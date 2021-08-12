@@ -11,4 +11,18 @@ class Product(models.Model):
     price = models.IntegerField()
 
 class Profile(models.Model):
-    username = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    is_staff = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        stfsts = ""
+        if self.is_staff:
+            stfsts = "(STAFF)"
+        return f"{str(self.user.first_name)} {str(self.user.last_name)} - Profile {stfsts}"
+
+class Order(models.Model):
+    products = models.ManyToManyField(Product, related_name='orders')
+    time_of_order = models.DateTimeField()
+    time_of_delivery = models.DateTimeField()
+
+    
