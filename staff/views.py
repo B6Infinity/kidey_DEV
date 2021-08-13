@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def home(request):
-    return render(request, 'staff/home.html')
+    DATA = {"CURRENT_PAGE": "home"}
+    return render(request, 'staff/home.html', DATA)
 
 def handle_logout(request):
     logout(request)
@@ -30,16 +31,20 @@ def handle_login(request):
         return HttpResponse("Critical Violation... Login Aborted!")
 
 def products(request):
-    return render(request, 'staff/products.html')
+    DATA = {"CURRENT_PAGE": "products"}
+    return render(request, 'staff/products.html', DATA)
 
 def analytics(request):
-    return render(request, 'staff/analytics.html')
+    DATA = {"CURRENT_PAGE": "analytics"}
+    return render(request, 'staff/analytics.html', DATA)
 
 def orders(request):
-    return render(request, 'staff/orders.html')
+    DATA = {"CURRENT_PAGE": "orders"}
+    return render(request, 'staff/orders.html', DATA)
 
 def money(request):
-    return render(request, 'staff/money.html')
+    DATA = {"CURRENT_PAGE": "money"}
+    return render(request, 'staff/money.html', DATA)
 
 
 # APIs

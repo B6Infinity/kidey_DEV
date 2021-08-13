@@ -1,0 +1,15 @@
+{% extends 'staff/base.html' %}
+{% block title %}Products Manager{% endblock title %}
+{% block body %}
+
+
+
+
+<script>
+    if("{{CURRENT_PAGE}}" == "analytics"){
+        document.getElementById('{{CURRENT_PAGE}}-hotbar').classList.add('hotbar-active');
+    }
+
+</script>
+
+{% endblock body %}

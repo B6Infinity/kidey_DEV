@@ -160,11 +160,23 @@ button{
     width: 65px;
 }
 
+
+.hotbar-active{
+    
+    font-size: 13px !important;
+    background: #202020 !important;
+    width: 65px;
+}
+.hotbar-active img {
+    width: 55px;
+    padding: 2px;
+}
+
 .input-classic{
     padding: 10px;
     margin: 5px;
-    width: 190px;
     background-color: #202020;
+    width: 190px;
     outline: none;
     border-radius: 5px;
     border: none;

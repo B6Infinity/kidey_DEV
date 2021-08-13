@@ -3,4 +3,10 @@
 {% block body %}
 
 
+<script>
+    if("{{CURRENT_PAGE}}" == "home"){
+        document.getElementById('{{CURRENT_PAGE}}-hotbar').classList.add('hotbar-active');
+    }
+
+</script>
 {% endblock body %}
