@@ -12,7 +12,6 @@ def handle_logout(request):
 
     return redirect('home')
 
-
 def handle_login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -29,3 +28,19 @@ def handle_login(request):
 
     else:
         return HttpResponse("Critical Violation... Login Aborted!")
+
+def products(request):
+    return render(request, 'staff/products.html')
+
+def analytics(request):
+    return render(request, 'staff/analytics.html')
+
+def orders(request):
+    return render(request, 'staff/orders.html')
+
+def money(request):
+    return render(request, 'staff/money.html')
+
+
+# APIs
+
