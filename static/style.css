@@ -105,6 +105,7 @@ body {
 
 #hotbar {
     /* background-color: brown; */
+    user-select: none;
     height: 80%;
     margin: 30px 0;
     display: flex;
@@ -149,7 +150,7 @@ body {
 
 @media only screen and (max-device-width: 640px) {
     body{
-        height: 80vh;
+        height: 83vh;
     }
     .fnt-xx-big {
         font-size: 60px;
@@ -170,9 +171,11 @@ body {
         font-size: 5px;
     }
     #logged_in_as {
+        position: absolute;
+        right: 10px;
+        top: 60px;
         margin: 3px;
         font-size: 13px;
-        margin-top: -10px;
     }
     #body-flex-container {
         flex-direction: column-reverse;
@@ -189,12 +192,13 @@ body {
     }
     #hotbar .hotbar-slot {
         margin: 5px;
-        height: 80%;
+        height: 50px;
         width: 100%;
         text-align: center;
         border-radius: 5px;
         margin-bottom: 0;
     }
+    
     .hotbar-slot img {
         transition: 0.2s;
         width: 30px;
