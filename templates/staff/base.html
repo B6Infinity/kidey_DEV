@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Kidey *STAFF* - {% block title %}{% endblock title %}</title>
+
+
+
+</head>
+
+<body>
+    <div id="main_header">
+        <div class="inner">
+
+            <div class="logo">
+                <div>
+                    <span class="fnt-big">KIDEY</span>
+                    <span class="fnt-med" style="color: grey;">Staff Panel</span>
+                </div>
+            </div>
+
+            <div id="logged_in_as">
+                Logout <span style="color: #808080;">({{user.first_name}})</span>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="implanted_body">
+        <!-- IMPLANTED BODY -->
+        {% block body %}
+        {% endblock body %}
+    </div>
+
+</body>
+
+{% block postdoc_script %}
+{% endblock postdoc_script %}
+
+</html>

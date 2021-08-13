@@ -1,8 +1,112 @@
-*{
+* {
     color: aliceblue;
     margin: 0px;
     padding: 0px;
+    font-family: Arial, Helvetica, sans-serif;
 }
-body{
+
+body {
     background-color: black;
+}
+
+#main_header {
+    width: 100vw;
+    height: 80px;
+    background-color: #101010;
+}
+
+#main_header .inner {
+    width: 90%;
+    height: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+#main_header .logo {
+    display: table;
+    height: 100%;
+    float: left;
+}
+
+#main_header .logo div {
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* TEXT DECOR */
+
+.italic {
+    font-style: italic;
+}
+
+.underline {
+    font-style: underline;
+}
+
+.fnt-xx-big {
+    font-size: 80px;
+}
+
+.fnt-x-big {
+    font-size: 50px;
+}
+
+.fnt-big {
+    font-size: 40px;
+}
+
+.fnt-med {
+    font-size: 30px;
+}
+
+.fnt-small {
+    font-size: 20px;
+}
+
+.fnt-x-small {
+    font-size: 10px;
+}
+
+#logged_in_as {
+    transition: 0.2s;
+    float: right;
+    margin: 30px;
+    font-size: 15px;
+    padding: 2px;
+    user-select: none;
+    border-radius: 5px;
+    background-color: #202020;
+}
+#logged_in_as:hover{
+    background-color: #ff00005b;
+}
+
+/* For Phones */
+
+@media only screen and (max-device-width: 640px) {
+    .fnt-xx-big {
+        font-size: 60px;
+    }
+    .fnt-x-big {
+        font-size: 40px;
+    }
+    .fnt-big {
+        font-size: 30px;
+    }
+    .fnt-med {
+        font-size: 20px;
+    }
+    .fnt-small {
+        font-size: 10px;
+    }
+    .fnt-x-small {
+        font-size: 5px;
+    }
+
+    #logged_in_as {
+        margin: 3px;
+        font-size: 13px;
+        margin-top: -10px
+    }
 }
