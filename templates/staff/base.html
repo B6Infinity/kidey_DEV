@@ -13,6 +13,7 @@
 </head>
 
 <body>
+
     <div id="main_header">
         <div class="inner">
 
@@ -30,13 +31,49 @@
     </div>
 
 
+    <div id="body-flex-container">
 
+        <div id="hotbar-container">
+            <div id="hotbar">
 
-    <div id="implanted_body">
-        <!-- IMPLANTED BODY -->
-        {% block body %}
-        {% endblock body %}
+                <div class="hotbar-slot">
+                    <img src="https://img.icons8.com/material/96/ffffff/dashboard-layout.png"/>
+                    Dashboard
+                </div>
+
+                <div class="hotbar-slot">
+                    <img src="https://img.icons8.com/wired/64/ffffff/hamburger.png"/>
+                    Products
+                </div>
+
+                <div class="hotbar-slot">
+                    <img src="https://img.icons8.com/material-outlined/96/ffffff/web-analystics.png"/>
+                    Analytics
+                </div>
+
+                <div class="hotbar-slot">
+                    <img src="https://img.icons8.com/wired/64/ffffff/deliver-food.png"/>
+                    Orders
+                </div>
+
+                <div class="hotbar-slot">
+                    <img src="https://img.icons8.com/wired/64/ffffff/rupee.png"/>
+                    Money
+                </div>
+
+            </div>
+        </div>
+
+        <div id="implanted_body">
+            <!-- IMPLANTED BODY -->
+            {% block body %}
+            {% endblock body %}
+        </div>
     </div>
+
+    <style>
+        
+    </style>
 
 </body>
 
