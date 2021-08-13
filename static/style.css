@@ -10,6 +10,13 @@ body {
     height: 85vh;
 }
 
+button{
+    background-color: #202020;
+    border-radius: 5px;
+    padding: 5px;
+    
+}
+
 #main_header {
     width: 100vw;
     height: 80px;
@@ -66,6 +73,10 @@ body {
 }
 
 .fnt-x-small {
+    font-size: 15px;
+}
+
+.fnt-xx-small {
     font-size: 10px;
 }
 
@@ -87,8 +98,8 @@ body {
 #implanted_body {
     flex-grow: 1;
     /* background-color: rebeccapurple; */
-    margin: 3px;
-    padding: 2px;
+    margin: 5px;
+    padding: 10px;
     border-radius: 5px;
     overflow: auto;
 }
@@ -147,6 +158,16 @@ body {
     background: #202020;
     font-size: 13px;
     width: 65px;
+}
+
+.input-classic{
+    padding: 10px;
+    margin: 5px;
+    width: 190px;
+    background-color: #202020;
+    outline: none;
+    border-radius: 5px;
+    border: none;
 }
 
 /* For Phones */
