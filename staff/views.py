@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 def home(request):
-    return HttpResponse("STAFF ADMIN")
+    
+    return render(request, 'staff/staff_base.html')
