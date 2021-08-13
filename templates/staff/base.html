@@ -13,7 +13,9 @@
 </head>
 
 <body>
-
+    {% if user.is_staff %}
+    
+    <!-- USER IS LOGGED IN -->
     <div id="main_header">
         <div class="inner">
 
@@ -27,6 +29,8 @@
             <div id="logged_in_as">
                 Logout <span style="color: #808080;">({{user.first_name}})</span>
             </div>
+
+
         </div>
     </div>
 
@@ -37,44 +41,50 @@
             <div id="hotbar">
 
                 <div class="hotbar-slot">
-                    <img src="https://img.icons8.com/material/96/ffffff/dashboard-layout.png"/>
+                    <img src="https://img.icons8.com/material/96/ffffff/dashboard-layout.png" />
                     Dashboard
                 </div>
 
                 <div class="hotbar-slot">
-                    <img src="https://img.icons8.com/wired/64/ffffff/hamburger.png"/>
+                    <img src="https://img.icons8.com/wired/64/ffffff/hamburger.png" />
                     Products
                 </div>
 
                 <div class="hotbar-slot">
-                    <img src="https://img.icons8.com/material-outlined/96/ffffff/web-analystics.png"/>
+                    <img src="https://img.icons8.com/material-outlined/96/ffffff/web-analystics.png" />
                     Analytics
                 </div>
 
                 <div class="hotbar-slot">
-                    <img src="https://img.icons8.com/wired/64/ffffff/deliver-food.png"/>
+                    <img src="https://img.icons8.com/wired/64/ffffff/deliver-food.png" />
                     Orders
                 </div>
 
                 <div class="hotbar-slot">
-                    <img src="https://img.icons8.com/wired/64/ffffff/rupee.png"/>
+                    <img src="https://img.icons8.com/wired/64/ffffff/rupee.png" />
                     Money
                 </div>
 
             </div>
         </div>
 
+        <!-- IMPLANTED BODY -->
         <div id="implanted_body">
-            <!-- IMPLANTED BODY -->
             {% block body %}
             {% endblock body %}
         </div>
+
     </div>
 
     <style>
-        
+
     </style>
 
+    {% else %}
+    <!-- USER IS NOT LOGGED IN OR NOT STAFF -->
+    YOU NEED TO LOGIN AS A STAFF!
+
+    {% endif %}
 </body>
 
 {% block postdoc_script %}

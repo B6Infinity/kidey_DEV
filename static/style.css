@@ -86,7 +86,10 @@ body {
 
 #implanted_body {
     flex-grow: 1;
-    background-color: rebeccapurple;
+    /* background-color: rebeccapurple; */
+    margin: 3px;
+    padding: 2px;
+    border-radius: 5px;
     overflow: auto;
 }
 
