@@ -16,14 +16,25 @@
             <form action="/staff/add-product" method="POST">
                 {% csrf_token %}
 
-                <input class="input-classic" name="product_name" type="text" placeholder="Product Name" autocomplete="off" required>
-                <input class="input-classic" name="price" type="number" placeholder="Price" autocomplete="off" required>
-                <input type="hidden" name="new_product" value="true">
-                <input type="hidden" name="product_id" value="">
+                <input class="input-classic" name="customer_name" type="text" placeholder="Customer Name" autocomplete="off" required>
+                <input class="input-classic" name="customer_phone_no" type="tel" placeholder="Customer Phone" autocomplete="off" required maxlength="10">
+                <br>Time Of Order:
+                <input class="input-classic" name="time_of_order" type="datetime-local" placeholder="Time Of Order" autocomplete="off" required>
+                <br>Time Of Delivery:
+                <input class="input-classic" name="time_of_delivery" type="datetime-local" placeholder="Time Of Delivery" autocomplete="off" required><br>
+                <br>
+                <input class="input-classic" style="width: 100px;" name="total_bill" type="number" placeholder="Total Bill" autocomplete="off" required>-
+                <input class="input-classic" style="width: 100px;" name="discount" type="number" placeholder="Discount" autocomplete="off" required>
+                <input class="input-classic" style="width: 120px; background-color: #101010;" type="number" placeholder="Payable Amount" autocomplete="off" disabled>
 
+                
+
+
+
+                
                 <br><br>
-                <button class="big-button" id="createbutton" type="submit" style="font-size: 18px;">Create</button>
-                <button class="big-button" style="visibility: hidden;" id="cancel" type="reset" onclick="cancelEditiing()" style="font-size: 18px;">Cancel</button>
+                <button class="big-button" id="createbutton" type="button" style="font-size: 18px;">Create</button>
+                
                 
             </form>
                 
@@ -44,29 +55,10 @@
             {% for orders in EXISTING_ORDERS %}
             <div class="existing-product">
                 <div style="display: flex;">
-                    <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{order.name}}</b></div>
+                    <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{order.customer}}</b></div>
                     
-                    <form action="/staff/delete-product" method="post">{% csrf_token %}
 
-                        <input type="hidden" name="product_id" value="{{product.id}}">
-                        <button type="button" onclick="confirmDelete('delete_confirmation-{{product.id}}')" class="delete-button" style="padding: 2px;">
-                            <img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"/>
-                        </button>
-
-                        <div class="delete_confirmation" id="delete_confirmation-{{product.id}}">
-                            Delete {{product.name}}?<br>
-                            
-                            <button type="submit" class="delete-button" style="padding: 2px;">
-                                <img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"/>
-                            </button>
-                            <button type="button" onclick="document.getElementById('delete_confirmation-{{product.id}}').style.visibility='hidden'" class="delete-button" style="padding: 2px;">
-                                <img width="15px" src="https://img.icons8.com/material-outlined/24/26e07f/cancel--v1.png"/>
-                            </button>
-                        </div>
-
-                    </form>
-
-                    <div class="edit-button" onclick="editProduct('{{product.id}}'); location.href='#add-product-container'">Edit</div>
+                    <div class="edit-button" onclick="">Edit</div>
                 </div>
                 <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">
                     <div id="{{product.id}}-price" style="flex-grow: 1;">₹{{product.price}}/-</div>
