@@ -66,7 +66,58 @@ def money(request):
     return render(request, 'staff/money.html', DATA)
 
 def addProduct(request):
-    pass
+    
+    if request.method == 'POST':
+        new_product = request.POST['new_product']
+        
+        if new_product == "false":
+            # Edit Product
+
+            product_id = request.POST['product_id']
+
+            if len(Product.objects.filter(id=product_id)) != 0:
+                edit_product = Product.objects.get(id=product_id)
+                
+                product_name = request.POST['product_name']
+                price = request.POST['price']
+
+                edit_product.name = product_name
+                edit_product.price = price
+                edit_product.save()
+
+                return HttpResponse("<h1>Product Successfully Edited! <a href='/staff/products'>Back</a></h1>")
+
+            else:
+                # PRODUCT DOES NOT EXIST
+                return HttpResponse("Product Does not exist! <a href='/staff/products'>Back</a>")
+        
+        else:
+            # Create Product
+
+            product_name = request.POST['product_name']
+            price = request.POST['price']
+
+            Product.objects.create(name=product_name, price=price)
+
+            return HttpResponse("<h1>Product Successfully Created! <a href='/staff/products'>Back</a></h1>")
+
+        
+
+    else:
+        return HttpResponse("Critical Violation... Invalid Gateway!")
+
+def deleteProduct(request):
+    if request.method == 'POST':
+        product_id = request.POST['product_id']
+
+        if len(Product.objects.filter(id=product_id)) != 0:
+            del_product = Product.objects.get(id=product_id)
+            del_product.delete()
+
+        return HttpResponse("<h1>Product Successfully Deleted! <a href='/staff/products'>Back</a></h1>")
+
+    else:
+        return HttpResponse("Critical Gateway! Data Loss!")
 
 # APIs
 

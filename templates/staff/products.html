@@ -31,7 +31,7 @@
 
     <!-- EXISTING PRODUCTS -->
 
-    <div class="flex-object">
+    <div class="flex-object" id="exisitingproductsflexbox">
         <div class="fnt-med">Existing Products</div>
 
         <br>
@@ -42,6 +42,14 @@
             <div class="existing-product">
                 <div style="display: flex;">
                     <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{product.name}}</b></div>
+                    
+                    <form action="/staff/delete-product" method="post">{% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{product.id}}">
+                        <button type="submit" class="delete-button" style="padding: 2px;">
+                            <img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"/>
+                        </button>
+                    </form>
+
                     <div class="edit-button" onclick="editProduct('{{product.id}}'); location.href='#add-product-container'">Edit</div>
                 </div>
                 <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">

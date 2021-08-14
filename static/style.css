@@ -244,7 +244,9 @@ button{
 #add-product-container{
     padding: 10px;
 }
-
+#exisitingproductsflexbox{
+    width: 240px;
+}
 /* For Phones */
 
 @media only screen and (max-device-width: 640px) {
@@ -312,6 +314,9 @@ button{
     }
     #add-product-container{
         padding: 10px 0 !important;
+    }
+    #exisitingproductsflexbox{
+        width: 90%;
     }
 }
 
