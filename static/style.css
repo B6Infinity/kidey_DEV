@@ -182,6 +182,69 @@ button{
     border: none;
 }
 
+.flex-row{
+    display: flex;
+    flex-direction: row;
+}
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
+.flex-row-reverse{
+    display: flex;
+    flex-direction: row-reverse;
+}
+.flex-column-reverse{
+    display: flex;
+    flex-direction: column-reverse;
+}
+.flex-grow div{
+    flex-grow: 1;
+}
+.flex-object{
+    margin: 5px;
+    padding: 10px;
+}
+
+.existing-product{
+    user-select: none;
+    padding: 3px;
+    border-radius: 5px;
+    background-color: #202020;
+    transition: 0.2s;
+    margin: 5px 0;
+}
+.existing-product:hover{
+    background-color: #303030;
+    padding: 7px 5px;
+}
+.edit-button{
+    padding: 3px;
+    border-radius: 3px;
+    font-size: 15px;
+    background-color: skyblue;
+    color: black;
+    display: inline-block;
+}
+.big-button:hover{
+    background: #62c6ee;
+
+}
+.big-button{
+    transition: 0.2s;
+    padding: 10px 15px;
+    margin: 5px;
+    font-size: 20px;
+    background: skyblue;
+    border-radius: 5px;
+    display: inline-block;
+    user-select: none;
+    color: black;
+}
+#add-product-container{
+    padding: 10px;
+}
+
 /* For Phones */
 
 @media only screen and (max-device-width: 640px) {
@@ -244,4 +307,32 @@ button{
         width: 33px;
         padding: 1px;
     }
+    .row-responsive{
+        flex-direction: column;
+    }
+    #add-product-container{
+        padding: 10px 0 !important;
+    }
 }
+
+/* SCROLLBAR */
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #303030; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
