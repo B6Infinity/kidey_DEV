@@ -247,6 +247,20 @@ button{
 #exisitingproductsflexbox{
     width: 240px;
 }
+
+.delete_confirmation{
+    padding: 5px;
+    background-color: #303030;
+    border-radius: 5px;
+    visibility: hidden;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    font-size: 25px;
+    box-shadow: 2px 2px 3px black;
+}
+
+
 /* For Phones */
 
 @media only screen and (max-device-width: 640px) {

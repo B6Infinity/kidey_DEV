@@ -44,10 +44,23 @@
                     <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{product.name}}</b></div>
                     
                     <form action="/staff/delete-product" method="post">{% csrf_token %}
+
                         <input type="hidden" name="product_id" value="{{product.id}}">
-                        <button type="submit" class="delete-button" style="padding: 2px;">
+                        <button type="button" onclick="confirmDelete('delete_confirmation-{{product.id}}')" class="delete-button" style="padding: 2px;">
                             <img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"/>
                         </button>
+
+                        <div class="delete_confirmation" id="delete_confirmation-{{product.id}}">
+                            Delete {{product.name}}?<br>
+                            
+                            <button type="submit" class="delete-button" style="padding: 2px;">
+                                <img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"/>
+                            </button>
+                            <button type="button" onclick="document.getElementById('delete_confirmation-{{product.id}}').style.visibility='hidden'" class="delete-button" style="padding: 2px;">
+                                <img width="15px" src="https://img.icons8.com/material-outlined/24/26e07f/cancel--v1.png"/>
+                            </button>
+                        </div>
+
                     </form>
 
                     <div class="edit-button" onclick="editProduct('{{product.id}}'); location.href='#add-product-container'">Edit</div>
@@ -90,6 +103,10 @@
             document.getElementsByName('product_id')[0].value = "";
             
 
+        }
+
+        function confirmDelete(divid){
+            document.getElementById(divid).style.visibility = 'visible';
         }
 
     </script>
