@@ -6,7 +6,7 @@
 <div class="flex-row row-responsive" style="width: 100%; height: 100%;">
 
     <div class="flex-object" id="addproduct_container" style="flex-grow: 1;">
-        <div class="fnt-med">Add a Product</div>
+        <div id="addaproduct" class="fnt-med">Add a Product</div>
         
         <div id="add-product-container">
 
@@ -19,19 +19,18 @@
                 <input type="hidden" name="product_id" value="">
 
                 <br><br>
-                <button class="big-button" type="submit" style="font-size: 18px;">Create</button>
+                <button class="big-button" id="createbutton" type="submit" style="font-size: 18px;">Create</button>
+                <button class="big-button" style="visibility: hidden;" id="cancel" type="reset" onclick="cancelEditiing()" style="font-size: 18px;">Cancel</button>
                 
             </form>
                 
         </div>
 
-
-        <style>
-            
-        </style>
-
     </div>
     <hr>
+
+    <!-- EXISTING PRODUCTS -->
+
     <div class="flex-object">
         <div class="fnt-med">Existing Products</div>
 
@@ -43,7 +42,7 @@
             <div class="existing-product">
                 <div style="display: flex;">
                     <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{product.name}}</b></div>
-                    <div class="edit-button" onclick="editProduct('{{product.id}}')">Edit</div>
+                    <div class="edit-button" onclick="editProduct('{{product.id}}'); location.href='#add-product-container'">Edit</div>
                 </div>
                 <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">
                     <div id="{{product.id}}-price" style="flex-grow: 1;">₹{{product.price}}/-</div>
@@ -51,17 +50,6 @@
                 </div>
             </div>
             {% endfor %}
-            
-            <script>
-                function editProduct(productId){
-                    product_name = document.getElementById(productId+"-name").textContent;
-                    price = document.getElementById(productId+"-price").textContent;
-
-                    console.log(product_name, price);
-                }
-
-            </script>
-            
 
         </div>
 
@@ -69,6 +57,34 @@
 
     </div>
 
+    <script>
+        function editProduct(productId){
+            product_name = document.getElementById(productId+"-name").textContent;
+            price = document.getElementById(productId+"-price").textContent;
+
+            console.log(product_name, price);
+            
+            // Toggle the UI
+            document.getElementById('createbutton').textContent = "Save Changes";
+            document.getElementById('addaproduct').textContent = "Edit "+product_name;
+            document.getElementsByName('product_name')[0].value = product_name;
+            document.getElementsByName('price')[0].value = (price.replace('/-', '')).replace('₹', '');
+            document.getElementsByName('new_product')[0].value = "false";
+            document.getElementsByName('product_id')[0].value = productId;
+            document.getElementById('cancel').style.visibility = 'visible';
+        }
+        
+        function cancelEditiing(){
+            document.getElementById('cancel').style.visibility = 'hidden';
+            document.getElementById('createbutton').textContent = "Create";
+            document.getElementById('addaproduct').textContent = "Add a Product";
+            document.getElementsByName('new_product')[0].value = "true";
+            document.getElementsByName('product_id')[0].value = "";
+            
+
+        }
+
+    </script>
 
 </div>
 
