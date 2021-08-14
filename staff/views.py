@@ -54,8 +54,11 @@ def orders(request):
     if not request.user.is_staff:
         return HttpResponse("You need to login as a staff <a href='/staff'>Login Here</a>")
 
-
     DATA = {"CURRENT_PAGE": "orders"}
+
+    existing_orders = Order.objects.all()
+    DATA["EXISTING_ORDERS"] = existing_orders
+
     return render(request, 'staff/orders.html', DATA)
 
 def money(request):

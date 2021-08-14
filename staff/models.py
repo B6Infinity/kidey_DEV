@@ -4,6 +4,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.base import Model
+from django.db.models.fields import CharField, TextField
 
 # Create your models here.
 class Product(models.Model):
@@ -26,8 +27,18 @@ class Profile(models.Model):
         return f"{str(self.user.first_name)} {str(self.user.last_name)} - Profile {stfsts}"
 
 
+class Customer(models.Model):
+    name = models.CharField(max_length=120)
+    phone_no =  models.IntegerField()
+
+    address = models.TextField(default="")
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.phone_no}"
+
+
 class Order(models.Model):
-    custormer_phone_no = models.IntegerField(max_length=15)
+    customer = models.OneToOneField(Customer, on_delete=models.SET_NULL, null=True)
 
     order_json = models.JSONField(null=True) # {"<Product ID>": <No. of items>} eg. {"2": 3, "1": 2}
     time_of_order = models.DateTimeField()
@@ -39,7 +50,6 @@ class Order(models.Model):
     bill_text = models.TextField(default="", blank=True)
 
     discount = models.IntegerField(default=0)
-
     
 
     def save(self, *args, **kwargs):
@@ -72,7 +82,3 @@ class Expense(models.Model):
     amount = models.IntegerField()
 
     summary = models.CharField(max_length=150, null=True, blank=True)
-
-class Customer(models.Model):
-    name = models.CharField(max_length=70)
-    phone_no = models.IntegerField(max_length=15)
