@@ -13,6 +13,8 @@
 
         <div id="add-product-container">
 
+            <script>let orderJson = {}; let totalBill = 0; let discount = 0;</script>
+
             <form action="/staff/add-product" method="POST">
                 {% csrf_token %}
 
@@ -31,12 +33,12 @@
                         <input class="input-classic" name="time_of_delivery" type="datetime-local"
                             placeholder="Time Of Delivery" autocomplete="off" required><br>
                         <br>
-                        <input class="input-classic" style="width: 100px;" name="total_bill" type="number"
-                            placeholder="Total Bill" autocomplete="off" required>-
-                        <input class="input-classic" style="width: 100px;" name="discount" type="number"
-                            placeholder="Discount" autocomplete="off" required>
-                        <input class="input-classic" style="width: 90px; background-color: #101010;" type="number"
-                            placeholder="Payable ₹" autocomplete="off" disabled>
+                        <input class="input-classic" style="width: 100px; background-color: #101010;" name="total_bill"
+                            type="number" placeholder="Total Bill" autocomplete="off" disabled>-
+                        <input class="input-classic" style="width: 100px;" onchange="addDiscount(Number(this.value));" name="discount" type="number"
+                            placeholder="Discount" autocomplete="off">
+                        <input class="input-classic" style="width: 90px; background-color: #101010;" name="payable_amt"
+                            type="number" placeholder="Payable ₹" autocomplete="off" disabled>
 
                     </div>
 
@@ -46,28 +48,77 @@
                         <div class="fnt-med">Product List</div>
 
                         <div id="product_list">
+                            <script>let products = {};</script>
                             {% for product in EXISTING_PRODUCTS %}
                             <div id="product-{{product.id}}" class="product_list-product">
 
                                 {{product.name}} <br>
 
-                                <span style="color: #999999; font-weight: 800;">₹{{product.price}}/-</span>
+                                <span style=" font-weight: 800;">₹{{product.price}}/-</span>
                                 <div class="productcounter-container">
-                                    <span class="add-product">+</span>
-                                    <span class="counter-product">0</span>
-                                    <span class="add-product">-</span>
+                                    <span onclick="countProduct('{{product.id}}', 'add')" class="add-product">+</span>
+                                    <span id="product-counter-{{product.id}}" class="counter-product">0</span>
+                                    <span onclick="countProduct('{{product.id}}', 'substract')"
+                                        class="add-product">-</span>
                                 </div>
 
                             </div>
+
+                            <script>products["{{product.id}}"] = {{ product.price }};</script>
+
                             {% endfor %}
-                            
+
                         </div>
 
                     </div>
-                    <style>
-                        
-                    </style>
 
+                    <script>
+
+
+                        function countProduct(product_id, operation) {
+                            let count = Number(document.getElementById('product-counter-' + product_id).textContent);
+                            if (operation == 'add') count++;
+                            else { if (count != 0) count--; }
+
+                            document.getElementById('product-counter-' + product_id).textContent = count;
+
+                            // CHANGE CSS
+                            if (count == 0) {
+                                document.getElementById('product-' + product_id).classList.remove('non-zero-product');
+                            } else document.getElementById('product-' + product_id).classList.add('non-zero-product');
+
+                            if (count == 0) delete orderJson[product_id]; else orderJson[product_id] = count;
+
+                            evaluateBill();
+
+
+
+
+                        }
+
+                        function evaluateBill() {
+                            totalBill = 0;
+                            for (let product in orderJson) {
+                                let money = products[product] * orderJson[product];
+                                totalBill += money;
+                                // console.log(totalBill);
+                            }
+
+                            if (Object.keys(orderJson).length == 0) totalBill = 0;
+
+
+                            // CHANGE HTML
+                            document.getElementsByName('total_bill')[0].value = totalBill;
+                            document.getElementsByName('payable_amt')[0].value = totalBill - discount;
+                        }
+
+                        function addDiscount(d){
+                            discount = d;
+                            console.log(discount);
+                            evaluateBill();
+                        }
+
+                    </script>
 
                 </div>
 
@@ -92,17 +143,17 @@
 
         <div id="existing-products-container" style="height: 90%; overflow-y:auto;">
 
-            {% for orders in EXISTING_ORDERS %}
+            {% for order in EXISTING_ORDERS %}
             <div class="existing-product">
                 <div style="display: flex;">
-                    <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{order.customer}}</b>
+                    <div id="{{product.id}}-name" class="fnt-x-small" style="flex-grow: 1;">{{order.customer}}
                     </div>
 
 
                     <div class="edit-button" onclick="">Edit</div>
                 </div>
                 <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">
-                    <div id="{{product.id}}-price" style="flex-grow: 1;">₹{{product.price}}/-</div>
+                    <div id="{{product.id}}-price" style="flex-grow: 1;">₹{{order.payable_amt}}</div>
 
                 </div>
             </div>

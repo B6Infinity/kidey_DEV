@@ -50,6 +50,8 @@ class Order(models.Model):
     bill_text = models.TextField(default="", blank=True)
 
     discount = models.IntegerField(default=0)
+
+    payable_amt = models.IntegerField(default=0, blank=True)
     
 
     def save(self, *args, **kwargs):
@@ -64,6 +66,7 @@ class Order(models.Model):
             bill_text += f'{product.name} (₹{product.price}) [x{self.order_json[product_id]}] - ₹{product.price * self.order_json[product_id]}\n'
 
         self.total_bill = bill
+        self.payable_amt = bill - self.discount
         self.bill_text = bill_text
 
 
@@ -71,7 +74,7 @@ class Order(models.Model):
     
     
     def __str__(self) -> str:
-        return f"₹{self.total_bill} - ₹{self.discount} >> {(self.time_of_delivery.strftime('%d/%m/%y, %H:%M'))}"
+        return f"{self.customer}:₹{self.payable_amt} >> {(self.time_of_delivery.strftime('%d/%m/%y, %H:%M'))}"
 
 
 class Expense(models.Model):

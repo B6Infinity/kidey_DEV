@@ -315,6 +315,16 @@ button {
 .counter-product{
     color: grey;
 }
+.non-zero-product span{color: black;}
+.non-zero-product .add-product{box-shadow: 1px 1px 3px black;}
+
+.non-zero-product{
+    margin: 5px 0px;
+    padding: 3px;
+    background-color: #6cfa49;
+    border-radius: 5px;
+    color: black;
+}
 
 /* For Phones */
 
