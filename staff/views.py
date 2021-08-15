@@ -59,6 +59,10 @@ def orders(request):
     existing_orders = Order.objects.all()
     DATA["EXISTING_ORDERS"] = existing_orders
 
+    existing_products = Product.objects.all()
+    DATA["EXISTING_PRODUCTS"] = existing_products
+
+
     return render(request, 'staff/orders.html', DATA)
 
 def money(request):

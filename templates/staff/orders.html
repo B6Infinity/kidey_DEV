@@ -10,34 +10,74 @@
 
     <div class="flex-object" id="addproduct_container" style="flex-grow: 1;">
         <div id="addaproduct" class="fnt-med">Create Order Instance</div>
-        
+
         <div id="add-product-container">
 
             <form action="/staff/add-product" method="POST">
                 {% csrf_token %}
 
-                <input class="input-classic" name="customer_name" type="text" placeholder="Customer Name" autocomplete="off" required>
-                <input class="input-classic" name="customer_phone_no" type="tel" placeholder="Customer Phone" autocomplete="off" required maxlength="10">
-                <br>Time Of Order:
-                <input class="input-classic" name="time_of_order" type="datetime-local" placeholder="Time Of Order" autocomplete="off" required>
-                <br>Time Of Delivery:
-                <input class="input-classic" name="time_of_delivery" type="datetime-local" placeholder="Time Of Delivery" autocomplete="off" required><br>
-                <br>
-                <input class="input-classic" style="width: 100px;" name="total_bill" type="number" placeholder="Total Bill" autocomplete="off" required>-
-                <input class="input-classic" style="width: 100px;" name="discount" type="number" placeholder="Discount" autocomplete="off" required>
-                <input class="input-classic" style="width: 120px; background-color: #101010;" type="number" placeholder="Payable Amount" autocomplete="off" disabled>
+                <div class="flex-row row-responsive">
 
-                
+                    <div class="flex-object">
+
+                        <input class="input-classic" name="customer_name" type="text" placeholder="Customer Name"
+                            autocomplete="off" required>
+                        <input class="input-classic" name="customer_phone_no" type="tel" placeholder="Customer Phone"
+                            autocomplete="off" required maxlength="10">
+                        <br>Time Of Order:
+                        <input class="input-classic" name="time_of_order" type="datetime-local"
+                            placeholder="Time Of Order" autocomplete="off" required>
+                        <br>Time Of Delivery:
+                        <input class="input-classic" name="time_of_delivery" type="datetime-local"
+                            placeholder="Time Of Delivery" autocomplete="off" required><br>
+                        <br>
+                        <input class="input-classic" style="width: 100px;" name="total_bill" type="number"
+                            placeholder="Total Bill" autocomplete="off" required>-
+                        <input class="input-classic" style="width: 100px;" name="discount" type="number"
+                            placeholder="Discount" autocomplete="off" required>
+                        <input class="input-classic" style="width: 90px; background-color: #101010;" type="number"
+                            placeholder="Payable ₹" autocomplete="off" disabled>
+
+                    </div>
+
+                    <!-- PRODUCT LIST -->
+
+                    <div class="flex-object" style="width: 200px;">
+                        <div class="fnt-med">Product List</div>
+
+                        <div id="product_list">
+                            {% for product in EXISTING_PRODUCTS %}
+                            <div id="product-{{product.id}}" class="product_list-product">
+
+                                {{product.name}} <br>
+
+                                <span style="color: #999999; font-weight: 800;">₹{{product.price}}/-</span>
+                                <div class="productcounter-container">
+                                    <span class="add-product">+</span>
+                                    <span class="counter-product">0</span>
+                                    <span class="add-product">-</span>
+                                </div>
+
+                            </div>
+                            {% endfor %}
+                            
+                        </div>
+
+                    </div>
+                    <style>
+                        
+                    </style>
 
 
+                </div>
 
-                
+
                 <br><br>
                 <button class="big-button" id="createbutton" type="button" style="font-size: 18px;">Create</button>
-                
-                
+
+
             </form>
-                
+
         </div>
 
     </div>
@@ -55,14 +95,15 @@
             {% for orders in EXISTING_ORDERS %}
             <div class="existing-product">
                 <div style="display: flex;">
-                    <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{order.customer}}</b></div>
-                    
+                    <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{order.customer}}</b>
+                    </div>
+
 
                     <div class="edit-button" onclick="">Edit</div>
                 </div>
                 <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">
                     <div id="{{product.id}}-price" style="flex-grow: 1;">₹{{product.price}}/-</div>
-                    
+
                 </div>
             </div>
             {% endfor %}
@@ -73,7 +114,7 @@
 
     </div>
 
-   
+
 
 </div>
 
@@ -86,7 +127,7 @@
 
 
 <script>
-    if("{{CURRENT_PAGE}}" == "orders"){
+    if ("{{CURRENT_PAGE}}" == "orders") {
         document.getElementById('{{CURRENT_PAGE}}-hotbar').classList.add('hotbar-active');
     }
 

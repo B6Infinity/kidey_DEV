@@ -10,11 +10,10 @@ body {
     height: 85vh;
 }
 
-button{
+button {
     background-color: #202020;
     border-radius: 5px;
     padding: 5px;
-    
 }
 
 #main_header {
@@ -104,7 +103,6 @@ button{
     overflow: auto;
 }
 
-
 #body-flex-container {
     display: flex;
     flex-direction: row;
@@ -160,19 +158,18 @@ button{
     width: 65px;
 }
 
-
-.hotbar-active{
-    
+.hotbar-active {
     font-size: 13px !important;
     background: #202020 !important;
     width: 65px;
 }
+
 .hotbar-active img {
     width: 55px;
     padding: 2px;
 }
 
-.input-classic{
+.input-classic {
     padding: 10px;
     margin: 5px;
     background-color: #202020;
@@ -182,31 +179,36 @@ button{
     border: none;
 }
 
-.flex-row{
+.flex-row {
     display: flex;
     flex-direction: row;
 }
-.flex-column{
+
+.flex-column {
     display: flex;
     flex-direction: column;
 }
-.flex-row-reverse{
+
+.flex-row-reverse {
     display: flex;
     flex-direction: row-reverse;
 }
-.flex-column-reverse{
+
+.flex-column-reverse {
     display: flex;
     flex-direction: column-reverse;
 }
-.flex-grow div{
+
+.flex-grow div {
     flex-grow: 1;
 }
-.flex-object{
+
+.flex-object {
     margin: 5px;
     padding: 10px;
 }
 
-.existing-product{
+.existing-product {
     user-select: none;
     padding: 3px;
     border-radius: 5px;
@@ -214,11 +216,13 @@ button{
     transition: 0.2s;
     margin: 5px 0;
 }
-.existing-product:hover{
+
+.existing-product:hover {
     background-color: #303030;
     padding: 7px 5px;
 }
-.edit-button{
+
+.edit-button {
     padding: 3px;
     border-radius: 3px;
     font-size: 15px;
@@ -226,11 +230,12 @@ button{
     color: black;
     display: inline-block;
 }
-.big-button:hover{
-    background: #62c6ee;
 
+.big-button:hover {
+    background: #62c6ee;
 }
-.big-button{
+
+.big-button {
     transition: 0.2s;
     padding: 10px 15px;
     margin: 5px;
@@ -241,14 +246,16 @@ button{
     user-select: none;
     color: black;
 }
-#add-product-container{
+
+#add-product-container {
     padding: 10px;
 }
-#exisitingproductsflexbox{
+
+#exisitingproductsflexbox {
     width: 240px;
 }
 
-.delete_confirmation{
+.delete_confirmation {
     padding: 5px;
     background-color: #303030;
     border-radius: 5px;
@@ -260,11 +267,59 @@ button{
     box-shadow: 2px 2px 3px black;
 }
 
+#product_list:hover {
+    background-color: #404040;
+}
+
+#product_list {
+    transition: 0.2s;
+    height: 250px;
+    overflow-y: auto;
+    background-color: #303030;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.product_list-product {
+    margin: 5px 0px;
+    padding: 3px;
+    background-color: #212121;
+    border-radius: 5px;
+    color: grey;
+}
+
+.productcounter-container {
+    display: flex;
+    user-select: none;
+}
+
+.productcounter-container span {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: 900;
+}
+
+.add-product {
+    margin: 0px 2px;
+    padding: 0 3px;
+    background-color: #89cfeb80;
+    color: black;
+    transition: 0.2s;
+    border-radius: 5px;
+}
+
+.add-product:hover {
+    border-radius: 3px;
+    background-color: #89cfeb;
+}
+.counter-product{
+    color: grey;
+}
 
 /* For Phones */
 
 @media only screen and (max-device-width: 640px) {
-    body{
+    body {
         height: 83vh;
     }
     .fnt-xx-big {
@@ -313,7 +368,6 @@ button{
         border-radius: 5px;
         margin-bottom: 0;
     }
-    
     .hotbar-slot img {
         transition: 0.2s;
         width: 30px;
@@ -323,13 +377,13 @@ button{
         width: 33px;
         padding: 1px;
     }
-    .row-responsive{
+    .row-responsive {
         flex-direction: column;
     }
-    #add-product-container{
+    #add-product-container {
         padding: 10px 0 !important;
     }
-    #exisitingproductsflexbox{
+    #exisitingproductsflexbox {
         width: 90%;
     }
 }
@@ -337,21 +391,27 @@ button{
 /* SCROLLBAR */
 
 /* width */
+
 ::-webkit-scrollbar {
     width: 7px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #303030; 
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #888; 
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-  }
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #303030;
+    border-radius: 5px;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
