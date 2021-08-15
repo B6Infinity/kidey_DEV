@@ -35,12 +35,14 @@
                         <br>
                         <input class="input-classic" style="width: 100px; background-color: #101010;" name="total_bill"
                             type="number" placeholder="Total Bill" autocomplete="off" disabled>-
-                        <input class="input-classic" style="width: 100px;" onchange="addDiscount(Number(this.value));" name="discount" type="number"
-                            placeholder="Discount" autocomplete="off">
+                        <input class="input-classic" style="width: 100px;" onchange="addDiscount(Number(this.value));"
+                            name="discount" type="number" placeholder="Discount" autocomplete="off">
                         <input class="input-classic" style="width: 90px; background-color: #101010;" name="payable_amt"
                             type="number" placeholder="Payable ₹" autocomplete="off" disabled>
 
                     </div>
+
+                    
 
                     <!-- PRODUCT LIST -->
 
@@ -112,10 +114,8 @@
                             document.getElementsByName('payable_amt')[0].value = totalBill - discount;
                         }
 
-                        function addDiscount(d){
-                            discount = d;
-                            console.log(discount);
-                            evaluateBill();
+                        function addDiscount(d) {
+                            discount = d; evaluateBill();
                         }
 
                     </script>
