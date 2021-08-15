@@ -34,7 +34,7 @@ class Customer(models.Model):
     address = models.TextField(default="")
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.phone_no}"
+        return f"{self.name}({self.phone_no})"
 
 
 class Order(models.Model):

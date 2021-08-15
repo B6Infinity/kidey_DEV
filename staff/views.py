@@ -1,4 +1,4 @@
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -127,4 +127,39 @@ def deleteProduct(request):
         return HttpResponse("Critical Gateway! Data Loss!")
 
 # APIs
+
+def fetchCustomer(request):
+    
+    if request.method == 'POST':
+        datatype = request.POST['datatype']
+        data = request.POST['data']
+        RESPONSE = {"ERROR": None}
+
+
+        if datatype == 'name':
+            name = data.lower()
+            if len(Customer.objects.filter(name__iexact=name)) == 0:
+                RESPONSE["ERROR"] = "NOT FOUND"
+            else:
+                matching_customer = Customer.objects.filter(name__iexact=name)[0]
+                RESPONSE["MATCHING_CUSTOMER"] = {"Name": matching_customer.name, "Phone": matching_customer.phone_no}
+
+        elif datatype == 'phone_no':
+            
+            phone_no = data.lower()
+            if len(Customer.objects.filter(phone_no=phone_no)) == 0:
+                RESPONSE["ERROR"] = "NOT FOUND"
+            else:
+                matching_customer = Customer.objects.filter(phone_no=phone_no)[0]
+                RESPONSE["MATCHING_CUSTOMER"] = {"Name": matching_customer.name, "Phone": matching_customer.phone_no}
+            
+
+        else:
+            RESPONSE["ERROR"] = "Invalid 'datatype' parameter"
+        
+        return JsonResponse(RESPONSE)
+    
+    else:
+        return HttpResponse("Not this way Mr. heckar :)")
+
 

@@ -22,10 +22,13 @@
 
                     <div class="flex-object">
 
-                        <input class="input-classic" name="customer_name" type="text" placeholder="Customer Name"
-                            autocomplete="off" required>
-                        <input class="input-classic" name="customer_phone_no" type="tel" placeholder="Customer Phone"
+                        <input class="input-classic" name="customer_name" type="text"
+                            onchange="fetchCustomer(this.value, 'name')" placeholder="Customer Name" autocomplete="off"
+                            required>
+                        <input class="input-classic" name="customer_phone_no" type="number"
+                            onchange="fetchCustomer(this.value, 'phone_no')" placeholder="Customer Phone"
                             autocomplete="off" required maxlength="10">
+
                         <br>Time Of Order:
                         <input class="input-classic" name="time_of_order" type="datetime-local"
                             placeholder="Time Of Order" autocomplete="off" required>
@@ -42,7 +45,7 @@
 
                     </div>
 
-                    
+
 
                     <!-- PRODUCT LIST -->
 
@@ -75,7 +78,6 @@
                     </div>
 
                     <script>
-
 
                         function countProduct(product_id, operation) {
                             let count = Number(document.getElementById('product-counter-' + product_id).textContent);
@@ -116,6 +118,35 @@
 
                         function addDiscount(d) {
                             discount = d; evaluateBill();
+                        }
+
+                        let csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+                        function fetchCustomer(data, datatype) {
+                            // console.log(data, datatype);
+
+                            let form = new FormData();
+                            form.set('data', data);
+                            form.set('datatype', datatype);
+
+                            fetch(`fetchCustomer`,
+                                {
+                                    method: 'POST',
+                                    body: form,
+                                    headers: {
+                                        'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                                        "X-CSRFToken": csrftoken
+                                    },
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+
+                                    if (data["ERROR"] == null){
+                                        // CHANGE HTML
+                                        document.getElementsByName('customer_name')[0].value = data["MATCHING_CUSTOMER"]["Name"];
+                                        document.getElementsByName('customer_phone_no')[0].value = data["MATCHING_CUSTOMER"]["Phone"];
+                                    }
+                                });
+
                         }
 
                     </script>

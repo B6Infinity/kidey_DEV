@@ -345,10 +345,13 @@ button {
         font-size: 20px;
     }
     .fnt-small {
-        font-size: 10px;
+        font-size: 18px;
     }
     .fnt-x-small {
-        font-size: 5px;
+        font-size: 15px;
+    }
+    .fnt-x-small {
+        font-size: 10px;
     }
     #logged_in_as {
         position: absolute;
