@@ -168,7 +168,17 @@ def addOrder(request):
 def deleteOrder(request):
     if request.method == 'POST' and request.user.is_staff:
         order_id = request.POST['order-id']
+        
         # DELETE THE ORDER
+
+        if len(Order.objects.filter(id=order_id)) != 0:
+            del_order = Order.objects.get(id=order_id)
+            del_order.delete()
+
+        return HttpResponse("<h1>Order Successfully Deleted! <a href='/staff/orders'>Back</a></h1>")
+
+    else:
+        return HttpResponse("Critical Gateway! Data Loss!")
 
 # APIs
 

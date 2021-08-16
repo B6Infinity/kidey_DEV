@@ -240,6 +240,7 @@
         <form action="/staff/delete-order" method="POST">{% csrf_token %}
             <input type="hidden" name="order-id" value="">
             <button style=" font-size: 20px; color: red;" type="submit">Confirm Delete</button>
+            <button style=" font-size: 20px; color: green;" onclick="document.getElementById('confirm_delete').style.visibility = 'hidden';" type="button">Cancel</button>
         </form>
     </div>
 
