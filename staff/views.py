@@ -165,6 +165,10 @@ def addOrder(request):
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
 
+def deleteOrder(request):
+    if request.method == 'POST' and request.user.is_staff:
+        order_id = request.POST['order-id']
+        # DELETE THE ORDER
 
 # APIs
 
@@ -218,6 +222,7 @@ def fetchOrder(request):
                 "PHONE": order.customer.phone_no,
                 "ADDRESS": order.customer.address,
                 "BILL_TEXT": order.bill_text,
+                "MONEY": f"₹{order.total_bill} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
                 "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
                 "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
             }

@@ -63,7 +63,7 @@ class Order(models.Model):
             product = Product.objects.get(id=product_id)
             bill += product.price * self.order_json[product_id]
 
-            bill_text += f'{product.name} (₹{product.price}) [x{self.order_json[product_id]}] - ₹{product.price * self.order_json[product_id]}\n'
+            bill_text += f'{product.name} (₹{product.price}) [x{self.order_json[product_id]}] - ₹{product.price * self.order_json[product_id]}/-\n'
 
         self.total_bill = bill
         self.payable_amt = bill - self.discount
