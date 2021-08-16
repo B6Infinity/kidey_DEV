@@ -38,7 +38,7 @@ class Customer(models.Model):
 
 
 class Order(models.Model):
-    customer = models.OneToOneField(Customer, on_delete=models.SET_NULL, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, related_name="placed_orders")
 
     order_json = models.JSONField(null=True) # {"<Product ID>": <No. of items>} eg. {"2": 3, "1": 2}
     time_of_order = models.DateTimeField()

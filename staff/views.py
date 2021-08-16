@@ -132,7 +132,7 @@ def addOrder(request):
     if request.method == 'POST' and request.user.is_staff:
         customer_name = request.POST['customer_name']
         customer_phone_no = request.POST['customer_phone_no']
-        
+        address = request.POST['address']        
         time_of_order = request.POST['time_of_order']
         time_of_delivery = request.POST['time_of_delivery']
         discount = request.POST['discount']
@@ -157,6 +157,8 @@ def addOrder(request):
             discount = int(discount)
         )
 
+        customer.address = address
+        customer.save()
 
         return HttpResponse("<h1>Order Successfully Created! <a href='/staff/orders'>Back</a></h1>")
 
@@ -216,8 +218,8 @@ def fetchOrder(request):
                 "PHONE": order.customer.phone_no,
                 "ADDRESS": order.customer.address,
                 "BILL_TEXT": order.bill_text,
-                "TIME_OF_ORDER": order.time_of_order.date(),
-                "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%d/%m/%Y %-I:%M %p"),
+                "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
+                "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
             }
         
         return JsonResponse(RESPONSE)
