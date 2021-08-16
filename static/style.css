@@ -357,6 +357,16 @@ button {
 #big_money{
     font-weight: 900;
 }
+.existing-expense{
+    transition: 0.2s;
+}
+.expense-details{
+    display: none;
+}
+.existing-expense:hover .expense-details{
+    display: block;
+
+}
 
 /* For Phones */
 

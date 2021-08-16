@@ -73,7 +73,7 @@ def money(request):
 
     
     
-    DATA = {"CURRENT_PAGE": "money", "CASH": Money.objects.all()[0]}
+    DATA = {"CURRENT_PAGE": "money", "CASH": Money.objects.all()[0], "EXPENSES":Expense.objects.all()[:20][::-1]}
     return render(request, 'staff/money.html', DATA)
 
 def addProduct(request):

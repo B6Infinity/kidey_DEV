@@ -101,9 +101,10 @@ class Expense(models.Model):
         m.value -= self.amount
         m.save()
 
+        super(Expense, self).save(*args, **kwargs)
 
-        super(Order, self).save(*args, **kwargs)
-
+    def __str__(self) -> str:
+        return f"<b style='color:skyblue;'>{self.amount}</b> - {self.time_of_expense.strftime('%d/%m/%y, %H:%M')}"
 
 class Money(models.Model):
     value = models.IntegerField(default=0)
