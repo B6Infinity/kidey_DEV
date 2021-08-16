@@ -20,6 +20,7 @@ urlpatterns = [
     # APIs
     path('fetchCustomer', view=views.fetchCustomer, name='fetchCustomer'),
     path('fetchOrder', view=views.fetchOrder, name='fetchOrder'),
+    path('markOrderPaid', view=views.markOrderPaid, name='markOrderPaid'),
 
 
 

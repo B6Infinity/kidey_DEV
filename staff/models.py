@@ -53,6 +53,7 @@ class Order(models.Model):
 
     payable_amt = models.IntegerField(default=0, blank=True)
     
+    paid = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
 
@@ -69,6 +70,11 @@ class Order(models.Model):
         self.payable_amt = bill - self.discount
         self.bill_text = bill_text
 
+        if self.paid:
+            m = Money.objects.all()[0]
+            m.value += self.payable_amt
+            m.save()
+
 
         super(Order, self).save(*args, **kwargs)
     
@@ -79,9 +85,25 @@ class Order(models.Model):
 
 class Expense(models.Model):
 
+    withdrawer = models.CharField(max_length=150, default="", null=True, blank=True)
+
     time_created = models.DateTimeField(auto_now_add=True)
     time_of_expense = models.DateTimeField()
 
     amount = models.IntegerField()
 
     summary = models.CharField(max_length=150, null=True, blank=True)
+
+
+    def save(self, *args, **kwargs):
+
+        m = Money.objects.all()[0]
+        m.value -= self.amount
+        m.save()
+
+
+        super(Order, self).save(*args, **kwargs)
+
+
+class Money(models.Model):
+    value = models.IntegerField(default=0)

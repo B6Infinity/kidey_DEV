@@ -51,6 +51,10 @@ button {
     font-style: underline;
 }
 
+.fnt-extra-xxx{
+    font-size: 220px;
+}
+
 .fnt-xx-big {
     font-size: 80px;
 }
@@ -326,11 +330,42 @@ button {
     color: black;
 }
 
+.label-classic {
+    font-size: 20px;
+    line-height: 30px;
+    color: grey;
+    display: inline-block;
+}
+
+#show-order {
+    overflow-y: auto;
+    visibility: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 30px 30px 5px #30303075;
+    padding: 10px;
+    margin: 20px;
+    background-color: #131313;
+    border: 3px solid skyblue;
+    width: 60vw;
+    border-radius: 5px;
+    height: 60vh;
+}
+
+#big_money{
+    font-weight: 900;
+}
+
 /* For Phones */
 
 @media only screen and (max-device-width: 640px) {
     body {
         height: 83vh;
+    }
+    .fnt-extra-xxx{
+        font-size: 70px;
     }
     .fnt-xx-big {
         font-size: 60px;

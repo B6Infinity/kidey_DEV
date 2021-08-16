@@ -234,44 +234,20 @@
     <br><span class="label-classic">Order:&nbsp; </span><br>
     <div style="color: white;" class="label-classic" id="order-bill_text"></div><br><br>
     <div style="color: green; font-size: 25px;" class="label-classic" id="order-money"></div>
-
-
+    <br><br>
+    <button id="paid-" name="paid_button" style="font-size: 20px; color: green;" onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Mark as Paid</button>
 
     <div id="confirm_delete" style="float: right; margin: 5px; visibility: hidden;">
         <form action="/staff/delete-order" method="POST">{% csrf_token %}
             <input type="hidden" name="order-id" value="">
-            <button style=" font-size: 20px; color: red;" type="submit">Confirm Delete</button>
-            <button style=" font-size: 20px; color: green;" onclick="document.getElementById('confirm_delete').style.visibility = 'hidden';" type="button">Cancel</button>
+            <button style="font-size: 20px; color: red;" type="submit">Confirm Delete</button>
+            <button style="font-size: 20px; color: green;" onclick="document.getElementById('confirm_delete').style.visibility = 'hidden';" type="button">Cancel</button>
         </form>
     </div>
 
 </div>
 
-<style>
-    .label-classic {
-        font-size: 20px;
-        line-height: 30px;
-        color: grey;
-        display: inline-block;
-    }
 
-    #show-order {
-        overflow-y: auto;
-        visibility: hidden;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        box-shadow: 30px 30px 5px #30303075;
-        padding: 10px;
-        margin: 20px;
-        background-color: #131313;
-        border: 3px solid skyblue;
-        width: 60vw;
-        border-radius: 5px;
-        height: 60vh;
-    }
-</style>
 <script>
     function showOrder(order_id) {
 
@@ -303,11 +279,49 @@
                     document.getElementById('order-time_of_delivery').textContent = data["ORDER"]["TIME_OF_DELIVERY"];
                     document.getElementById('order-money').innerHTML = data["ORDER"]["MONEY"];
                     document.getElementsByName('order-id')[0].value = order_id;
+                    let paidbtn = document.getElementsByName('paid_button')[0];
+
+                    paidbtn.id = 'paid-'+order_id
+
+                    let paid = data["ORDER"]["PAID"];
+                    if(paid){
+                        paidbtn.disabled = true;
+                        paidbtn.textContent = "Paid";
+                        paidbtn.style.color = 'green';
+                    }else{
+                        paidbtn.disabled = false;
+                        paidbtn.style.color = '#00FF00';
+                        paidbtn.textContent = "Mark as Paid";
+                        
+                    }
 
                 }
             });
     }
 
+    function markOrderAsPaid(order_id){
+        console.log(order_id);
+        let form = new FormData();
+        form.set('order_id', order_id);
+        fetch(`markOrderPaid`,
+            {
+                method: 'POST',
+                body: form,
+                headers: {
+                    'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                    "X-CSRFToken": csrftoken
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(data["ERROR"] == null){
+                    document.getElementsByName('paid_button')[0].disabled = true;
+                    document.getElementsByName('paid_button')[0].textContent = "Paid";
+                    document.getElementsByName('paid_button')[0].style.color = 'green';
+                }
+            });
+    }
 
 </script>
 

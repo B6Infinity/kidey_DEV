@@ -70,8 +70,10 @@ def orders(request):
 def money(request):
     if not request.user.is_staff:
         return HttpResponse("You need to login as a staff <a href='/staff'>Login Here</a>")
+
     
-    DATA = {"CURRENT_PAGE": "money"}
+    
+    DATA = {"CURRENT_PAGE": "money", "CASH": Money.objects.all()[0]}
     return render(request, 'staff/money.html', DATA)
 
 def addProduct(request):
@@ -132,7 +134,7 @@ def addOrder(request):
     if request.method == 'POST' and request.user.is_staff:
         customer_name = request.POST['customer_name']
         customer_phone_no = request.POST['customer_phone_no']
-        address = request.POST['address']        
+        address = request.POST['customer_address']        
         time_of_order = request.POST['time_of_order']
         time_of_delivery = request.POST['time_of_delivery']
         discount = request.POST['discount']
@@ -232,6 +234,7 @@ def fetchOrder(request):
                 "PHONE": order.customer.phone_no,
                 "ADDRESS": order.customer.address,
                 "BILL_TEXT": order.bill_text,
+                "PAID": order.paid,
                 "MONEY": f"₹{order.total_bill} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
                 "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
                 "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
@@ -239,3 +242,17 @@ def fetchOrder(request):
         
         return JsonResponse(RESPONSE)
 
+def markOrderPaid(request):
+    if request.method == 'POST' and request.user.is_staff:
+        RESPONSE = {"ERROR": None}
+        
+        order_id = request.POST['order_id']
+
+        if len(Order.objects.filter(id=order_id)) == 0:
+            RESPONSE["ERROR"] = "Order does not exist!"
+        else:
+            order = Order.objects.get(id=order_id)
+            order.paid = True
+            order.save()
+
+        return JsonResponse(RESPONSE)
