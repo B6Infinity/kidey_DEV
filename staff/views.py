@@ -59,7 +59,7 @@ def orders(request):
     DATA = {"CURRENT_PAGE": "orders"}
 
     existing_orders = Order.objects.all()
-    DATA["EXISTING_ORDERS"] = existing_orders
+    DATA["EXISTING_ORDERS"] = existing_orders[::-1]
 
     existing_products = Product.objects.all()
     DATA["EXISTING_PRODUCTS"] = existing_products
@@ -196,7 +196,7 @@ def fetchCustomer(request):
                 RESPONSE["ERROR"] = "NOT FOUND"
             else:
                 matching_customer = Customer.objects.filter(name__iexact=name)[0]
-                RESPONSE["MATCHING_CUSTOMER"] = {"Name": matching_customer.name, "Phone": matching_customer.phone_no}
+                RESPONSE["MATCHING_CUSTOMER"] = {"Name": matching_customer.name, "Phone": matching_customer.phone_no, "Address": matching_customer.address}
 
         elif datatype == 'phone_no':
             
@@ -205,7 +205,7 @@ def fetchCustomer(request):
                 RESPONSE["ERROR"] = "NOT FOUND"
             else:
                 matching_customer = Customer.objects.filter(phone_no=phone_no)[0]
-                RESPONSE["MATCHING_CUSTOMER"] = {"Name": matching_customer.name, "Phone": matching_customer.phone_no}
+                RESPONSE["MATCHING_CUSTOMER"] = {"Name": matching_customer.name, "Phone": matching_customer.phone_no, "Address": matching_customer.address}
             
 
         else:

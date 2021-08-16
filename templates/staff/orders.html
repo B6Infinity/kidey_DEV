@@ -29,7 +29,7 @@
                             onchange="fetchCustomer(this.value, 'phone_no')" placeholder="Customer Phone"
                             autocomplete="off" required>
 
-                        <input class="input-classic" name="address" value="" type="text" placeholder="Address"
+                        <input class="input-classic" name="customer_address" value="" type="text" placeholder="Address"
                             autocomplete="off">
 
                         <br>Time Of Order:
@@ -152,6 +152,7 @@
                                         // CHANGE HTML
                                         document.getElementsByName('customer_name')[0].value = data["MATCHING_CUSTOMER"]["Name"];
                                         document.getElementsByName('customer_phone_no')[0].value = data["MATCHING_CUSTOMER"]["Phone"];
+                                        document.getElementsByName('customer_address')[0].value = data["MATCHING_CUSTOMER"]["Address"];
                                     }
                                 });
 
