@@ -41,9 +41,11 @@
                         <input class="input-classic" style="width: 100px;" onchange="addDiscount(Number(this.value));"
                             name="discount" type="number" placeholder="Discount" autocomplete="off">
                         <input class="input-classic" style="width: 90px; background-color: #101010;" name="payable_amt"
-                            type="number" placeholder="Payable ₹" autocomplete="off" disabled>
+                            type="number" placeholder="Payable ₹" autocomplete="off" disabled required>
 
                     </div>
+
+                    <input type="hidden" name="order_json" value="">
 
 
 
@@ -108,12 +110,15 @@
                                 // console.log(totalBill);
                             }
 
-                            if (Object.keys(orderJson).length == 0) totalBill = 0;
+                            if (Object.keys(orderJson).length == 0) {totalBill = 0; document.getElementById('createbutton').disabled = true;}
+                            else {document.getElementById('createbutton').disabled = false;}
 
 
                             // CHANGE HTML
                             document.getElementsByName('total_bill')[0].value = totalBill;
                             document.getElementsByName('payable_amt')[0].value = totalBill - discount;
+
+                            document.getElementsByName('order_json')[0].value = JSON.stringify(orderJson);
                         }
 
                         function addDiscount(d) {
@@ -155,7 +160,7 @@
 
 
                 <br><br>
-                <button class="big-button" id="createbutton" type="button" style="font-size: 18px;">Create</button>
+                <button disabled class="big-button" id="createbutton" type="submit" style="font-size: 18px;">Create</button>
 
 
             </form>
