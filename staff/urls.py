@@ -14,6 +14,7 @@ urlpatterns = [
     path('money', view=views.money, name='money'),
     path('add-product', view=views.addProduct, name='add-product'),
     path('delete-product', view=views.deleteProduct, name='delete-product'),
+    path('add-order', view=views.addOrder, name='add-order'),
 
     # APIs
     path('fetchCustomer', view=views.fetchCustomer, name='fetchCustomer'),

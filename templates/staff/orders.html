@@ -15,7 +15,7 @@
 
             <script>let orderJson = {}; let totalBill = 0; let discount = 0;</script>
 
-            <form action="/staff/add-product" method="POST">
+            <form action="/staff/add-order" method="POST">
                 {% csrf_token %}
 
                 <div class="flex-row row-responsive">
@@ -27,7 +27,7 @@
                             required>
                         <input class="input-classic" name="customer_phone_no" type="number"
                             onchange="fetchCustomer(this.value, 'phone_no')" placeholder="Customer Phone"
-                            autocomplete="off" required maxlength="10">
+                            autocomplete="off" required>
 
                         <br>Time Of Order:
                         <input class="input-classic" name="time_of_order" type="datetime-local"

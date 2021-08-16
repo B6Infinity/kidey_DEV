@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .models import *
+import json
 
 # Create your views here.
 def home(request):
@@ -125,6 +126,42 @@ def deleteProduct(request):
 
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
+
+def addOrder(request):
+    if request.method == 'POST':
+        customer_name = request.POST['customer_name']
+        customer_phone_no = request.POST['customer_phone_no']
+        
+        time_of_order = request.POST['time_of_order']
+        time_of_delivery = request.POST['time_of_delivery']
+        discount = request.POST['discount']
+        order_json = request.POST['order_json']
+
+        # Frisk Data
+        if len(discount) == 0:
+            discount = "0"
+        
+
+
+        # Handling the Customer
+        __customer = Customer.objects.get_or_create(name=customer_name, phone_no=customer_phone_no)
+        customer = __customer[0]
+
+        # Handling the Order
+        newOrder = Order.objects.create(
+            customer = customer, 
+            order_json = json.loads(order_json), 
+            time_of_order = datetime.strptime(time_of_order, "%Y-%m-%dT%H:%M"),
+            time_of_delivery = datetime.strptime(time_of_delivery, "%Y-%m-%dT%H:%M"),
+            discount = int(discount)
+        )
+
+
+        return HttpResponse("<h1>Order Successfully Created! <a href='/staff/orders'>Back</a></h1>")
+
+    else:
+        return HttpResponse("Critical Gateway! Data Loss!")
+
 
 # APIs
 
