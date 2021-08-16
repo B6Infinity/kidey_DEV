@@ -1,3 +1,4 @@
+from django.core.checks.messages import ERROR
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -75,7 +76,7 @@ def money(request):
 
 def addProduct(request):
     
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_staff:
         new_product = request.POST['new_product']
         
         if new_product == "false":
@@ -115,7 +116,7 @@ def addProduct(request):
         return HttpResponse("Critical Violation... Invalid Gateway!")
 
 def deleteProduct(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_staff:
         product_id = request.POST['product_id']
 
         if len(Product.objects.filter(id=product_id)) != 0:
@@ -128,7 +129,7 @@ def deleteProduct(request):
         return HttpResponse("Critical Gateway! Data Loss!")
 
 def addOrder(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_staff:
         customer_name = request.POST['customer_name']
         customer_phone_no = request.POST['customer_phone_no']
         
@@ -167,7 +168,7 @@ def addOrder(request):
 
 def fetchCustomer(request):
     
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_staff:
         datatype = request.POST['datatype']
         data = request.POST['data']
         RESPONSE = {"ERROR": None}
@@ -199,4 +200,25 @@ def fetchCustomer(request):
     else:
         return HttpResponse("Not this way Mr. heckar :)")
 
+def fetchOrder(request):
+    if request.method == 'POST' and request.user.is_staff:
+        RESPONSE = {"ERROR": None}
+        
+        order_id = request.POST['order_id']
+
+        if len(Order.objects.filter(id=order_id)) == 0:
+            RESPONSE["ERROR"] = "Order does not exist!"
+        else:
+            order = Order.objects.get(id=order_id)
+
+            RESPONSE["ORDER"] = {
+                "NAME": order.customer.name,
+                "PHONE": order.customer.phone_no,
+                "ADDRESS": order.customer.address,
+                "BILL_TEXT": order.bill_text,
+                "TIME_OF_ORDER": order.time_of_order.date(),
+                "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%d/%m/%Y %-I:%M %p"),
+            }
+        
+        return JsonResponse(RESPONSE)
 

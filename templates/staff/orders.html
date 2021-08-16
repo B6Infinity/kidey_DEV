@@ -110,8 +110,8 @@
                                 // console.log(totalBill);
                             }
 
-                            if (Object.keys(orderJson).length == 0) {totalBill = 0; document.getElementById('createbutton').disabled = true;}
-                            else {document.getElementById('createbutton').disabled = false;}
+                            if (Object.keys(orderJson).length == 0) { totalBill = 0; document.getElementById('createbutton').disabled = true; }
+                            else { document.getElementById('createbutton').disabled = false; }
 
 
                             // CHANGE HTML
@@ -145,7 +145,7 @@
                                 .then(response => response.json())
                                 .then(data => {
 
-                                    if (data["ERROR"] == null){
+                                    if (data["ERROR"] == null) {
                                         // CHANGE HTML
                                         document.getElementsByName('customer_name')[0].value = data["MATCHING_CUSTOMER"]["Name"];
                                         document.getElementsByName('customer_phone_no')[0].value = data["MATCHING_CUSTOMER"]["Phone"];
@@ -160,7 +160,8 @@
 
 
                 <br><br>
-                <button disabled class="big-button" id="createbutton" type="submit" style="font-size: 18px;">Create</button>
+                <button disabled class="big-button" id="createbutton" type="submit"
+                    style="font-size: 18px;">Create</button>
 
 
             </form>
@@ -180,16 +181,18 @@
         <div id="existing-products-container" style="height: 90%; overflow-y:auto;">
 
             {% for order in EXISTING_ORDERS %}
-            <div class="existing-product">
+            <div class="existing-product" onclick="showOrder('{{order.id}}')" id="order-{{order.id}}">
                 <div style="display: flex;">
                     <div id="{{product.id}}-name" class="fnt-x-small" style="flex-grow: 1;">{{order.customer}}
                     </div>
 
 
-                    <div class="edit-button" onclick="">Edit</div>
+                    <div class="edit-button" onclick="">del</div>
                 </div>
                 <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">
-                    <div id="{{product.id}}-price" style="flex-grow: 1;">₹{{order.payable_amt}}</div>
+                    <div id="{{product.id}}-price" style="flex-grow: 1; color: skyblue; font-weight: 900;">
+                        ₹{{order.payable_amt}}</div>
+                    <div id="{{product.id}}-price" style="padding: 0px 5px;">{{order.time_of_delivery}}</div>
 
                 </div>
             </div>
@@ -206,8 +209,89 @@
 </div>
 
 
+<div id="show-order">
+    <div style="float: right; font-weight: 900; padding: 5px; user-select: none; color: red; background-color: black; border-radius: 5px;"
+        onclick="document.getElementById('show-order').style.visibility = 'hidden';">X</div>
 
 
+    <span class="label-classic">Customer Name:&nbsp;</span>
+    <div style="color: white;" class="label-classic" id="order-customer_name"></div>
+    <br><span class="label-classic">Phone No.:&nbsp; </span>
+    <div style="color: white;" class="label-classic" id="order-phone_no"></div>
+    <br><span class="label-classic">Address: &nbsp;</span>
+    <div style="color: white;" class="label-classic" id="order-address"></div>
+    <br><span class="label-classic">Time Of Order: &nbsp;</span>
+    <div style="color: white;" class="label-classic" id="order-time_of_order"></div>
+    <br><span class="label-classic">Time Of Delivery: &nbsp;</span>
+    <div style="color: white;" class="label-classic" id="order-time_of_delivery"></div>
+    <br><span class="label-classic">Order:&nbsp; </span><br>
+    <div style="color: white;" class="label-classic" id="order-bill_text"></div>
+
+
+</div>
+
+<style>
+    .label-classic {
+        font-size: 25px;
+        line-height: 40px;
+        color: grey;
+        display: inline-block;
+    }
+
+    #show-order {
+        overflow-y: auto;
+        visibility: hidden;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 30px 30px 5px #30303075;
+        padding: 10px;
+        margin: 20px;
+        background-color: #131313;
+        border: 3px solid skyblue;
+        width: 60vw;
+        border-radius: 5px;
+        height: 60vh;
+    }
+</style>
+<script>
+    function showOrder(order_id) {
+
+        // fetchOrder
+
+        let form = new FormData();
+        form.set('order_id', order_id);
+        fetch(`fetchOrder`,
+            {
+                method: 'POST',
+                body: form,
+                headers: {
+                    'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                    "X-CSRFToken": csrftoken
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data["ERROR"] == null) {
+                    // CHANGE HTML
+                    document.getElementById('show-order').style.visibility = 'visible';
+                    
+                    document.getElementById('order-customer_name').textContent = data["ORDER"]["NAME"];
+                    document.getElementById('order-phone_no').textContent = data["ORDER"]["PHONE"];
+                    document.getElementById('order-address').textContent = data["ORDER"]["ADDRESS"];
+                    document.getElementById('order-bill_text').textContent = data["ORDER"]["BILL_TEXT"];
+                    document.getElementById('order-time_of_order').textContent = data["ORDER"]["TIME_OF_ORDER"];
+                    document.getElementById('order-time_of_delivery').textContent = data["ORDER"]["TIME_OF_DELIVERY"];
+
+
+                }
+            });
+    }
+
+
+</script>
 
 
 

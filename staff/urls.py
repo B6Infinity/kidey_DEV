@@ -18,6 +18,7 @@ urlpatterns = [
 
     # APIs
     path('fetchCustomer', view=views.fetchCustomer, name='fetchCustomer'),
+    path('fetchOrder', view=views.fetchOrder, name='fetchOrder'),
 
 
 
