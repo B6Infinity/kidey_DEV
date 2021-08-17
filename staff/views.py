@@ -193,10 +193,6 @@ def withdrawMoney(request):
 
         return redirect("money")
 
-
-
-        
-
 # APIs
 
 def fetchCustomer(request):

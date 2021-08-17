@@ -51,7 +51,7 @@ button {
     font-style: underline;
 }
 
-.fnt-extra-xxx{
+.fnt-extra-xxx {
     font-size: 220px;
 }
 
@@ -316,13 +316,20 @@ button {
     border-radius: 3px;
     background-color: #89cfeb;
 }
-.counter-product{
+
+.counter-product {
     color: grey;
 }
-.non-zero-product span{color: black;}
-.non-zero-product .add-product{box-shadow: 1px 1px 3px black;}
 
-.non-zero-product{
+.non-zero-product span {
+    color: black;
+}
+
+.non-zero-product .add-product {
+    box-shadow: 1px 1px 3px black;
+}
+
+.non-zero-product {
     margin: 5px 0px;
     padding: 3px;
     background-color: #6cfa49;
@@ -354,18 +361,25 @@ button {
     height: 60vh;
 }
 
-#big_money{
+#big_money {
     font-weight: 900;
 }
-.existing-expense{
+
+.existing-expense {
     transition: 0.2s;
 }
-.expense-details{
+
+.expense-details {
     display: none;
 }
-.existing-expense:hover .expense-details{
-    display: block;
 
+.existing-expense:hover .expense-details {
+    display: block;
+}
+
+.responsive-chart {
+    width: 100%;
+    height: 400px;
 }
 
 /* For Phones */
@@ -374,7 +388,7 @@ button {
     body {
         height: 83vh;
     }
-    .fnt-extra-xxx{
+    .fnt-extra-xxx {
         font-size: 70px;
     }
     .fnt-xx-big {
@@ -443,6 +457,10 @@ button {
     }
     #exisitingproductsflexbox {
         width: 90%;
+    }
+    .responsive-chart {
+        width: 100%;
+        height: 100%;
     }
 }
 
