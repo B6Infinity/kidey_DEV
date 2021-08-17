@@ -8,7 +8,23 @@
     <div class="flex-object" style="flex-grow: 1;">
         <div class="fnt-med" style="color: #aaaaaa">Total Money in Cash</div><br>
         <div class="fnt-extra-xxx" id="big_money">{{CASH.value}}/-</div>
+
+        <div id="withdraw-money-container">
+            <div class="fnt-med" style="color: #aaaaaa">Withdraw Money:</div>
+
+            <form action="withdrawMoney" method="post">{% csrf_token %}
+                <input type="text" class="input-classic" name="withdraw_name" placeholder="Name of withdrawer" required autocomplete="off">
+                <input type="number" class="input-classic" name="withdraw_amt" placeholder="Amount Withdrawn" required autocomplete="off">
+                <input type="text" class="input-classic" name="withdraw_summary" placeholder="Summary" required autocomplete="off">
+                <input type="datetime-local" class="input-classic" name="widthdraw_time" placeholder="Time Of Widthdrawl" required autocomplete="off">
+                <br><br>
+                <button style="font-size: 20px; color: green;" type="submit">Widthdraw</button>
+            </form>
+
+        </div>
+
     </div>
+    
     <hr>
     <div class="flex-object">
         <div class="fnt-med" style="color: #aaaaaa; right: 0;">Expenses</div><br>
@@ -20,14 +36,15 @@
             </div>
             <!-- EXPENSE DETAILS -->
             <div class="expense-details">
-                {{expense.withdrawer}}
-                <br>{{expense.summary}}
+                <span style="font-weight:900; color: skyblue;">{{expense.withdrawer}}</span> - {{expense.summary}}
             </div>
         </div>
 
         {% endfor %}
 
     </div>
+
+    
 
 
 

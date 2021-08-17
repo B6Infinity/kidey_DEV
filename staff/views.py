@@ -182,6 +182,21 @@ def deleteOrder(request):
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
 
+def withdrawMoney(request):
+    if request.method == 'POST' and request.user.is_staff:
+        withdraw_name = request.POST['withdraw_name']
+        withdraw_amt = request.POST['withdraw_amt']
+        withdraw_summary = request.POST['withdraw_summary']
+        time_of_expense = request.POST['widthdraw_time']
+
+        Expense.objects.create(withdrawer=withdraw_name, amount=int(withdraw_amt), summary=withdraw_summary, time_of_expense=time_of_expense)
+
+        return redirect("money")
+
+
+
+        
+
 # APIs
 
 def fetchCustomer(request):

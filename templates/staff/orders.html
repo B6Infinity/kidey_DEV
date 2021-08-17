@@ -185,7 +185,8 @@
         <div id="existing-products-container" style="height: 90%; overflow-y:auto;">
 
             {% for order in EXISTING_ORDERS %}
-            <div class="existing-product" onclick="showOrder('{{order.id}}')" id="order-{{order.id}}">
+            <div class="existing-product" onclick="showOrder('{{order.id}}')" id="order-{{order.id}}"
+            {% if not order.paid %}style="background-color: rgba(135, 207, 235, 0.548);"{% endif %}>
                 <div style="display: flex;">
                     <div id="{{product.id}}-name" class="fnt-x-small" style="flex-grow: 1;">{{order.customer}}
                     </div>
@@ -217,7 +218,8 @@
     <div style="float: right; font-weight: 900; padding: 5px; user-select: none; color: red; background-color: black; border-radius: 5px;"
         onclick="document.getElementById('show-order').style.visibility = 'hidden';">X</div>
     <div style="margin-right: 5px;float: right; font-weight: 900; padding: 5px; user-select: none; color: red; background-color: black; border-radius: 5px;"
-        onclick="document.getElementById('confirm_delete').style.visibility = 'visible';"><img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png">
+        onclick="document.getElementById('confirm_delete').style.visibility = 'visible';"><img style="width: 15px;"
+            src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png">
     </div>
 
 
@@ -235,13 +237,16 @@
     <div style="color: white;" class="label-classic" id="order-bill_text"></div><br><br>
     <div style="color: green; font-size: 25px;" class="label-classic" id="order-money"></div>
     <br><br>
-    <button id="paid-" name="paid_button" style="font-size: 20px; color: green;" onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Mark as Paid</button>
+    <button id="paid-" name="paid_button" style="font-size: 20px; color: green;"
+        onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Mark as Paid</button>
 
     <div id="confirm_delete" style="float: right; margin: 5px; visibility: hidden;">
         <form action="/staff/delete-order" method="POST">{% csrf_token %}
             <input type="hidden" name="order-id" value="">
             <button style="font-size: 20px; color: red;" type="submit">Confirm Delete</button>
-            <button style="font-size: 20px; color: green;" onclick="document.getElementById('confirm_delete').style.visibility = 'hidden';" type="button">Cancel</button>
+            <button style="font-size: 20px; color: green;"
+                onclick="document.getElementById('confirm_delete').style.visibility = 'hidden';"
+                type="button">Cancel</button>
         </form>
     </div>
 
@@ -281,25 +286,25 @@
                     document.getElementsByName('order-id')[0].value = order_id;
                     let paidbtn = document.getElementsByName('paid_button')[0];
 
-                    paidbtn.id = 'paid-'+order_id
+                    paidbtn.id = 'paid-' + order_id
 
                     let paid = data["ORDER"]["PAID"];
-                    if(paid){
+                    if (paid) {
                         paidbtn.disabled = true;
                         paidbtn.textContent = "Paid";
                         paidbtn.style.color = 'green';
-                    }else{
+                    } else {
                         paidbtn.disabled = false;
                         paidbtn.style.color = '#00FF00';
                         paidbtn.textContent = "Mark as Paid";
-                        
+
                     }
 
                 }
             });
     }
 
-    function markOrderAsPaid(order_id){
+    function markOrderAsPaid(order_id) {
         console.log(order_id);
         let form = new FormData();
         form.set('order_id', order_id);
@@ -315,10 +320,11 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                if(data["ERROR"] == null){
+                if (data["ERROR"] == null) {
                     document.getElementsByName('paid_button')[0].disabled = true;
                     document.getElementsByName('paid_button')[0].textContent = "Paid";
                     document.getElementsByName('paid_button')[0].style.color = 'green';
+                    document.getElementById('order-'+order_id).style.backgroundColor = '#202020';
                 }
             });
     }

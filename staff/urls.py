@@ -16,6 +16,7 @@ urlpatterns = [
     path('delete-product', view=views.deleteProduct, name='delete-product'),
     path('add-order', view=views.addOrder, name='add-order'),
     path('delete-order', view=views.deleteOrder, name='delete-order'),
+    path('withdrawMoney', view=views.withdrawMoney, name='withdrawMoney'),
 
     # APIs
     path('fetchCustomer', view=views.fetchCustomer, name='fetchCustomer'),

@@ -92,7 +92,7 @@ class Expense(models.Model):
 
     amount = models.IntegerField()
 
-    summary = models.CharField(max_length=150, null=True, blank=True)
+    summary = models.TextField(null=True, blank=True)
 
 
     def save(self, *args, **kwargs):
@@ -104,7 +104,7 @@ class Expense(models.Model):
         super(Expense, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return f"<b style='color:skyblue;'>{self.amount}</b> - {self.time_of_expense.strftime('%d/%m/%y, %H:%M')}"
+        return f"<b style='color:skyblue;'>₹{self.amount}</b> - {self.time_of_expense.strftime('%d/%m/%y, %H:%M')}"
 
 class Money(models.Model):
     value = models.IntegerField(default=0)
