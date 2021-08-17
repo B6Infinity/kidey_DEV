@@ -1,5 +1,5 @@
 {% extends 'staff/base.html' %}
-{% block title %}Products Manager{% endblock title %}
+{% block title %}Analytics{% endblock title %}
 {% block body %}
 
 
@@ -13,23 +13,44 @@
 
     <!-- CHART MAIN -->
     <div class="flex-object" style="flex-grow: 1;">
+        <div class="fnt-med" id="mainChart-heading" style="color: grey;">Last Week Sales</div><br>
         <canvas class="responsive-chart" id="mainChart"></canvas>
-        
     </div>
     <hr>
-    <div class="flex-object fnt-med" style="color: grey;">
-        Analytics:
+    <div class="flex-object fnt-med">
+        <div class="fnt-med" id="mainChart-heading" style="color: grey;">Analytics:</div>
+        <br>
+        <div id="small-charts-container" style="overflow-y: auto; height: 440px;">
+
+            <div class="anaylitics-object" onclick="console.log('Total Sales')">
+                <div class="small-chart-label">Last Week Sales</div>
+                <canvas class="small-chart" id="chart-totalSales" width="200" height="190"></canvas>
+            </div>
+            <div class="anaylitics-object" onclick="console.log('Expenses')">
+                <div class="small-chart-label">Total Expenses</div>
+                <canvas class="small-chart active" id="chart-expenses" width="200" height="190"></canvas>
+            </div>
+            <div class="anaylitics-object" onclick="console.log('Most Ordered Product')">
+                <div class="small-chart-label">Most Ordered Product</div>
+                <canvas class="small-chart" id="chart-mostOrdered" width="200" height="190"></canvas>
+            </div>
+
+        </div>
+
     </div>
 
-    
+
 </div>
 
 
 
 
 <script>
-    var ctx = document.getElementById('mainChart').getContext('2d');
-    var mainChart = new Chart(ctx, {
+
+
+
+    var mainCanvas = document.getElementById('mainChart').getContext('2d');
+    var mainChart = new Chart(mainCanvas, {
         type: 'bar',
         data: {
             labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -51,6 +72,69 @@
             }
         }
     });
+
+    let canvas_totalSales = document.getElementById('chart-totalSales').getContext('2d');
+    let canvas_expenses = document.getElementById('chart-expenses').getContext('2d');
+    let canvas_mostOrdered = document.getElementById('chart-mostOrdered').getContext('2d');
+
+    // mainChart.
+
+    let chart_totalSales = new Chart(canvas_totalSales, {
+        type: 'line',
+        data: {
+            labels: {{ LAST_WEEK_SALES| safe}}[0],
+                datasets: [{
+                    label: 'Daily Income',
+                    data: {{ LAST_WEEK_SALES| safe}}[1],
+                    backgroundColor: ['skyblue'],
+                    borderColor: [
+                    'skyblue',
+                ],
+                    borderWidth: 3
+            }]
+        },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+    });
+
+
+
+
+    let chart_expenses = new Chart(canvas_expenses, {
+        type: 'bar',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [{
+                label: 'Daily Income',
+                data: [120, 100, 600, 50, 200, 300, 600],
+                backgroundColor: ['skyblue']
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    function setMainChart(newChart){
+        mainChart.data.datasets = [];
+        mainChart.data.labels = [];
+
+        mainChart.data.datasets.
+        BUGGGGGGGGGGG
+
+    }
+
+
 </script>
 
 
@@ -65,7 +149,6 @@
     if ("{{CURRENT_PAGE}}" == "analytics") {
         document.getElementById('{{CURRENT_PAGE}}-hotbar').classList.add('hotbar-active');
     }
-
 </script>
 
 {% endblock body %}
