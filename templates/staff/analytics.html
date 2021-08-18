@@ -22,15 +22,15 @@
         <br>
         <div id="small-charts-container" style="overflow-y: auto; height: 440px;">
 
-            <div class="anaylitics-object" onclick="console.log('Total Sales')">
+            <div class="anaylitics-object" onclick="setMainChart(chart_totalSales)">
                 <div class="small-chart-label">Last Week Sales</div>
                 <canvas class="small-chart" id="chart-totalSales" width="200" height="190"></canvas>
             </div>
-            <div class="anaylitics-object" onclick="console.log('Expenses')">
+            <div class="anaylitics-object" onclick="setMainChart(chart_expenses)">
                 <div class="small-chart-label">Total Expenses</div>
                 <canvas class="small-chart active" id="chart-expenses" width="200" height="190"></canvas>
             </div>
-            <div class="anaylitics-object" onclick="console.log('Most Ordered Product')">
+            <div class="anaylitics-object" onclick="setMainChart(chart_MostOrdered)">
                 <div class="small-chart-label">Most Ordered Product</div>
                 <canvas class="small-chart" id="chart-mostOrdered" width="200" height="190"></canvas>
             </div>
@@ -125,12 +125,19 @@
     });
 
 
-    function setMainChart(newChart){
-        mainChart.data.datasets = [];
-        mainChart.data.labels = [];
+    function setMainChart(sourceChart){
+        mainChart.data.labels = sourceChart.data.labels;
+        mainChart.data.datasets[0].data = sourceChart.data.datasets[0].data;
 
-        mainChart.data.datasets.
-        BUGGGGGGGGGGG
+        mainChart.config.type = sourceChart.config.type;
+
+        document.getElementsByClassName('active')[0].classList.remove('active');
+        sourceChart.canvas.classList.add('active');
+
+
+
+
+        mainChart.update();
 
     }
 
