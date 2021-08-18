@@ -55,16 +55,17 @@ def analytics(request):
 
     # Data to send: Last Week Sales,
 
-    seven_days_before = date.today() - timedelta(days=7)
+    seven_days_before = date.today() - timedelta(days=6)
 
     # MONDAY IS '0'
     weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     LAST_WEEK_SALES = [] # Labels(Day), Data
     # Fetch Last Week Orders
-    last_week_orders = Order.objects.filter(time_of_order__gt=seven_days_before, paid=True)
+    last_week_orders = Order.objects.filter(time_of_order__gte=seven_days_before, paid=True)
     startingDay = seven_days_before.weekday()
     LAST_WEEK_SALES.append(weekDays[startingDay:] + weekDays[:startingDay])
+    
     
     sales = []
     for day in LAST_WEEK_SALES[0]:
@@ -76,12 +77,41 @@ def analytics(request):
             if startingDay == 7:
                 startingDay = 0
         sales.append(day_income)
+    sales = sales[1:] + [sales[0]]
+    
     LAST_WEEK_SALES.append(sales)
+    startingDay = seven_days_before.weekday()
+
+
+
+
+
+
+    LAST_WEEK_EXPENSES = [] # Labels(Day), Data
+
+    last_week_expenses = Expense.objects.filter(time_of_expense__gte=seven_days_before)
+    startingDay = seven_days_before.weekday()
+    LAST_WEEK_EXPENSES.append(weekDays[startingDay:] + weekDays[:startingDay])
     
+    sales = []
+    for day in LAST_WEEK_EXPENSES[0]: # Copied Code from above
+        day_income = 0
+
+        for order in last_week_expenses:
+            if order.time_of_expense.weekday() == startingDay:
+                day_income += order.amount
+            
+            startingDay += 1
+            if startingDay == 7:
+                startingDay = 0
+        sales.append(day_income)BUGGGGGGGGGG
     
-    print(LAST_WEEK_SALES)
+    # sales = sales[1:] + [sales[0]]
+    LAST_WEEK_EXPENSES.append(sales)
+    print(LAST_WEEK_EXPENSES)
 
     DATA["LAST_WEEK_SALES"] = LAST_WEEK_SALES
+    DATA["LAST_WEEK_EXPENSES"] = LAST_WEEK_EXPENSES
 
     return render(request, 'staff/analytics.html', DATA)
 

@@ -24,11 +24,11 @@
 
             <div class="anaylitics-object" onclick="setMainChart(chart_totalSales)">
                 <div class="small-chart-label">Last Week Sales</div>
-                <canvas class="small-chart" id="chart-totalSales" width="200" height="190"></canvas>
+                <canvas class="small-chart active" id="chart-totalSales" width="200" height="190"></canvas>
             </div>
             <div class="anaylitics-object" onclick="setMainChart(chart_expenses)">
                 <div class="small-chart-label">Total Expenses</div>
-                <canvas class="small-chart active" id="chart-expenses" width="200" height="190"></canvas>
+                <canvas class="small-chart" id="chart-expenses" width="200" height="190"></canvas>
             </div>
             <div class="anaylitics-object" onclick="setMainChart(chart_MostOrdered)">
                 <div class="small-chart-label">Most Ordered Product</div>
@@ -47,37 +47,40 @@
 
 <script>
 
-
+    // MAIN CHART
 
     var mainCanvas = document.getElementById('mainChart').getContext('2d');
     var mainChart = new Chart(mainCanvas, {
-        type: 'bar',
+        type: 'line',
         data: {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            datasets: [{
-                label: 'Daily Income',
-                data: [120, 100, 600, 50, 200, 300, 600],
-                backgroundColor: ['skyblue'],
-                borderColor: [
+            labels: {{ LAST_WEEK_SALES| safe}}[0],
+                datasets: [{
+                    label: 'Daily Income',
+                    data: {{ LAST_WEEK_SALES| safe}}[1],
+                    backgroundColor: ['skyblue'],
+                    borderColor: [
                     'skyblue',
                 ],
-                borderWidth: 3
+                    borderWidth: 3
             }]
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
             }
         }
+    }
     });
+
+    // ------------------------------------------------
+    // Init the Canvases
 
     let canvas_totalSales = document.getElementById('chart-totalSales').getContext('2d');
     let canvas_expenses = document.getElementById('chart-expenses').getContext('2d');
     let canvas_mostOrdered = document.getElementById('chart-mostOrdered').getContext('2d');
 
-    // mainChart.
+    // TOTAL SALES
 
     let chart_totalSales = new Chart(canvas_totalSales, {
         type: 'line',
@@ -104,15 +107,16 @@
 
 
 
+    // EXPENSES
 
     let chart_expenses = new Chart(canvas_expenses, {
         type: 'bar',
         data: {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            labels: {{ LAST_WEEK_EXPENSES| safe}}[0],
             datasets: [{
-                label: 'Daily Income',
-                data: [120, 100, 600, 50, 200, 300, 600],
-                backgroundColor: ['skyblue']
+                label: 'Daily Expenses',
+                data: {{ LAST_WEEK_EXPENSES| safe}}[1],
+                backgroundColor: ['yellow']
             }]
         },
         options: {
@@ -125,11 +129,17 @@
     });
 
 
-    function setMainChart(sourceChart){
+    function setMainChart(sourceChart) {
         mainChart.data.labels = sourceChart.data.labels;
         mainChart.data.datasets[0].data = sourceChart.data.datasets[0].data;
 
         mainChart.config.type = sourceChart.config.type;
+
+        mainChart.data.datasets[0].backgroundColor = sourceChart.data.datasets[0].backgroundColor;
+        mainChart.data.datasets[0].borderColor[0] = sourceChart.data.datasets[0].backgroundColor;
+        mainChart.data.datasets[0].borderColor[0] = sourceChart.data.datasets[0].backgroundColor;
+        mainChart.data.datasets[0].label = sourceChart.data.datasets[0].label;
+
 
         document.getElementsByClassName('active')[0].classList.remove('active');
         sourceChart.canvas.classList.add('active');
