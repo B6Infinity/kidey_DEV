@@ -95,10 +95,30 @@ def analytics(request):
 
 
     LAST_WEEK_EXPENSES.append(list(JS.values()))
-    print(LAST_WEEK_EXPENSES)
 
     DATA["LAST_WEEK_SALES"] = LAST_WEEK_SALES
     DATA["LAST_WEEK_EXPENSES"] = LAST_WEEK_EXPENSES
+
+    startingDay = seven_days_before.weekday()
+
+
+    MOST_ORDERED_PRODUCTS = []
+
+    JS = {}
+    for order in last_week_orders:
+        order_json = order.order_json
+        for product in order_json:
+            product_name = Product.objects.get(id=product).name
+            if not product_name in JS:
+                JS[product_name] = 0
+            JS[product_name] += order_json[product]
+
+    MOST_ORDERED_PRODUCTS.append(list(JS.keys()))
+    MOST_ORDERED_PRODUCTS.append(list(JS.values()))
+    DATA["MOST_ORDERED_PRODUCTS"] = MOST_ORDERED_PRODUCTS
+
+
+
 
     return render(request, 'staff/analytics.html', DATA)
 

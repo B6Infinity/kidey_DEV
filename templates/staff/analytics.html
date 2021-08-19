@@ -30,7 +30,7 @@
                 <div class="small-chart-label">Total Expenses</div>
                 <canvas class="small-chart" id="chart-expenses" width="200" height="190"></canvas>
             </div>
-            <div class="anaylitics-object" onclick="setMainChart(chart_MostOrdered)">
+            <div class="anaylitics-object" onclick="setMainChart(chart_mostOrdered)">
                 <div class="small-chart-label">Most Ordered Product</div>
                 <canvas class="small-chart" id="chart-mostOrdered" width="200" height="190"></canvas>
             </div>
@@ -129,6 +129,35 @@
     });
 
 
+
+    let chart_mostOrdered = new Chart(canvas_mostOrdered, {
+        type: 'pie',
+        data: {
+            labels: {{ MOST_ORDERED_PRODUCTS|safe}}[0],
+                datasets: [{
+                    label: 'Most Selling',
+                    data: {{ MOST_ORDERED_PRODUCTS|safe}}[1],
+                    backgroundColor: ['skyblue', 'tomato', 'chartreuse', 'yellow', 'green', 'peach', 'red'],
+                    borderWidth: 0
+            }]
+        },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+    });
+
+
+
+
+
+
+
+
+
     function setMainChart(sourceChart) {
         mainChart.data.labels = sourceChart.data.labels;
         mainChart.data.datasets[0].data = sourceChart.data.datasets[0].data;
@@ -150,7 +179,6 @@
         mainChart.update();
 
     }
-
 
 </script>
 
