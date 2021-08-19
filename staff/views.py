@@ -67,25 +67,16 @@ def analytics(request):
     LAST_WEEK_SALES.append(weekDays[startingDay:] + weekDays[:startingDay])
     
     
-    sales = []
+    JS = {}
     for day in LAST_WEEK_SALES[0]:
-        day_income = 0
-        for order in last_week_orders:
-            if order.time_of_order.weekday() == startingDay:
-                day_income += order.payable_amt
-            startingDay += 1
-            if startingDay == 7:
-                startingDay = 0
-        sales.append(day_income)
-    sales = sales[1:] + [sales[0]]
+        JS[day] = 0
     
-    LAST_WEEK_SALES.append(sales)
+    for order in last_week_orders:
+        Oday = weekDays[order.time_of_order.weekday()]
+        JS[Oday] += order.payable_amt
+    
+    LAST_WEEK_SALES.append(list(JS.values()))
     startingDay = seven_days_before.weekday()
-
-
-
-
-
 
     LAST_WEEK_EXPENSES = [] # Labels(Day), Data
 
@@ -93,21 +84,17 @@ def analytics(request):
     startingDay = seven_days_before.weekday()
     LAST_WEEK_EXPENSES.append(weekDays[startingDay:] + weekDays[:startingDay])
     
-    sales = []
-    for day in LAST_WEEK_EXPENSES[0]: # Copied Code from above
-        day_income = 0
-
-        for order in last_week_expenses:
-            if order.time_of_expense.weekday() == startingDay:
-                day_income += order.amount
-            
-            startingDay += 1
-            if startingDay == 7:
-                startingDay = 0
-        sales.append(day_income)BUGGGGGGGGGG
     
-    # sales = sales[1:] + [sales[0]]
-    LAST_WEEK_EXPENSES.append(sales)
+    JS = {}
+    for day in LAST_WEEK_EXPENSES[0]:
+        JS[day] = 0
+    
+    for expense in last_week_expenses:
+        Oday = weekDays[expense.time_of_expense.weekday()]
+        JS[Oday] += expense.amount
+
+
+    LAST_WEEK_EXPENSES.append(list(JS.values()))
     print(LAST_WEEK_EXPENSES)
 
     DATA["LAST_WEEK_SALES"] = LAST_WEEK_SALES
