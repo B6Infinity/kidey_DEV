@@ -45,6 +45,13 @@ def products(request):
     DATA["EXISTING_PRODUCTS"] = existing_products
 
 
+    categories = []
+    for product in existing_products:
+        if product.category not in categories:
+            categories.append(product.category)
+
+    DATA["CATEGORIES"] = categories[::-1]
+
     return render(request, 'staff/products.html', DATA)
 
 def analytics(request):

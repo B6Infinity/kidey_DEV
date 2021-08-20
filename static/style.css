@@ -399,7 +399,12 @@ button {
     margin: 5px 0px;
     margin-right: 3px;
 }
-
+.category-head{
+    font-weight: 900;
+    font-size: 22px;
+    color: chartreuse;
+    text-align: center;
+}
 /* For Phones */
 
 @media only screen and (max-device-width: 640px) {
