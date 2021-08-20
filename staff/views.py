@@ -41,7 +41,7 @@ def products(request):
     if not request.user.is_staff:
         return HttpResponse("You need to login as a staff <a href='/staff'>Login Here</a>")
         
-    existing_products = Product.objects.all()
+    existing_products = Product.objects.all()[::-1]
     DATA["EXISTING_PRODUCTS"] = existing_products
 
 
@@ -166,7 +166,7 @@ def addProduct(request):
                 edit_product.price = price
                 edit_product.save()
 
-                return HttpResponse("<h1>Product Successfully Edited! <a href='/staff/products'>Back</a></h1>")
+                return redirect("products")
 
             else:
                 # PRODUCT DOES NOT EXIST
@@ -180,7 +180,7 @@ def addProduct(request):
 
             Product.objects.create(name=product_name, price=price)
 
-            return HttpResponse("<h1>Product Successfully Created! <a href='/staff/products'>Back</a></h1>")
+            return redirect("products")
 
         
 
@@ -195,7 +195,7 @@ def deleteProduct(request):
             del_product = Product.objects.get(id=product_id)
             del_product.delete()
 
-        return HttpResponse("<h1>Product Successfully Deleted! <a href='/staff/products'>Back</a></h1>")
+        return redirect("products")
 
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
@@ -232,7 +232,7 @@ def addOrder(request):
         customer.address = address
         customer.save()
 
-        return HttpResponse("<h1>Order Successfully Created! <a href='/staff/orders'>Back</a></h1>")
+        return redirect("orders")
 
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
@@ -247,7 +247,7 @@ def deleteOrder(request):
             del_order = Order.objects.get(id=order_id)
             del_order.delete()
 
-        return HttpResponse("<h1>Order Successfully Deleted! <a href='/staff/orders'>Back</a></h1>")
+        return redirect("orders")
 
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
