@@ -23,6 +23,8 @@ urlpatterns = [
     path('fetchOrder', view=views.fetchOrder, name='fetchOrder'),
     path('markOrderPaid', view=views.markOrderPaid, name='markOrderPaid'),
 
+    # STATICITY
 
+    path('get_menu', view=views.get_menu, name='get_menu'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

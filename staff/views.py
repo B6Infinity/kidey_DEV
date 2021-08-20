@@ -360,3 +360,9 @@ def markOrderPaid(request):
             order.save()
 
         return JsonResponse(RESPONSE)
+
+
+# STATICITY
+
+def get_menu(request):
+    return HttpResponse("HI")
