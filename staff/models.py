@@ -12,6 +12,15 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField()
 
+    category_choices = (
+        ('none', 'none'),
+        ('biriyani', 'biriyani'),
+        ('thali', 'thali'),
+        ('chinese', 'chinese'),
+    )
+    
+    category = models.CharField(max_length=25, choices=category_choices, default='none')
+
     def __str__(self) -> str:
         return f"{self.name} - ₹{self.price}"
 

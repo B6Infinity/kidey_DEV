@@ -7,23 +7,32 @@
 
     <div class="flex-object" id="addproduct_container" style="flex-grow: 1;">
         <div id="addaproduct" class="fnt-med">Add a Product</div>
-        
+
         <div id="add-product-container">
 
             <form action="/staff/add-product" method="POST">
                 {% csrf_token %}
 
-                <input class="input-classic" name="product_name" type="text" placeholder="Product Name" autocomplete="off" required>
+                <input class="input-classic" name="product_name" type="text" placeholder="Product Name"
+                    autocomplete="off" required>
                 <input class="input-classic" name="price" type="number" placeholder="Price" autocomplete="off" required>
+                <select class="input-classic" name="category" id="category">
+                    <option value="none" disabled selected>-Choose a Category-</option>
+                    <option value="none">-NONE-</option>
+                    <option value="biriyani">BIRIYANI</option>
+                    <option value="thali">THALI</option>
+                    <option value="chinese">CHINESE</option>
+                </select>
                 <input type="hidden" name="new_product" value="true">
                 <input type="hidden" name="product_id" value="">
 
                 <br><br>
                 <button class="big-button" id="createbutton" type="submit" style="font-size: 18px;">Create</button>
-                <button class="big-button" style="visibility: hidden;" id="cancel" type="reset" onclick="cancelEditiing()" style="font-size: 18px;">Cancel</button>
-                
+                <button class="big-button" style="visibility: hidden;" id="cancel" type="reset"
+                    onclick="cancelEditiing()" style="font-size: 18px;">Cancel</button>
+
             </form>
-                
+
         </div>
 
     </div>
@@ -41,33 +50,43 @@
             {% for product in EXISTING_PRODUCTS %}
             <div class="existing-product">
                 <div style="display: flex;">
-                    <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b>{{product.name}}</b></div>
-                    
+                    <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b
+                            style="color: skyblue;">{{product.name}}</b></div>
+
                     <form action="/staff/delete-product" method="post">{% csrf_token %}
 
                         <input type="hidden" name="product_id" value="{{product.id}}">
-                        <button type="button" onclick="confirmDelete('delete_confirmation-{{product.id}}')" class="delete-button" style="padding: 2px;">
-                            <img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"/>
+                        <button type="button" onclick="confirmDelete('delete_confirmation-{{product.id}}')"
+                            class="delete-button" style="padding: 2px;">
+                            <img style="width: 15px;"
+                                src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png" />
                         </button>
 
                         <div class="delete_confirmation" id="delete_confirmation-{{product.id}}">
                             Delete {{product.name}}?<br>
-                            
+
                             <button type="submit" class="delete-button" style="padding: 2px;">
-                                <img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"/>
+                                <img style="width: 15px;"
+                                    src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png" />
                             </button>
-                            <button type="button" onclick="document.getElementById('delete_confirmation-{{product.id}}').style.visibility='hidden'" class="delete-button" style="padding: 2px;">
-                                <img width="15px" src="https://img.icons8.com/material-outlined/24/26e07f/cancel--v1.png"/>
+                            <button type="button"
+                                onclick="document.getElementById('delete_confirmation-{{product.id}}').style.visibility='hidden'"
+                                class="delete-button" style="padding: 2px;">
+                                <img width="15px"
+                                    src="https://img.icons8.com/material-outlined/24/26e07f/cancel--v1.png" />
                             </button>
                         </div>
 
                     </form>
 
-                    <div class="edit-button" onclick="editProduct('{{product.id}}'); location.href='#add-product-container'">Edit</div>
+                    <div class="edit-button"
+                        onclick="editProduct('{{product.id}}'); location.href='#add-product-container'">Edit</div>
                 </div>
                 <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">
-                    <div id="{{product.id}}-price" style="flex-grow: 1;">₹{{product.price}}/-</div>
+                    <div id="{{product.id}}-price" style="flex-grow: 1; color: goldenrod; font-weight: 900;">
+                        ₹{{product.price}}/-</div>
                     <div style="color: grey;">Last week Sale: null</div>
+                    <span style="display: none;" id="{{product.id}}-category">{{product.category}}</span>
                 </div>
             </div>
             {% endfor %}
@@ -79,33 +98,36 @@
     </div>
 
     <script>
-        function editProduct(productId){
-            product_name = document.getElementById(productId+"-name").textContent;
-            price = document.getElementById(productId+"-price").textContent;
+        function editProduct(productId) {
+            product_name = document.getElementById(productId + "-name").textContent;
+            price = document.getElementById(productId + "-price").textContent.trim().replace('\n', '');
+            category = document.getElementById(productId + "-category").textContent;
 
-            console.log(product_name, price);
-            
+            console.log(category);
+
             // Toggle the UI
             document.getElementById('createbutton').textContent = "Save Changes";
-            document.getElementById('addaproduct').textContent = "Edit "+product_name;
+            document.getElementById('addaproduct').textContent = "Edit " + product_name;
             document.getElementsByName('product_name')[0].value = product_name;
+            document.getElementById('category').value = category;
             document.getElementsByName('price')[0].value = (price.replace('/-', '')).replace('₹', '');
             document.getElementsByName('new_product')[0].value = "false";
             document.getElementsByName('product_id')[0].value = productId;
             document.getElementById('cancel').style.visibility = 'visible';
         }
-        
-        function cancelEditiing(){
+
+        function cancelEditiing() {
             document.getElementById('cancel').style.visibility = 'hidden';
             document.getElementById('createbutton').textContent = "Create";
             document.getElementById('addaproduct').textContent = "Add a Product";
             document.getElementsByName('new_product')[0].value = "true";
             document.getElementsByName('product_id')[0].value = "";
-            
+            document.getElementById('category').value = 'none';
+
 
         }
 
-        function confirmDelete(divid){
+        function confirmDelete(divid) {
             document.getElementById(divid).style.visibility = 'visible';
         }
 

@@ -147,7 +147,7 @@ def money(request):
     return render(request, 'staff/money.html', DATA)
 
 def addProduct(request):
-    
+
     if request.method == 'POST' and request.user.is_staff:
         new_product = request.POST['new_product']
         
@@ -177,8 +177,9 @@ def addProduct(request):
 
             product_name = request.POST['product_name']
             price = request.POST['price']
+            category = request.POST['category']
 
-            Product.objects.create(name=product_name, price=price)
+            Product.objects.create(name=product_name, price=price, category=category)
 
             return redirect("products")
 
