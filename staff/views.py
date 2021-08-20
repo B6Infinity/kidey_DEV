@@ -161,9 +161,11 @@ def addProduct(request):
                 
                 product_name = request.POST['product_name']
                 price = request.POST['price']
+                category = request.POST['category']
 
                 edit_product.name = product_name
                 edit_product.price = price
+                edit_product.category = category
                 edit_product.save()
 
                 return redirect("products")
