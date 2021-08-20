@@ -55,7 +55,7 @@
                 <div class="existing-product">
                     <div style="display: flex;">
                         <div id="{{product.id}}-name" class="fnt-small" style="flex-grow: 1;"><b
-                                style="color: skyblue;">{{product.name}}</b></div>
+                                style="color: goldenrod;">{{product.name}}</b></div>
 
                         <form action="/staff/delete-product" method="post">{% csrf_token %}
 
@@ -87,7 +87,7 @@
                             onclick="editProduct('{{product.id}}'); location.href='#add-product-container'">Edit</div>
                     </div>
                     <div style="display: flex; margin: 2px; padding: 5px; padding-bottom:0;">
-                        <div id="{{product.id}}-price" style="flex-grow: 1; color: goldenrod; font-weight: 900;">
+                        <div id="{{product.id}}-price" style="flex-grow: 1; color: skyblue; font-weight: 900;">
                             ₹{{product.price}}/-</div>
                         <div style="color: grey;">Last week Sale: null</div>
                         <span style="display: none;" id="{{product.id}}-category">{{product.category}}</span>

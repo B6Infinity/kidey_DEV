@@ -405,6 +405,12 @@ button {
     color: chartreuse;
     text-align: center;
 }
+
+#order_productlist{
+    width: 250px;
+    flex-grow: 1;
+}
+
 /* For Phones */
 
 @media only screen and (max-device-width: 640px) {
@@ -485,6 +491,13 @@ button {
         width: 100%;
         height: 100%;
     }
+    .category-head{
+        font-weight: 900;
+        font-size: 20px;
+        color: chartreuse;
+        text-align: center;
+    }
+    
 }
 
 /* SCROLLBAR */

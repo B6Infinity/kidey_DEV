@@ -142,6 +142,19 @@ def orders(request):
     DATA["EXISTING_PRODUCTS"] = existing_products
 
 
+
+    categories = []
+    for product in existing_products:
+        if product.category not in categories:
+            categories.append(product.category)
+
+    # Making Sure that 'NONE' Category appears in the end
+    
+    categories.remove(categories[categories.index("none")])
+    categories.append("none")
+    DATA["CATEGORIES"] = categories
+
+
     return render(request, 'staff/orders.html', DATA)
 
 def money(request):

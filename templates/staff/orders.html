@@ -54,12 +54,17 @@
 
                     <!-- PRODUCT LIST -->
 
-                    <div class="flex-object" style="width: 200px;">
+                    <div class="flex-object" id="order_productlist">
                         <div class="fnt-med">Product List</div>
 
                         <div id="product_list">
                             <script>let products = {};</script>
-                            {% for product in EXISTING_PRODUCTS %}
+                            {% for category in CATEGORIES %}
+                            <div class="category-head">
+                                {{category|upper}}
+                            </div>
+                            {% for product in EXISTING_PRODUCTS %}{% if product.category == category %}
+                            
                             <div id="product-{{product.id}}" class="product_list-product">
 
                                 {{product.name}} <br>
@@ -75,7 +80,8 @@
                             </div>
 
                             <script>products["{{product.id}}"] = {{ product.price }};</script>
-
+                            {% endif %}
+                            {% endfor %}
                             {% endfor %}
 
                         </div>
