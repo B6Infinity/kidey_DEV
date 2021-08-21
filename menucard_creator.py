@@ -46,7 +46,9 @@ def generateMenuCard(MENU, path):
     todays_date = (datetime.today().strftime("%d.%m.%Y"))
     draw.text((WIDTH-380, 195), f"Generated on: {todays_date}", font=font, fill="grey", stroke_fill=(218, 165, 32), stroke_width=0)
     font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 35)
-    draw.text((WIDTH-450, 100), "ORDER NOW: 74074 89666", font=font, fill="yellow", stroke_fill="yellow", stroke_width=1)
+    draw.text((WIDTH-450, 40), "ORDER NOW: 74074 89666", font=font, fill="yellow", stroke_fill="yellow", stroke_width=1)
+    draw.text((WIDTH-215, 80), "95477 70599", font=font, fill="yellow", stroke_fill="yellow", stroke_width=1)
+    draw.text((WIDTH-215, 120), "99329 65153", font=font, fill="yellow", stroke_fill="yellow", stroke_width=1)
 
     draw.line([(0, 230), (WIDTH, 230)], fill =(133, 138, 36), width = 7)
 
@@ -81,7 +83,7 @@ def generateMenuCard(MENU, path):
         YCURSOR += 5
 
 
-    savename = f"menucard_{todays_date.replace('.', '-')}.jpg"
+    savename = f"menucard.jpg"
     savedir = os.path.join(path, savename)
     img.save(savedir)
 
