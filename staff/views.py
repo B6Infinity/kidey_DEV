@@ -397,6 +397,8 @@ def get_menu(request):
     savedir = generateMenuCard(MENU, 'media')
 
     return HttpResponse(f'''
+        <title>Kidey's Menu Card</title>
+
         <img style="object-fit:contain; height:85%;" src="/staff/{savedir}"><br>
         <a href="/staff/{savedir}" download>
         <div style="padding: 10px; border-radius:5px; background-color:skyblue; margin:10px; font-size:28px; user-select:none; color: black;">Download</div></a>
