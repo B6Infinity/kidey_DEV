@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 import json
+from menucard_creator import generateMenuCard
 
 # Create your views here.
 def home(request):
@@ -50,7 +51,12 @@ def products(request):
         if product.category not in categories:
             categories.append(product.category)
 
-    DATA["CATEGORIES"] = categories[::-1]
+    # Making Sure that 'NONE' Category appears in the end
+    
+    categories.remove(categories[categories.index("none")])
+    categories.append("none")
+
+    DATA["CATEGORIES"] = categories
 
     return render(request, 'staff/products.html', DATA)
 
@@ -365,4 +371,45 @@ def markOrderPaid(request):
 # STATICITY
 
 def get_menu(request):
-    return HttpResponse("HI")
+
+    MENU = {}
+
+    existing_products = Product.objects.all()[::-1]
+
+
+    categories = []
+    for product in existing_products:
+        if product.category not in categories:
+            categories.append(product.category)
+
+    # Making Sure that 'NONE' Category appears in the end
+    
+    categories.remove(categories[categories.index("none")])
+    categories.append("none")
+
+    for category in categories:
+        MENU[category.upper()] = {}
+        for product in existing_products:
+            if product.category == category:
+                MENU[category.upper()][product.name] = str(product.price)
+
+    
+    savedir = generateMenuCard(MENU, 'media')
+
+    return HttpResponse(f'''
+        <img style="object-fit:contain; height:85%;" src="/staff/{savedir}"><br>
+        <a href="/staff/{savedir}" download>
+        <div style="padding: 10px; border-radius:5px; background-color:skyblue; margin:10px; font-size:28px; user-select:none; color: black;">Download</div></a>
+
+        '''+'''
+        <style>
+        *{
+            padding:0; margin:0; text-decorations: none; font-family: arial;
+        }
+        body{
+            background: peach;
+        }
+        </style>
+        '''+'''
+
+    ''')
