@@ -30,6 +30,10 @@
                 <div class="small-chart-label">Total Expenses</div>
                 <canvas class="small-chart" id="chart-expenses" width="200" height="190"></canvas>
             </div>
+            <div class="anaylitics-object" onclick="setMainChart(chart_expenseVSincome)">
+                <div class="small-chart-label">Expense vs Income</div>
+                <canvas class="small-chart" id="chart-expenseVSincome" width="200" height="190"></canvas>
+            </div>
             <div class="anaylitics-object" onclick="setMainChart(chart_mostOrdered)">
                 <div class="small-chart-label">Most Ordered Product</div>
                 <canvas class="small-chart" id="chart-mostOrdered" width="200" height="190"></canvas>
@@ -79,6 +83,7 @@
     let canvas_totalSales = document.getElementById('chart-totalSales').getContext('2d');
     let canvas_expenses = document.getElementById('chart-expenses').getContext('2d');
     let canvas_mostOrdered = document.getElementById('chart-mostOrdered').getContext('2d');
+    let canvas_expenseVSincome = document.getElementById('chart-expenseVSincome').getContext('2d');
 
     // TOTAL SALES
 
@@ -90,9 +95,7 @@
                     label: 'Daily Income',
                     data: {{ LAST_WEEK_SALES| safe}}[1],
                     backgroundColor: ['skyblue'],
-                    borderColor: [
-                    'skyblue',
-                ],
+                    borderColor: ['skyblue'],
                     borderWidth: 3
             }]
         },
@@ -129,6 +132,34 @@
     });
 
 
+    // EXPENSES vs INCOME
+
+    let chart_expenseVSincome = new Chart(canvas_expenseVSincome, {
+        type: 'bar',
+        data: {
+            labels: {{ LAST_WEEK_EXPENSES| safe}}[0],
+            datasets: [{
+                label: 'Daily Expenses',
+                data: {{ LAST_WEEK_EXPENSES| safe}}[1],
+                backgroundColor: ['yellow'],
+                borderWidth: 3
+            },{
+                label: 'Daily Income',
+                data: {{ LAST_WEEK_SALES| safe}}[1],
+                backgroundColor: ['skyblue'],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
 
     let chart_mostOrdered = new Chart(canvas_mostOrdered, {
         type: 'pie',
@@ -137,7 +168,7 @@
                 datasets: [{
                     label: 'Most Selling',
                     data: {{ MOST_ORDERED_PRODUCTS|safe}}[1],
-                    backgroundColor: ['skyblue', 'tomato', 'chartreuse', 'yellow', 'green', 'peach', 'red'],
+                    backgroundColor: ['skyblue', 'tomato', 'chartreuse', 'yellow', 'green', 'red', 'goldenrod'],
                     borderWidth: 0
             }]
         },
@@ -160,14 +191,9 @@
 
     function setMainChart(sourceChart) {
         mainChart.data.labels = sourceChart.data.labels;
-        mainChart.data.datasets[0].data = sourceChart.data.datasets[0].data;
+        mainChart.data.datasets = sourceChart.data.datasets;
 
         mainChart.config.type = sourceChart.config.type;
-
-        mainChart.data.datasets[0].backgroundColor = sourceChart.data.datasets[0].backgroundColor;
-        mainChart.data.datasets[0].borderColor[0] = sourceChart.data.datasets[0].backgroundColor;
-        mainChart.data.datasets[0].borderColor[0] = sourceChart.data.datasets[0].backgroundColor;
-        mainChart.data.datasets[0].label = sourceChart.data.datasets[0].label;
 
 
         document.getElementsByClassName('active')[0].classList.remove('active');
