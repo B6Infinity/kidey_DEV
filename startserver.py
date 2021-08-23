@@ -4,7 +4,7 @@ import os, sys, platform
 import datetime
 
 # PULLING CHANGES
-print("\n\n\nSYNCHRONISING DATABASE...\n\n\n")
+print("\n\n\n\033[95m\033[1m\033[4mSYNCHRONISING DATABASE...\033[0m\n\n\n")
 os.system('git pull origin master')
 
 
@@ -15,14 +15,14 @@ native_ip = str(s.getsockname()[0])
 
 platform_os = platform.system()
 
+print(f"\033[95m\033[1m\033[4mStarting Server ---> KIDEY-CORE @ {native_ip}:8000\033[0m\n\n\n")
 if platform_os == "Linux":
-    print(f"Starting Server ---> KIDEY-CORE @ {native_ip}:8000\n\n\n")
     os.system(f'python3 manage.py runserver {native_ip}:8000')
 else:
     try:
         os.system(f'python manage.py runserver {native_ip}:8000')
     except Exception:
-        print("\n'python' is probably not recognised as a command... \nERROR DETAILS:\n\n")
+        print("\n\033[93m'python'\033[0m \033[91mis probably not recognised as a command...\033[0m \n\033[94m\033[1mERROR DETAILS:\033[0m\n\n")
         print(Exception)
 
 
@@ -32,7 +32,7 @@ try:
 finally:
     print("\n\n")
     
-    print("PUSHING DATABASE CHANGES")
+    print("\033[95m\033[1m\033[4mPUSHING DATABASE CHANGES\033[0m")
 
     os.system('git add db.sqlite3')
     os.system(f'git commit -m "Changed db.sqlite3 from {native_ip} at {datetime.datetime.now().date()}--{datetime.datetime.now().time()}"')
@@ -42,4 +42,4 @@ finally:
     
 
 
-    print("STOPPING SERVER...\n\n")
+    print("\033[95m\033[1m\033[4mSTOPPING SERVER...\033[0m\n\n")
