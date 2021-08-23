@@ -3,8 +3,9 @@ import os
 import os, sys, platform
 
 
-
-
+# PULLING CHANGES
+print("\n\n\nSYNCHRONISING DATABASE...\n\n\n")
+os.system('git pull origin master')
 
 
 # GETTING THE IP ADDRESS OF NATIVE MACHINE (LAN COMPATIBLE)
@@ -30,5 +31,9 @@ try:
     pass
 finally:
     print("\n\n")
+    
+    print("PUSHING DATABASE CHANGES")
 
-    os.system("nautilus .")
+
+
+    print("STOPPING SERVER...\n\n")
