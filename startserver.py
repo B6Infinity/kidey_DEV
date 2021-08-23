@@ -2,6 +2,12 @@ import socket
 import os
 import os, sys, platform
 
+
+
+
+
+
+# GETTING THE IP ADDRESS OF NATIVE MACHINE (LAN COMPATIBLE)
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
 native_ip = str(s.getsockname()[0])
@@ -18,3 +24,11 @@ else:
         print("\n'python' is probably not recognised as a command... \nERROR DETAILS:\n\n")
         print(Exception)
 
+
+# AFTER KEYBOARD INTERRUPT
+try:
+    pass
+finally:
+    print("\n\n")
+
+    os.system("nautilus .")
