@@ -1,7 +1,7 @@
 import socket
 import os
 import os, sys, platform
-
+import datetime
 
 # PULLING CHANGES
 print("\n\n\nSYNCHRONISING DATABASE...\n\n\n")
@@ -34,6 +34,12 @@ finally:
     
     print("PUSHING DATABASE CHANGES")
 
+    os.system('git add db.sqlite3')
+    os.system(f'git commit -m "Changed db.sqlite3 from {native_ip} at {datetime.datetime.now().date()}--{datetime.datetime.now().time()}"')
+    os.system('git push origin master')
+
+    
+    
 
 
     print("STOPPING SERVER...\n\n")
