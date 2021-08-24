@@ -26,7 +26,7 @@ SECRET_KEY = 'mgy$l_enc+@8dor5*16om=0!6&w&b0b$(otdhm3wbnwm4$!qdt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.106']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.106','192.168.0.112']
 
 
 # Application definition
