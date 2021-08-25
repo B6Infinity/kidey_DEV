@@ -17,7 +17,8 @@ native_ip = str(s.getsockname()[0])
 
 platform_os = platform.system()
 
-print(f"\033[95m\033[1m\033[4mStarting Server ---> KIDEY-CORE @ {native_ip}:8000\033[0m\n\n\n")
+print(f"\033[95m\033[1m\033[4mStarting Server ---> KIDEY-CORE @ {native_ip}:8000\033[0m")
+print('\n\n\n')
 if platform_os == "Linux":
     os.system(f'python3 manage.py runserver {native_ip}:8000')
 else:
