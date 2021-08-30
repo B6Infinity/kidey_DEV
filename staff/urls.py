@@ -26,5 +26,6 @@ urlpatterns = [
     # STATICITY
 
     path('get_menu', view=views.get_menu, name='get_menu'),
+    path('respond_avail', view=views.respond_avail, name='respond_avail'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

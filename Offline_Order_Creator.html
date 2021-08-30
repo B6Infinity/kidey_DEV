@@ -1,33 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIDEY : Offline Order Creator</title>
-    
+
     <!-- CSS -->
     <style>
-        *{
+        * {
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             color: whitesmoke;
             padding: 0%;
             margin: 0%;
         }
-        body{
+
+        body {
             background-color: black;
             padding: 10px;
         }
 
-
+        .wingy-parent {
+            padding: 5px;
+            font-size: 18px;
+            border-bottom: 1px solid grey;
+        }
     </style>
 
 </head>
+
 <body>
     <h2 style="padding: 10px; background-color: #202020;">Kidey Offline Tool</h2>
+    <div class="wingy-parent">
+        <img id="server_connection_status" style="width: 20px;"
+            src="https://img.icons8.com/material-outlined/48/fa314a/no-network.png" />
+        <div style="float: right;">
+            <span id="server_connection_status_txt" style="color: gray; float: left;">Disconnected to Server!</span>
+            <img style="width: 20px; padding: 0px 0px 0px 5px;"
+                src="https://img.icons8.com/office/40/4a90e2/refresh--v2.png" />
+        </div>
+    </div>
 
 
+
+</body>
+
+<!-- POST DOC SCRIPT -->
+<script>
+
+    // <img src="https://img.icons8.com/ios/50/26e07f/connected.png"/>
+    let server_connection_status = document.getElementById('server_connection_status');
+    server_connection_status.src = 'https://img.icons8.com/material-outlined/48/fa314a/no-network.png';
+
+
+
+
+    // CONNECT TO SERVERS
+    // OMEGA
+    let connected = false;
+
+    fetch('http://192.168.0.106:8000/staff/respond_avail')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            connected = data['RESPONSE'];
+            statusUpdateSERVER(connected, 'omega');
+        }).catch(function(err) {
+            console.log(err.message);
+            // CHARUKRIT
+            fetch('http://192.168.0.113:8000/staff/respond_avail')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    connected = data['RESPONSE'];
+                    statusUpdateSERVER(connected, 'omega');
+                }).catch(function(err) {
+                    console.log(err.message);
+                });
+
+        })
 
     
-</body>
+
+
+
+
+
+
+
+
+    function statusUpdateSERVER(connected, host) {
+        if (connected) {
+            server_connection_status.src = 'https://img.icons8.com/ios/50/26e07f/connected.png';
+            document.getElementById('server_connection_status_txt').textContent = "Connected! - " + host;
+
+        }
+    }
+</script>
+
 </html>

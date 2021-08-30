@@ -4,10 +4,16 @@ from django.core.checks.messages import ERROR
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import user_passes_test
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 import json
 from menucard_creator import generateMenuCard
+
+def allow_all(self):
+    return True
+
 
 # Create your views here.
 def home(request):
@@ -415,3 +421,9 @@ def get_menu(request):
         '''+'''
 
     ''')
+
+
+@user_passes_test(allow_all)
+@csrf_exempt
+def respond_avail(request):
+    return JsonResponse({"RESPONSE": True, "TIMESTAMP:": datetime.now().strftime("%H%M%S.%D%M%Y")})

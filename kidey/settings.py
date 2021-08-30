@@ -26,6 +26,9 @@ SECRET_KEY = 'mgy$l_enc+@8dor5*16om=0!6&w&b0b$(otdhm3wbnwm4$!qdt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+
+
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.106','192.168.0.112']
 
 
@@ -40,8 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # MANUALLY ADDED
-    'staff'
+    'staff',
+
+    'corsheaders'
 ]
+
+# if DEBUG is True:
+#     INSTALLED_APPS += ('corsheaders', )
+
+# CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,7 +61,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'kidey.urls'
 
