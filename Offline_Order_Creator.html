@@ -27,13 +27,96 @@
             font-size: 18px;
             border-bottom: 1px solid grey;
         }
+
+        .input-classic {
+            padding: 10px;
+            margin: 5px;
+            background-color: #202020;
+            width: 190px;
+            outline: none;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .big-button:hover {
+            background: #62c6ee;
+        }
+
+        .big-button {
+            transition: 0.2s;
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 20px;
+            background: skyblue;
+            border-radius: 5px;
+            display: inline-block;
+            user-select: none;
+            color: black;
+        }
+
+        .category-head {
+            font-weight: 900;
+            font-size: 22px;
+            color: chartreuse;
+            text-align: center;
+        }
+
+        .product_list-product {
+            margin: 5px 0px;
+            padding: 3px;
+            background-color: #212121;
+            border-radius: 5px;
+            color: grey;
+        }
+
+        #product_list:hover {
+            background-color: #404040;
+        }
+
+        #product_list {
+            transition: 0.2s;
+            height: 250px;
+            overflow-y: auto;
+            background-color: #303030;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .productcounter-container {
+            display: flex;
+            user-select: none;
+        }
+
+        .productcounter-container span {
+            flex-grow: 1;
+            text-align: center;
+            font-weight: 900;
+        }
+
+        .add-product {
+            margin: 0px 2px;
+            padding: 0 3px;
+            background-color: #89cfeb80;
+            color: black;
+            transition: 0.2s;
+            border-radius: 5px;
+        }
+
+        .add-product:hover {
+            border-radius: 3px;
+            background-color: #89cfeb;
+        }
+
+        .fnt-med {
+            font-size: 20px;
+        }
     </style>
 
 </head>
 
 <body>
     <h2 style="padding: 10px; background-color: #202020;">Kidey Offline Tool</h2>
-    <div class="wingy-parent">
+    <div class="wingy-parent" onclick="attemptConnectionToServer()">
         <img id="server_connection_status" style="width: 20px;"
             src="https://img.icons8.com/material-outlined/48/fa314a/no-network.png" />
         <div style="float: right;">
@@ -43,6 +126,127 @@
         </div>
     </div>
 
+
+    <div class="flex-object" id="addproduct_container" style="flex-grow: 1;">
+        <div id="addaproduct" class="fnt-med">Create Order Instance</div>
+
+        <div id="add-product-container">
+
+            <script>let orderJson = {}; let totalBill = 0; let discount = 0;</script>
+
+            <form action="/staff/add-order" method="POST">
+                <input type="hidden" name="csrfmiddlewaretoken"
+                    value="dw7JAYXpGIWf9hmSaNFchk63PyhmL4GOd5OGCMbDw8TxAXQtZsdLb1ORh1u79oZ3">
+
+                <div class="flex-row row-responsive">
+
+                    <div class="flex-object">
+
+                        <input class="input-classic" name="customer_name" type="text"
+                            onchange="fetchCustomer(this.value, 'name')" placeholder="Customer Name" autocomplete="off"
+                            required="">
+                        <input class="input-classic" name="customer_phone_no" type="number"
+                            onchange="fetchCustomer(this.value, 'phone_no')" placeholder="Customer Phone"
+                            autocomplete="off" required="">
+
+                        <input class="input-classic" name="customer_address" value="" type="text" placeholder="Address"
+                            autocomplete="off">
+
+                        <br>Time Of Order:
+                        <input class="input-classic" name="time_of_order" type="datetime-local"
+                            placeholder="Time Of Order" autocomplete="off" required="">
+                        <br>Time Of Delivery:
+                        <input class="input-classic" name="time_of_delivery" type="datetime-local"
+                            placeholder="Time Of Delivery" autocomplete="off" required=""><br>
+                        <br>
+                        <input class="input-classic" style="width: 100px; background-color: #101010;" name="total_bill"
+                            type="number" placeholder="Total Bill" autocomplete="off" disabled="">-
+                        <input class="input-classic" style="width: 100px;" onchange="addDiscount(Number(this.value));"
+                            name="discount" type="number" placeholder="Discount" autocomplete="off">
+                        <input class="input-classic" style="width: 90px; background-color: #101010;" name="payable_amt"
+                            type="number" placeholder="Payable ₹" autocomplete="off" disabled="" required="">
+
+                    </div>
+
+                    <input type="hidden" name="order_json" value="">
+
+
+
+                    <!-- PRODUCT LIST -->
+
+                    <div class="flex-object" id="order_productlist">
+                        <div class="fnt-med">Product List</div>
+
+                        <div id="product_list">
+                            <script>let products = {};</script>
+
+
+                        </div>
+
+                    </div>
+
+                    <script>
+
+                        function countProduct(product_id, operation) {
+                            let count = Number(document.getElementById('product-counter-' + product_id).textContent);
+                            if (operation == 'add') count++;
+                            else { if (count != 0) count--; }
+
+                            document.getElementById('product-counter-' + product_id).textContent = count;
+
+                            // CHANGE CSS
+                            if (count == 0) {
+                                document.getElementById('product-' + product_id).classList.remove('non-zero-product');
+                            } else document.getElementById('product-' + product_id).classList.add('non-zero-product');
+
+                            if (count == 0) delete orderJson[product_id]; else orderJson[product_id] = count;
+
+                            evaluateBill();
+
+
+
+
+                        }
+
+                        function evaluateBill() {
+                            totalBill = 0;
+                            for (let product in orderJson) {
+                                let money = products[product] * orderJson[product];
+                                totalBill += money;
+                                // console.log(totalBill);
+                            }
+
+                            if (Object.keys(orderJson).length == 0) { totalBill = 0; document.getElementById('createbutton').disabled = true; }
+                            else { document.getElementById('createbutton').disabled = false; }
+
+
+                            // CHANGE HTML
+                            document.getElementsByName('total_bill')[0].value = totalBill;
+                            document.getElementsByName('payable_amt')[0].value = totalBill - discount;
+
+                            document.getElementsByName('order_json')[0].value = JSON.stringify(orderJson);
+                        }
+
+                        function addDiscount(d) {
+                            discount = d; evaluateBill();
+                        }
+
+
+                    </script>
+
+                </div>
+
+
+                <br><br>
+                <button disabled="" class="big-button" id="createbutton" type="submit"
+                    style="font-size: 18px;">Stash</button>
+
+
+            </form>
+
+        </div>
+
+    </div>
 
 
 </body>
@@ -55,49 +259,94 @@
     server_connection_status.src = 'https://img.icons8.com/material-outlined/48/fa314a/no-network.png';
 
 
+    function attemptConnectionToServer() {
+
+        fetch('http://192.168.0.106:8000/staff/respond_avail')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                connected = data['RESPONSE'];
+                statusUpdateSERVER(connected, 'omega');
+            }).catch(function (err) {
+                console.log(err.message);
+                // CHARUKRIT
+                fetch('http://192.168.0.113:8000/staff/respond_avail')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        connected = data['RESPONSE'];
+                        statusUpdateSERVER(connected, 'charukrit-pc');
+                    }).catch(function (err) {
+                        console.log(err.message);
+                    });
+
+            });
 
 
-    // CONNECT TO SERVERS
-    // OMEGA
-    let connected = false;
-
-    fetch('http://192.168.0.106:8000/staff/respond_avail')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            connected = data['RESPONSE'];
-            statusUpdateSERVER(connected, 'omega');
-        }).catch(function(err) {
-            console.log(err.message);
-            // CHARUKRIT
-            fetch('http://192.168.0.113:8000/staff/respond_avail')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    connected = data['RESPONSE'];
-                    statusUpdateSERVER(connected, 'omega');
-                }).catch(function(err) {
-                    console.log(err.message);
-                });
-
-        })
-
-    
-
-
-
-
-
-
-
+    }
 
     function statusUpdateSERVER(connected, host) {
         if (connected) {
             server_connection_status.src = 'https://img.icons8.com/ios/50/26e07f/connected.png';
-            document.getElementById('server_connection_status_txt').textContent = "Connected! - " + host;
+            document.getElementById('server_connection_status_txt').textContent = "Connected! (HOST - " + host + ")";
+
+            // Fetch Required Data from server
+            fetchProducts();
 
         }
     }
+
+    function fetchProducts() {
+        fetch('http://192.168.0.106:8000/staff/fetchMenu')
+            .then(response => response.json())
+            .then(MENU => {
+                console.log(MENU);
+
+                let menuHTML = ``;
+                
+                for (let category in MENU) {
+                    menuHTML += `
+                                <div class="category-head">
+                                    ${category}
+                                </div>
+                    `;
+                    for (let product in MENU[category]){
+                        menuHTML += `
+                            <div id="product-${MENU[category][product]["ID"]}" class="product_list-product">
+                                ${product} <br>
+
+                                <span style=" font-weight: 800;">₹${MENU[category][product]["PRICE"]}/-</span>
+                                <div class="productcounter-container">
+                                    <span onclick="countProduct('1', 'add')" class="add-product">+</span>
+                                    <span id="product-counter-1" class="counter-product">0</span>
+                                    <span onclick="countProduct('1', 'substract')" class="add-product">-</span>
+                                </div>
+
+                            </div>
+                        `;
+
+                    }
+                    
+                }
+                document.getElementById('product_list').innerHTML += menuHTML;
+            })
+    }
+
+    function rememberOrder(ORDER) {
+
+    }
+
+
+    // CONNECT TO SERVERS
+    let connected = false;
+    attemptConnectionToServer();
+
+
+
+
+
+
+
 </script>
 
 </html>

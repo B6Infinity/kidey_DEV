@@ -511,7 +511,9 @@ button {
         color: chartreuse;
         text-align: center;
     }
-    
+    #mainchartcanvas{
+        display: none;
+    }   
 }
 
 /* SCROLLBAR */

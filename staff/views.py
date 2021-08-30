@@ -147,7 +147,7 @@ def orders(request):
 
     DATA = {"CURRENT_PAGE": "orders"}
 
-    existing_orders = Order.objects.all()
+    existing_orders = Order.objects.order_by('time_of_delivery')
     DATA["EXISTING_ORDERS"] = existing_orders[::-1]
 
     existing_products = Product.objects.all()
@@ -310,6 +310,7 @@ def fetchCustomer(request):
 
         if datatype == 'name':
             name = data.lower()
+            
             if len(Customer.objects.filter(name__iexact=name)) == 0:
                 RESPONSE["ERROR"] = "NOT FOUND"
             else:
@@ -427,3 +428,31 @@ def get_menu(request):
 @csrf_exempt
 def respond_avail(request):
     return JsonResponse({"RESPONSE": True, "TIMESTAMP:": datetime.now().strftime("%H%M%S.%D%M%Y")})
+
+@user_passes_test(allow_all)
+@csrf_exempt
+def fetchMenu(request):
+    MENU = {}
+
+    existing_products = Product.objects.all()[::-1]
+
+
+    categories = []
+    for product in existing_products:
+        if product.category not in categories:
+            categories.append(product.category)
+
+    # Making Sure that 'NONE' Category appears in the end
+    
+    categories.remove(categories[categories.index("none")])
+    categories.append("none")
+
+    for category in categories:
+        MENU[category.upper()] = {}
+        for product in existing_products:
+            if product.category == category:
+                MENU[category.upper()][product.name] = {"ID": product.id, "PRICE": str(product.price)}
+
+
+
+    return JsonResponse(MENU)
