@@ -134,19 +134,15 @@
 
             <script>let orderJson = {}; let totalBill = 0; let discount = 0;</script>
 
-            <form action="/staff/add-order" method="POST">
-                <input type="hidden" name="csrfmiddlewaretoken"
-                    value="dw7JAYXpGIWf9hmSaNFchk63PyhmL4GOd5OGCMbDw8TxAXQtZsdLb1ORh1u79oZ3">
+            <form action="/12" method="POST">
 
                 <div class="flex-row row-responsive">
 
                     <div class="flex-object">
 
-                        <input class="input-classic" name="customer_name" type="text"
-                            onchange="fetchCustomer(this.value, 'name')" placeholder="Customer Name" autocomplete="off"
-                            required="">
-                        <input class="input-classic" name="customer_phone_no" type="number"
-                            onchange="fetchCustomer(this.value, 'phone_no')" placeholder="Customer Phone"
+                        <input class="input-classic" name="customer_name" type="text" placeholder="Customer Name"
+                            autocomplete="off" required="">
+                        <input class="input-classic" name="customer_phone_no" type="number" placeholder="Customer Phone"
                             autocomplete="off" required="">
 
                         <input class="input-classic" name="customer_address" value="" type="text" placeholder="Address"
@@ -238,7 +234,7 @@
 
 
                 <br><br>
-                <button disabled="" class="big-button" id="createbutton" type="submit"
+                <button onclick="rememberOrder()" class="big-button" id="createbutton" type="button"
                     style="font-size: 18px;">Stash</button>
 
 
@@ -276,8 +272,15 @@
                         console.log(data);
                         connected = data['RESPONSE'];
                         statusUpdateSERVER(connected, 'charukrit-pc');
+
+                        
+
                     }).catch(function (err) {
                         console.log(err.message);
+
+                        // PASTE CACHED MENU
+                        console.log(localStorage.getItem('cached_menu'));
+
                     });
 
             });
@@ -302,34 +305,44 @@
             .then(MENU => {
                 console.log(MENU);
 
-                let menuHTML = ``;
-                
-                for (let category in MENU) {
-                    menuHTML += `
-                                <div class="category-head">
-                                    ${category}
-                                </div>
-                    `;
-                    for (let product in MENU[category]){
-                        menuHTML += `
-                            <div id="product-${MENU[category][product]["ID"]}" class="product_list-product">
-                                ${product} <br>
+                // CACHE the MENU card
+                localStorage.setItem('cached_menu', JSON.stringify(MENU));
 
-                                <span style=" font-weight: 800;">₹${MENU[category][product]["PRICE"]}/-</span>
-                                <div class="productcounter-container">
-                                    <span onclick="countProduct('1', 'add')" class="add-product">+</span>
-                                    <span id="product-counter-1" class="counter-product">0</span>
-                                    <span onclick="countProduct('1', 'substract')" class="add-product">-</span>
-                                </div>
+                pasteMenu(MENU);
 
-                            </div>
-                        `;
 
-                    }
-                    
-                }
-                document.getElementById('product_list').innerHTML += menuHTML;
             })
+    }
+
+    function pasteMenu(MENU) {
+        let menuHTML = ``;
+
+        document.getElementById('product_list').innerHTML = ``;
+
+        for (let category in MENU) {
+            menuHTML += `
+                <div class="category-head">
+                    ${category}
+                </div>
+            `;
+            for (let product in MENU[category]) {
+                menuHTML += `
+                <div id="product-${MENU[category][product]["ID"]}" class="product_list-product">
+                    ${product} <br>
+
+                    <span style=" font-weight: 800;">₹${MENU[category][product]["PRICE"]}/-</span>
+                    <div class="productcounter-container">
+                        <span onclick="countProduct('${MENU[category][product]["ID"]}', 'add')" class="add-product">+</span>
+                        <span id="product-counter-${MENU[category][product]["ID"]}" class="counter-product">0</span>
+                        <span onclick="countProduct('${MENU[category][product]["ID"]}', 'substract')" class="add-product">-</span>
+                    </div>
+                </div>
+                `;
+                products[MENU[category][product]["ID"]] = MENU[category][product]["PRICE"];
+            }
+
+        }
+        document.getElementById('product_list').innerHTML += menuHTML;
     }
 
     function rememberOrder(ORDER) {
