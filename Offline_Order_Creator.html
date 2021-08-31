@@ -256,7 +256,7 @@
 
 
     function attemptConnectionToServer() {
-
+        document.getElementById('server_connection_status_txt').textContent = "Trying to connect @ 'omega'";
         fetch('http://192.168.0.106:8000/staff/respond_avail')
             .then(response => response.json())
             .then(data => {
@@ -265,6 +265,8 @@
                 statusUpdateSERVER(connected, 'omega');
             }).catch(function (err) {
                 console.log(err.message);
+                document.getElementById('server_connection_status_txt').textContent = "Trying to connect @ 'CHARUKRIT'";
+
                 // CHARUKRIT
                 fetch('http://192.168.0.113:8000/staff/respond_avail')
                     .then(response => response.json())
@@ -277,9 +279,10 @@
 
                     }).catch(function (err) {
                         console.log(err.message);
-
+                        document.getElementById('server_connection_status_txt').textContent = "Disconnected to Server!";
                         // PASTE CACHED MENU
-                        console.log(localStorage.getItem('cached_menu'));
+                        let cached_menu = JSON.parse(localStorage.getItem('cached_menu'));
+                        pasteMenu(cached_menu);
 
                     });
 
