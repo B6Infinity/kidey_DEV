@@ -257,6 +257,7 @@
 
     function attemptConnectionToServer() {
         document.getElementById('server_connection_status_txt').textContent = "Trying to connect @ 'omega'";
+        document.getElementById('product_list').innerHTML = "Trying to Fetch from server 'omega'...";
         fetch('http://192.168.0.106:8000/staff/respond_avail')
             .then(response => response.json())
             .then(data => {
@@ -266,7 +267,7 @@
             }).catch(function (err) {
                 console.log(err.message);
                 document.getElementById('server_connection_status_txt').textContent = "Trying to connect @ 'CHARUKRIT'";
-
+                document.getElementById('product_list').innerHTML = "Trying to Fetch from server 'CHARUKRIT'...";
                 // CHARUKRIT
                 fetch('http://192.168.0.113:8000/staff/respond_avail')
                     .then(response => response.json())
@@ -348,7 +349,7 @@
         document.getElementById('product_list').innerHTML += menuHTML;
     }
 
-    function rememberOrder(ORDER) {
+    function rememberOrder() {
 
     }
 
