@@ -276,7 +276,7 @@
                         connected = data['RESPONSE'];
                         statusUpdateSERVER(connected, 'charukrit-pc');
 
-                        
+
 
                     }).catch(function (err) {
                         console.log(err.message);
@@ -350,6 +350,40 @@
     }
 
     function rememberOrder() {
+        // FRISK DATA
+        let timestamp = (new Date).getTime();
+        let ORDERS = localStorage.getItem('ORDERS_json');
+
+        
+        if (ORDERS == null) { localStorage.setItem('ORDERS_json', "{}"); ORDERS = {}; console.log("Created ORDERS_json"); }
+        console.log(ORDERS);
+
+        ORDERS = JSON.parse(ORDERS); // Make object out of it
+
+        let customer_name = document.getElementsByName('customer_name')[0].value;
+        let customer_phone_no = document.getElementsByName('customer_phone_no')[0].value;
+        let customer_address = document.getElementsByName('customer_address')[0].value;
+        let time_of_order = document.getElementsByName('time_of_order')[0].value;
+        let time_of_delivery = document.getElementsByName('time_of_delivery')[0].value;
+
+        
+
+        
+        // SAVE DATA as str(json) in localstorage.getItem('ORDERS_json')
+        
+        ORDERS[timestamp] = {
+            "customer_name": customer_name,
+            "customer_phone_no": customer_phone_no,
+            "customer_address": customer_address,
+            "time_of_order": time_of_order,
+            "time_of_delivery": time_of_delivery,
+            
+            "orderJson": orderJson,
+
+
+        }
+
+        console.log(ORDERS);
 
     }
 
