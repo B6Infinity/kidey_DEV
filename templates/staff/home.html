@@ -14,6 +14,7 @@
 
     <!-- SIDE(INSTA) BOARD -->
     <div class="flex-object" id="sideboard">
+        {% csrf_token %}
 
         <div class="sideboard-object" id="customer_panel">
 
@@ -21,52 +22,93 @@
             {% for customer in CUSTOMERS %}
             <div class="cutomer-holder" id="customer-{{customer.id}}">
                 <div class="edit-customer-panel">
-                    <button type="button" id="cutomer-{{customer.id}}-btn=edit" onclick="editCustomer({{customer.id}})"><img src="https://img.icons8.com/material-outlined/48/ffffff/edit--v1.png"/></button>
-                    <button type="button" id="cutomer-{{customer.id}}-btn=save" onclick="saveCustomer({{customer.id}})" style="display: none;"><img src="https://img.icons8.com/material-rounded/50/ffffff/save.png"/></button>
-                    <button type="button" id="cutomer-{{customer.id}}-btn=delete" onclick="deleteCustomer({{customer.id}})"><img src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"></button>
+                    <button type="button" id="cutomer-{{customer.id}}-btn=edit"
+                        onclick="editCustomer({{customer.id}})"><img
+                            src="https://img.icons8.com/material-outlined/48/ffffff/edit--v1.png" /></button>
+                    <button type="button" id="cutomer-{{customer.id}}-btn=save" onclick="saveCustomer({{customer.id}})"
+                        style="display: none;"><img
+                            src="https://img.icons8.com/material-rounded/50/ffffff/save.png" /></button>
+                    <button type="button" id="cutomer-{{customer.id}}-btn=delete"
+                        onclick="deleteCustomer({{customer.id}})"><img
+                            src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"></button>
                 </div>
-                <input class="input-tabbed-editable" name="customer-{{customer.id}}-name" style="color: #fff7f0; font-size: 18px;" type="text" placeholder="Name" value="{{customer.name}}" disabled><br>
-                <input class="input-tabbed-editable" name="customer-{{customer.id}}-phone" style="color: #fff7f0;" type="number" placeholder="Phone" value="{{customer.phone_no}}" disabled><br>
-                <input class="input-tabbed-editable" name="customer-{{customer.id}}-address" style="color: #fff7f0;" type="text" placeholder="Address" value="{{customer.address}}" disabled><br>
+                <input class="input-tabbed-editable" name="customer-{{customer.id}}-name"
+                    style="color: #fff7f0; font-size: 18px;" type="text" placeholder="Name" value="{{customer.name}}"
+                    disabled><br>
+                <input class="input-tabbed-editable" name="customer-{{customer.id}}-phone" style="color: #fff7f0;"
+                    type="number" placeholder="Phone" value="{{customer.phone_no}}" disabled><br>
+                <input class="input-tabbed-editable" name="customer-{{customer.id}}-address" style="color: #fff7f0;"
+                    type="text" placeholder="Address" value="{{customer.address}}" disabled><br>
             </div>
             {% endfor %}
-            
+
             <!-- SCRIPT - CUSTOMERs -->
             <script>
-                function editCustomer(cid){
+                let csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+                function editCustomer(cid) {
                     // console.log('customer-'+String(cid)+'name');
-                    document.getElementsByName('customer-'+String(cid)+'-name')[0].disabled = false;
-                    document.getElementsByName('customer-'+String(cid)+'-phone')[0].disabled = false;
-                    document.getElementsByName('customer-'+String(cid)+'-address')[0].disabled = false;
+                    document.getElementsByName('customer-' + String(cid) + '-name')[0].disabled = false;
+                    document.getElementsByName('customer-' + String(cid) + '-phone')[0].disabled = false;
+                    document.getElementsByName('customer-' + String(cid) + '-address')[0].disabled = false;
 
                     // BUTTON UI Fix
-                    document.getElementById('cutomer-'+String(cid)+'-btn=edit').style.display = 'none';
-                    document.getElementById('cutomer-'+String(cid)+'-btn=save').style.display = 'inline-block';
+                    document.getElementById('cutomer-' + String(cid) + '-btn=edit').style.display = 'none';
+                    document.getElementById('cutomer-' + String(cid) + '-btn=save').style.display = 'inline-block';
                 }
-                
-                function saveCustomer(cid){
+
+                function saveCustomer(cid) {
                     // console.log(cid);
-                    let name_node = document.getElementsByName('customer-'+String(cid)+'-name')[0];
-                    let phone_node = document.getElementsByName('customer-'+String(cid)+'-phone')[0];
-                    let address_node = document.getElementsByName('customer-'+String(cid)+'-address')[0];
-                    
+                    let name_node = document.getElementsByName('customer-' + String(cid) + '-name')[0];
+                    let phone_node = document.getElementsByName('customer-' + String(cid) + '-phone')[0];
+                    let address_node = document.getElementsByName('customer-' + String(cid) + '-address')[0];
+
                     let name = name_node.value;
-                    let phone_no = name_node.value;
-                    let address = name_node.value;
-                    
-                    
-                    
-                    
-                    // BUTTON UI Fix
-                    document.getElementById('cutomer-'+String(cid)+'-btn=save').style.display = 'none';
-                    document.getElementById('cutomer-'+String(cid)+'-btn=edit').style.display = 'inline-block';
-                    
-                    name_node.disabled = true;
-                    phone_node.disabled = true;
-                    address_node.disabled = true;
-                    
+                    let phone_no = phone_node.value;
+                    let address = address_node.value;
+
+
+                    // Talk to the Server
+
+                    let form = new FormData();
+                    form.set('cid', String(cid));
+                    form.set('name', name);
+                    form.set('phone_no', phone_no);
+                    form.set('address', address);
+
+                    fetch(`editCustomer`,
+                        {
+                            method: 'POST',
+                            body: form,
+                            headers: {
+                                'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                                "X-CSRFToken": csrftoken
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data["ERROR"] == null) {
+                                // CHANGE HTML
+
+                                // BUTTON UI Fix
+                                document.getElementById('cutomer-' + String(cid) + '-btn=save').style.display = 'none';
+                                document.getElementById('cutomer-' + String(cid) + '-btn=edit').style.display = 'inline-block';
+
+                                name_node.disabled = true;
+                                phone_node.disabled = true;
+                                address_node.disabled = true;
+
+                            }
+                        });
+
+
+
+
+
+
                 }
-                function deleteCustomer(cid){
+                function deleteCustomer(cid) {
                     console.log(cid);
                 }
             </script>
@@ -93,7 +135,7 @@
 
 
 <script>
-    if("{{CURRENT_PAGE}}" == "home"){
+    if ("{{CURRENT_PAGE}}" == "home") {
         document.getElementById('{{CURRENT_PAGE}}-hotbar').classList.add('hotbar-active');
     }
 

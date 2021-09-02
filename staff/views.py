@@ -379,6 +379,32 @@ def markOrderPaid(request):
 
         return JsonResponse(RESPONSE)
 
+def editCustomer(request):
+    if request.user.is_staff and request.method == 'POST':
+        RESPONSE = {"ERROR": None, "STATUS": 'FAILED'}
+        
+        cid = request.POST['cid']
+        name = request.POST['name']
+        phone_no = request.POST['phone_no']
+        address = request.POST['address']
+
+        
+        customer__ = Customer.objects.filter(id=cid)
+        if len(customer__) == 0:
+            RESPONSE["ERROR"] = "FAILED: Customer Does Not Exist!"
+        else:
+            customer = customer__[0]
+            customer.name = name
+            customer.phone_no = phone_no
+            customer.address = address
+
+            customer.save()
+
+            RESPONSE["STATUS"] = 'SUCCESS'
+
+        
+
+        return JsonResponse(RESPONSE)
 
 # STATICITY
 
