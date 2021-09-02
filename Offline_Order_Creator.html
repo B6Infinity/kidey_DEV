@@ -254,6 +254,7 @@
     let server_connection_status = document.getElementById('server_connection_status');
     server_connection_status.src = 'https://img.icons8.com/material-outlined/48/fa314a/no-network.png';
 
+    let nativeServerIP = '';
 
     function attemptConnectionToServer() {
         document.getElementById('server_connection_status_txt').textContent = "Trying to connect @ 'omega'";
@@ -263,23 +264,25 @@
             .then(data => {
                 console.log(data);
                 connected = data['RESPONSE'];
+                nativeServerIP = '192.168.0.106';
                 statusUpdateSERVER(connected, 'omega');
+
             }).catch(function (err) {
-                console.log(err.message);
+                console.log(err.message, ": omega");
                 document.getElementById('server_connection_status_txt').textContent = "Trying to connect @ 'CHARUKRIT'";
                 document.getElementById('product_list').innerHTML = "Trying to Fetch from server 'CHARUKRIT'...";
                 // CHARUKRIT
-                fetch('http://192.168.0.113:8000/staff/respond_avail')
+                fetch('http://192.168.0.112:8000/staff/respond_avail')
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
                         connected = data['RESPONSE'];
+                        nativeServerIP = '192.168.0.112';
                         statusUpdateSERVER(connected, 'charukrit-pc');
 
 
-
                     }).catch(function (err) {
-                        console.log(err.message);
+                        console.log(err.message, ": CHARUKRIT");
                         document.getElementById('server_connection_status_txt').textContent = "Disconnected to Server!";
                         // PASTE CACHED MENU
                         let cached_menu = JSON.parse(localStorage.getItem('cached_menu'));
@@ -304,7 +307,7 @@
     }
 
     function fetchProducts() {
-        fetch('http://192.168.0.106:8000/staff/fetchMenu')
+        fetch('http://'+nativeServerIP+':8000/staff/fetchMenu')
             .then(response => response.json())
             .then(MENU => {
                 console.log(MENU);
