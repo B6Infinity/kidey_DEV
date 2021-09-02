@@ -3,7 +3,94 @@
 {% block body %}
 
 
-<h1>AMARE NA BOLLE KI KORE KI6U DEBO EKHANE? 🙂</h1>
+<!-- <h1>AMARE NA BOLLE KI KORE KI6U DEBO EKHANE? 🙂</h1> -->
+<div class="flex-row row-responsive" style="width: 100%; height: 100%;">
+
+    <!-- CHART MAIN -->
+    <div class="flex-object" id="mainboard" style="flex-grow: 1;">
+        MAIN STUFF HERE
+    </div>
+    <hr>
+
+    <!-- SIDE(INSTA) BOARD -->
+    <div class="flex-object" id="sideboard">
+
+        <div class="sideboard-object" id="customer_panel">
+
+            <div style="margin-bottom: 5px; font-weight: 900;" class="fnt-small">Customers</div>
+            {% for customer in CUSTOMERS %}
+            <div class="cutomer-holder" id="customer-{{customer.id}}">
+                <div class="edit-customer-panel">
+                    <button type="button" id="cutomer-{{customer.id}}-btn=edit" onclick="editCustomer({{customer.id}})"><img src="https://img.icons8.com/material-outlined/48/ffffff/edit--v1.png"/></button>
+                    <button type="button" id="cutomer-{{customer.id}}-btn=save" onclick="saveCustomer({{customer.id}})" style="display: none;"><img src="https://img.icons8.com/material-rounded/50/ffffff/save.png"/></button>
+                    <button type="button" id="cutomer-{{customer.id}}-btn=delete" onclick="deleteCustomer({{customer.id}})"><img src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"></button>
+                </div>
+                <input class="input-tabbed-editable" name="customer-{{customer.id}}-name" style="color: #fff7f0; font-size: 18px;" type="text" placeholder="Name" value="{{customer.name}}" disabled><br>
+                <input class="input-tabbed-editable" name="customer-{{customer.id}}-phone" style="color: #fff7f0;" type="number" placeholder="Phone" value="{{customer.phone_no}}" disabled><br>
+                <input class="input-tabbed-editable" name="customer-{{customer.id}}-address" style="color: #fff7f0;" type="text" placeholder="Address" value="{{customer.address}}" disabled><br>
+            </div>
+            {% endfor %}
+            
+            <!-- SCRIPT - CUSTOMERs -->
+            <script>
+                function editCustomer(cid){
+                    // console.log('customer-'+String(cid)+'name');
+                    document.getElementsByName('customer-'+String(cid)+'-name')[0].disabled = false;
+                    document.getElementsByName('customer-'+String(cid)+'-phone')[0].disabled = false;
+                    document.getElementsByName('customer-'+String(cid)+'-address')[0].disabled = false;
+
+                    // BUTTON UI Fix
+                    document.getElementById('cutomer-'+String(cid)+'-btn=edit').style.display = 'none';
+                    document.getElementById('cutomer-'+String(cid)+'-btn=save').style.display = 'inline-block';
+                }
+                
+                function saveCustomer(cid){
+                    // console.log(cid);
+                    let name_node = document.getElementsByName('customer-'+String(cid)+'-name')[0];
+                    let phone_node = document.getElementsByName('customer-'+String(cid)+'-phone')[0];
+                    let address_node = document.getElementsByName('customer-'+String(cid)+'-address')[0];
+                    
+                    let name = name_node.value;
+                    let phone_no = name_node.value;
+                    let address = name_node.value;
+                    
+                    
+                    
+                    
+                    // BUTTON UI Fix
+                    document.getElementById('cutomer-'+String(cid)+'-btn=save').style.display = 'none';
+                    document.getElementById('cutomer-'+String(cid)+'-btn=edit').style.display = 'inline-block';
+                    
+                    name_node.disabled = true;
+                    phone_node.disabled = true;
+                    address_node.disabled = true;
+                    
+                }
+                function deleteCustomer(cid){
+                    console.log(cid);
+                }
+            </script>
+
+
+        </div>
+
+        <!--
+        <div class="sideboard-object" id="customer_panel">
+
+            <div class="fnt-small">Monthly Expense</div>
+
+            
+
+        </div> -->
+
+    </div>
+
+
+</div>
+
+
+
+
 
 <script>
     if("{{CURRENT_PAGE}}" == "home"){

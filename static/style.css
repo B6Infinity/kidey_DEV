@@ -424,6 +424,58 @@ button {
     user-select: none;
 }
 
+#sideboard{
+    height: 90%; overflow-y:auto;
+}
+.sideboard-object:hover{
+    background-color: #101010;
+}
+.sideboard-object{
+    transition: 0.2s;
+    padding: 7px;
+    margin: 0px 5px 15px 5px;
+    border-radius: 3px;
+    background-color: #101010b6;
+}
+
+.input-tabbed-editable:disabled{
+    background-color: #101010;
+
+}
+.input-tabbed-editable{
+    padding: 3px;
+    margin: 2px;
+    background-color: #202020;
+    width: 150px;
+    outline: none;
+    border-radius: 3px;
+    border: none;
+}
+.cutomer-holder{
+    border: 2px solid steelblue;
+    border-radius: 3px;
+    position: relative;
+    margin-bottom: 2px;   
+}
+.edit-customer-panel button{
+    padding: 2px;
+}
+.edit-customer-panel button img{
+    width: 14px;
+    object-fit: contain;
+}
+.edit-customer-panel{
+    position: absolute;
+    right: 0%; bottom: 0%;
+    padding: 2px;
+    visibility: hidden;
+}
+
+.cutomer-holder:hover .edit-customer-panel{
+    visibility: visible;
+}
+
+
 
 /* For Phones */
 

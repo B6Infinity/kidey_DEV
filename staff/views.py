@@ -18,6 +18,11 @@ def allow_all(self):
 # Create your views here.
 def home(request):
     DATA = {"CURRENT_PAGE": "home"}
+
+    if request.user.is_staff:
+        all_customers = Customer.objects.order_by('name')
+        DATA["CUSTOMERS"] = all_customers
+
     return render(request, 'staff/home.html', DATA)
 
 def handle_logout(request):
