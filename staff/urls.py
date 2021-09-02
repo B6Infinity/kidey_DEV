@@ -23,6 +23,7 @@ urlpatterns = [
     path('fetchOrder', view=views.fetchOrder, name='fetchOrder'),
     path('markOrderPaid', view=views.markOrderPaid, name='markOrderPaid'),
     path('editCustomer', view=views.editCustomer, name='editCustomer'),
+    path('deleteCustomer', view=views.deleteCustomer, name='deleteCustomer'),
 
     # STATICITY
 

@@ -102,14 +102,37 @@
                             }
                         });
 
-
-
-
-
-
                 }
+
                 function deleteCustomer(cid) {
-                    console.log(cid);
+                    // console.log(cid);
+                    if (!confirm('Are you sure you want to delete Customer: '+String(cid)+'?')) {
+                        return null; // Do nothing!
+                    }
+                    let form = new FormData();
+                    form.set('cid', String(cid));
+
+                    fetch(`deleteCustomer`, {
+                        method: 'POST',
+                        body: form,
+                        headers: {
+                            'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                            "X-CSRFToken": csrftoken
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+
+                            if (data['STATUS'] == 'SUCCESS'){
+                                // REMOVE FROM HTML
+                                document.getElementById('customer-'+String(cid)).remove();
+                            }
+
+                        });
+
+
+
                 }
             </script>
 

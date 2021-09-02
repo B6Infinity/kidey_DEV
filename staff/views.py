@@ -388,7 +388,7 @@ def editCustomer(request):
         phone_no = request.POST['phone_no']
         address = request.POST['address']
 
-        
+
         customer__ = Customer.objects.filter(id=cid)
         if len(customer__) == 0:
             RESPONSE["ERROR"] = "FAILED: Customer Does Not Exist!"
@@ -403,6 +403,18 @@ def editCustomer(request):
             RESPONSE["STATUS"] = 'SUCCESS'
 
         
+
+        return JsonResponse(RESPONSE)
+
+def deleteCustomer(request):
+    if request.user.is_staff and request.method == 'POST':
+        RESPONSE = {"ERROR": None, "STATUS": 'FAILED'}
+        
+        cid = request.POST['cid']
+        Customer.objects.get(id=cid).delete()
+
+        RESPONSE["STATUS"] = 'SUCCESS'
+
 
         return JsonResponse(RESPONSE)
 
