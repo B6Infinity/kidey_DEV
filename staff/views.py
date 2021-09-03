@@ -499,3 +499,48 @@ def fetchMenu(request):
 
 
     return JsonResponse(MENU)
+
+@user_passes_test(allow_all)
+@csrf_exempt
+def addOrders__STATICPUSH(request):
+    return None
+    if request.method == 'POST' and request.user.is_staff:
+
+        request.POST['username']
+        request.POST['password']
+
+
+        customer_name = request.POST['customer_name']
+        customer_phone_no = request.POST['customer_phone_no']
+        address = request.POST['customer_address']        
+        time_of_order = request.POST['time_of_order']
+        time_of_delivery = request.POST['time_of_delivery']
+        discount = request.POST['discount']
+        order_json = request.POST['order_json']
+
+        # Frisk Data
+        if len(discount) == 0:
+            discount = "0"
+        
+
+
+        # Handling the Customer
+        __customer = Customer.objects.get_or_create(name=customer_name, phone_no=customer_phone_no)
+        customer = __customer[0]
+
+        # Handling the Order
+        newOrder = Order.objects.create(
+            customer = customer, 
+            order_json = json.loads(order_json), 
+            time_of_order = datetime.strptime(time_of_order, "%Y-%m-%dT%H:%M"),
+            time_of_delivery = datetime.strptime(time_of_delivery, "%Y-%m-%dT%H:%M"),
+            discount = int(discount)
+        )
+
+        customer.address = address
+        customer.save()
+
+        return redirect("orders")
+
+    else:
+        return HttpResponse("Critical Gateway! Data Loss!")
