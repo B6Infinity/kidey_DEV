@@ -26,6 +26,11 @@
             padding: 5px;
             font-size: 18px;
             border-bottom: 1px solid grey;
+            position: fixed;
+            background-color: black;
+            left: 0%;
+            top: 0%;
+            width: 95%;
         }
 
         .input-classic {
@@ -40,6 +45,11 @@
 
         .big-button:hover {
             background: #62c6ee;
+        }
+
+        .big-button:disabled {
+            background: #62c6ee74;
+
         }
 
         .big-button {
@@ -107,25 +117,44 @@
             background-color: #89cfeb;
         }
 
+        .non-zero-product span {
+            color: black;
+        }
+
+        .non-zero-product .add-product {
+            box-shadow: 1px 1px 3px black;
+        }
+
+        .non-zero-product {
+            margin: 5px 0px;
+            padding: 3px;
+            background-color: #6cfa49;
+            border-radius: 5px;
+            color: black;
+        }
+
         .fnt-med {
-            font-size: 20px;
+            font-size: 23px;
+            color: chartreuse;
         }
     </style>
 
 </head>
 
 <body>
-    <h2 style="padding: 10px; background-color: #202020;">Kidey Offline Tool</h2>
     <div class="wingy-parent" onclick="attemptConnectionToServer()">
         <img id="server_connection_status" style="width: 20px;"
-            src="https://img.icons8.com/material-outlined/48/fa314a/no-network.png" />
+        src="https://img.icons8.com/material-outlined/48/fa314a/no-network.png" />
         <div style="float: right;">
             <span id="server_connection_status_txt" style="color: gray; float: left;">Disconnected to Server!</span>
             <img style="width: 20px; padding: 0px 0px 0px 5px;"
-                src="https://img.icons8.com/office/40/4a90e2/refresh--v2.png" />
+            src="https://img.icons8.com/office/40/4a90e2/refresh--v2.png" />
         </div>
     </div>
+    <br><br>
+    <h2 style="padding: 10px; background-color: #202020;">Kidey Offline Tool</h2>
 
+    <br>
 
     <div class="flex-object" id="addproduct_container" style="flex-grow: 1;">
         <div id="addaproduct" class="fnt-med">Create Order Instance</div>
@@ -167,7 +196,7 @@
                     <input type="hidden" name="order_json" value="">
 
 
-
+                    <br>
                     <!-- PRODUCT LIST -->
 
                     <div class="flex-object" id="order_productlist">
@@ -236,6 +265,9 @@
                 <br><br>
                 <button onclick="rememberOrder()" class="big-button" id="createbutton" type="button"
                     style="font-size: 18px;">Stash</button>
+                <button onclick="pushOrders()" class="big-button" id="uploadbutton" disabled type="button"
+                    style="font-size: 18px;">Upload Orders</button>
+
 
 
             </form>
@@ -255,8 +287,13 @@
     server_connection_status.src = 'https://img.icons8.com/material-outlined/48/fa314a/no-network.png';
 
     let nativeServerIP = '';
+    
+    
 
     function attemptConnectionToServer() {
+        connected = false;
+        document.getElementById('uploadbutton').disabled = true;
+        server_connection_status.src = 'https://report.lsac.org/Images/Loading.gif';
         document.getElementById('server_connection_status_txt').textContent = "Trying to connect @ 'omega'";
         document.getElementById('product_list').innerHTML = "Trying to Fetch from server 'omega'...";
         fetch('http://192.168.0.106:8000/staff/respond_avail')
@@ -266,6 +303,7 @@
                 connected = data['RESPONSE'];
                 nativeServerIP = '192.168.0.106';
                 statusUpdateSERVER(connected, 'omega');
+                document.getElementById('uploadbutton').disabled = false;
 
             }).catch(function (err) {
                 console.log(err.message, ": omega");
@@ -279,11 +317,13 @@
                         connected = data['RESPONSE'];
                         nativeServerIP = '192.168.0.112';
                         statusUpdateSERVER(connected, 'charukrit-pc');
+                        document.getElementById('uploadbutton').disabled = false;
 
 
                     }).catch(function (err) {
                         console.log(err.message, ": CHARUKRIT");
                         document.getElementById('server_connection_status_txt').textContent = "Disconnected to Server!";
+                        server_connection_status.src = 'https://img.icons8.com/material-outlined/48/fa314a/no-network.png';
                         // PASTE CACHED MENU
                         let cached_menu = JSON.parse(localStorage.getItem('cached_menu'));
                         pasteMenu(cached_menu);
@@ -357,7 +397,7 @@
         let ORDERS = localStorage.getItem('ORDERS_json');
 
 
-        if (ORDERS == null) { localStorage.setItem('ORDERS_json', "{}"); ORDERS = {}; console.log("Created ORDERS_json"); }
+        if (ORDERS == null || ORDERS.trim().length == 0) { localStorage.setItem('ORDERS_json', "{}"); ORDERS = {}; console.log("Created ORDERS_json"); }
         // console.log(ORDERS);
 
         ORDERS = JSON.parse(ORDERS); // Make object out of it
@@ -397,22 +437,42 @@
 
 
         // STASH the Data
+        localStorage.setItem('ORDERS_json', JSON.stringify(ORDERS));
         
-        for(let product_id in orderJson){
-            console.log(product_id);
-            // product-counter-36
-            document.getElementById('product-counter-'+product_id).textContent = 0;
+
+        // RESET HTML
+        for (let product_id in orderJson) {
+            document.getElementById('product-counter-' + product_id).textContent = 0;
+            document.getElementById('product-counter-' + product_id).parentElement.parentElement.classList.remove('non-zero-product');
+
         }
-        
-        
+
         form.reset();
         orderJson = {};
+
+
+    }
+
+    function pushOrders(){
+        
+        if (!connected){
+            console.log("ERROR!");
+            return null;
+        }
+
+        let username = window.prompt('KIDEY Username');
+        let password = window.prompt('Password for '+username+': ');
+
+        // SEND data to SERVER
+
+        
+
 
     }
 
 
     // CONNECT TO SERVERS
-    let connected = false;
+    let connected;
     attemptConnectionToServer();
 
 
