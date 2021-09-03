@@ -134,7 +134,7 @@
 
             <script>let orderJson = {}; let totalBill = 0; let discount = 0;</script>
 
-            <form action="/12" method="POST">
+            <form id="order_form" action="" method="POST">
 
                 <div class="flex-row row-responsive">
 
@@ -307,7 +307,7 @@
     }
 
     function fetchProducts() {
-        fetch('http://'+nativeServerIP+':8000/staff/fetchMenu')
+        fetch('http://' + nativeServerIP + ':8000/staff/fetchMenu')
             .then(response => response.json())
             .then(MENU => {
                 console.log(MENU);
@@ -353,13 +353,12 @@
     }
 
     function rememberOrder() {
-        // FRISK DATA
         let timestamp = (new Date).getTime();
         let ORDERS = localStorage.getItem('ORDERS_json');
 
-        
+
         if (ORDERS == null) { localStorage.setItem('ORDERS_json', "{}"); ORDERS = {}; console.log("Created ORDERS_json"); }
-        console.log(ORDERS);
+        // console.log(ORDERS);
 
         ORDERS = JSON.parse(ORDERS); // Make object out of it
 
@@ -369,24 +368,45 @@
         let time_of_order = document.getElementsByName('time_of_order')[0].value;
         let time_of_delivery = document.getElementsByName('time_of_delivery')[0].value;
 
-        
 
-        
+        // FRISK DATA
+        let form = document.getElementById('order_form');
+
+        for (var i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].value === '' && form.elements[i].hasAttribute('required')) {
+                alert('There are some required fields!');
+                return false;
+            }
+        }
+
         // SAVE DATA as str(json) in localstorage.getItem('ORDERS_json')
-        
+
         ORDERS[timestamp] = {
             "customer_name": customer_name,
             "customer_phone_no": customer_phone_no,
             "customer_address": customer_address,
             "time_of_order": time_of_order,
             "time_of_delivery": time_of_delivery,
-            
+
             "orderJson": orderJson,
 
 
         }
 
         console.log(ORDERS);
+
+
+        // STASH the Data
+        
+        for(let product_id in orderJson){
+            console.log(product_id);
+            // product-counter-36
+            document.getElementById('product-counter-'+product_id).textContent = 0;
+        }
+        
+        
+        form.reset();
+        orderJson = {};
 
     }
 
