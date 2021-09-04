@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- IMPORTS -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/CryptoStore/crypto-js/3.1.2/build/rollups/aes.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIDEY : Offline Order Creator</title>
 
@@ -144,11 +149,11 @@
 <body>
     <div class="wingy-parent" onclick="attemptConnectionToServer()">
         <img id="server_connection_status" style="width: 20px;"
-        src="https://img.icons8.com/material-outlined/48/fa314a/no-network.png" />
+            src="https://img.icons8.com/material-outlined/48/fa314a/no-network.png" />
         <div style="float: right;">
             <span id="server_connection_status_txt" style="color: gray; float: left;">Disconnected to Server!</span>
             <img style="width: 20px; padding: 0px 0px 0px 5px;"
-            src="https://img.icons8.com/office/40/4a90e2/refresh--v2.png" />
+                src="https://img.icons8.com/office/40/4a90e2/refresh--v2.png" />
         </div>
     </div>
     <br><br>
@@ -287,8 +292,8 @@
     server_connection_status.src = 'https://img.icons8.com/material-outlined/48/fa314a/no-network.png';
 
     let nativeServerIP = '';
-    
-    
+
+
 
     function attemptConnectionToServer() {
         connected = false;
@@ -358,7 +363,7 @@
                 pasteMenu(MENU);
 
 
-            })
+            });
     }
 
     function pasteMenu(MENU) {
@@ -407,6 +412,7 @@
         let customer_address = document.getElementsByName('customer_address')[0].value;
         let time_of_order = document.getElementsByName('time_of_order')[0].value;
         let time_of_delivery = document.getElementsByName('time_of_delivery')[0].value;
+        let discount = document.getElementsByName('discount')[0].value;
 
 
         // FRISK DATA
@@ -429,7 +435,8 @@
             "time_of_delivery": time_of_delivery,
 
             "orderJson": orderJson,
-
+            
+            "discount": discount,
 
         }
 
@@ -438,7 +445,7 @@
 
         // STASH the Data
         localStorage.setItem('ORDERS_json', JSON.stringify(ORDERS));
-        
+
 
         // RESET HTML
         for (let product_id in orderJson) {
@@ -453,19 +460,45 @@
 
     }
 
-    function pushOrders(){
-        
-        if (!connected){
+    function pushOrders() {
+
+        if (!connected) {
             console.log("ERROR!");
             return null;
         }
 
         let username = window.prompt('KIDEY Username');
-        let password = window.prompt('Password for '+username+': ');
+        let password = window.prompt('Password for ' + username + ': ');
 
-        // SEND data to SERVER
+        let form = new FormData();
+        form.set('username', username);
+        form.set('password', password);
+        let ORDERS_json = localStorage.getItem('ORDERS_json');
+        
+        
+        
+        form.set('ORDERS_json', ORDERS_json);
 
         
+
+
+        fetch('http://' + nativeServerIP + ':8000/staff/pushOrders__STATIC', {
+            method: 'POST',
+            body: form,
+            headers: {
+                'Accept': 'multipart/form-data, application/json, text/plain, */*',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data["ERROR"] == null){
+                    localStorage.setItem('ORDERS_json', '{}');
+                }
+
+
+
+            });
 
 
     }

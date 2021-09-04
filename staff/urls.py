@@ -31,4 +31,6 @@ urlpatterns = [
     path('respond_avail', view=views.respond_avail, name='respond_avail'),
     path('fetchMenu', view=views.fetchMenu, name='fetchMenu'),
 
+    path('pushOrders__STATIC', view=views.addOrders__STATICPUSH, name='pushOrders__STATIC'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

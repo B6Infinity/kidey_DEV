@@ -503,6 +503,64 @@ def fetchMenu(request):
 @user_passes_test(allow_all)
 @csrf_exempt
 def addOrders__STATICPUSH(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return JsonResponse({"ERROR": "Invalid Credentials. FATAL DATA LOSS"})
+        elif not user.is_staff:
+            return JsonResponse({"ERROR": "Non-Trusted Credentials. FATAL DATA LOSS"})
+
+        # Its an Authentic REQUEST!
+
+        RESPONSE = {"ERROR": None}
+        
+        ORDERS_json = request.POST['ORDERS_json']
+        ORDERS = json.loads(ORDERS_json)
+        
+        # ADD ORDERS TO DB
+        for order in ORDERS:
+            ORDER = ORDERS[order]
+
+
+            customer_name = ORDER['customer_name']
+            customer_phone_no = ORDER['customer_phone_no']
+            address = ORDER['customer_address']        
+            time_of_order = ORDER['time_of_order']
+            time_of_delivery = ORDER['time_of_delivery']
+            discount = ORDER['discount']
+            order_json = ORDER['orderJson']
+
+            if len(discount) == 0:
+                discount = "0"
+
+            # Handling the Customer
+            __customer = Customer.objects.get_or_create(name=customer_name, phone_no=customer_phone_no)
+            customer = __customer[0]
+
+            newOrder = Order.objects.create(
+                customer = customer, 
+                order_json = order_json,
+                time_of_order = datetime.strptime(time_of_order, "%Y-%m-%dT%H:%M"),
+                time_of_delivery = datetime.strptime(time_of_delivery, "%Y-%m-%dT%H:%M"),
+                discount = int(discount)
+            )
+
+            print(newOrder)
+
+            customer.address = address
+            customer.save()
+
+        RESPONSE["ORDERS"] = ORDERS
+
+        return JsonResponse(RESPONSE)
+
+
+
+
+
     return None
     if request.method == 'POST' and request.user.is_staff:
 
@@ -523,10 +581,6 @@ def addOrders__STATICPUSH(request):
             discount = "0"
         
 
-
-        # Handling the Customer
-        __customer = Customer.objects.get_or_create(name=customer_name, phone_no=customer_phone_no)
-        customer = __customer[0]
 
         # Handling the Order
         newOrder = Order.objects.create(
