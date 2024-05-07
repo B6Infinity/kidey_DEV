@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from datetime import datetime
 # Create your models here.
@@ -5,6 +6,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.base import Model
 from django.db.models.fields import CharField, TextField
+
+from subtle_defs import printC
 
 # Create your models here.
 class Product(models.Model):
@@ -49,7 +52,7 @@ class Customer(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, related_name="placed_orders")
 
-    order_json = models.JSONField(null=True) # {"<Product ID>": <No. of items>} eg. {"2": 3, "1": 2}
+    order_json = models.TextField() # {"<Product ID>": <No. of items>} eg. {"2": 3, "1": 2}
     time_of_order = models.DateTimeField()
     time_of_delivery = models.DateTimeField()
 
@@ -69,11 +72,15 @@ class Order(models.Model):
         bill = 0
         bill_text = ''
 
-        for product_id in self.order_json:
+        
+        self.order_json = self.order_json.replace('\'', '"')
+        order_json = json.loads(self.order_json)
+        
+        for product_id in order_json:
             product = Product.objects.get(id=product_id)
-            bill += product.price * self.order_json[product_id]
+            bill += product.price * order_json[product_id]
 
-            bill_text += f'{product.name} (₹{product.price}) [x{self.order_json[product_id]}] - ₹{product.price * self.order_json[product_id]}/-\n'
+            bill_text += f'{product.name} (₹{product.price}) [x{order_json[product_id]}] - ₹{product.price * order_json[product_id]}/-\n'
 
         self.total_bill = bill
         self.payable_amt = bill - self.discount

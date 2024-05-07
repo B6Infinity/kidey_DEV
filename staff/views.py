@@ -7,8 +7,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
+
+from subtle_defs import *
 from .models import *
 import json
+import pytz
 from menucard_creator import generateMenuCard
 
 def allow_all(self):
@@ -130,7 +133,7 @@ def analytics(request):
 
     JS = {}
     for order in last_week_orders:
-        order_json = order.order_json
+        order_json = json.loads(order.order_json)
         for product in order_json:
             product_name = Product.objects.get(id=product).name
             if not product_name in JS:
@@ -261,11 +264,20 @@ def addOrder(request):
         customer = __customer[0]
 
         # Handling the Order
+        # # DateTimes
+        too = datetime.strptime(time_of_order, "%Y-%m-%dT%H:%M")
+        too = pytz.timezone('Asia/Kolkata').localize(too)
+        
+        tod = datetime.strptime(time_of_delivery, "%Y-%m-%dT%H:%M")
+        tod = pytz.timezone('Asia/Kolkata').localize(tod)
+        
+        
+
         newOrder = Order.objects.create(
-            customer = customer, 
-            order_json = json.loads(order_json), 
-            time_of_order = datetime.strptime(time_of_order, "%Y-%m-%dT%H:%M"),
-            time_of_delivery = datetime.strptime(time_of_delivery, "%Y-%m-%dT%H:%M"),
+            customer = customer,
+            order_json = order_json,
+            time_of_order = too,
+            time_of_delivery = tod,
             discount = int(discount)
         )
 
@@ -358,8 +370,10 @@ def fetchOrder(request):
                 "BILL_TEXT": order.bill_text,
                 "PAID": order.paid,
                 "MONEY": f"₹{order.total_bill} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
-                "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
-                "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
+                "TIME_OF_ORDER": str(order.time_of_order),
+                "TIME_OF_ORDER": str(order.time_of_delivery),
+                # "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
+                # "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
             }
         
         return JsonResponse(RESPONSE)

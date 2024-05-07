@@ -1,0 +1,5 @@
+TOTAL PROFIT ANALYTICS
+
+EXISTING ORDER FONT STYLE
+
+(views.py | Line 267): RuntimeWarning: DateTimeField Order.time_of_order received a naive datetime (2024-05-07 08:36:00) while time zone support is active.
