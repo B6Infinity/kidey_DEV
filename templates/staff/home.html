@@ -8,7 +8,27 @@
 
     <!-- CHART MAIN -->
     <div class="flex-object" id="mainboard" style="flex-grow: 1;">
-        MAIN STUFF HERE
+    
+        
+
+        <div class="flex-container">
+            <div class="column">
+                <!-- Content for the first column -->
+                <div class="dash" id="upcoming_orders" style="flex-grow: 2;">
+                    <div class="heading">Upcoming Orders</div>
+                    <div class="scroll_content">
+                        <div>Poltu Da - </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="column">
+                <!-- Content for the second column -->
+                ?!
+            </div>
+        </div>
+
     </div>
     <hr>
 
@@ -150,11 +170,57 @@
 
     </div>
 
+    
 
 </div>
 
 
+<style>
+    .flex-container {
+        display: flex;
+        height: 95%;
+    }
+    
+    .column {
+        flex-grow: 1;
+        padding: 20px;
+        height: 100%;
+        margin: 10px;
+        background-color: #252525; /* Set the background color for the first column */
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+    }
 
+    .column .dash:hover{
+        background-color: black;
+
+    }
+    .column .dash{
+        padding: 5px;
+        margin: 2px;
+        background-color: rgba(32, 32, 32, 0.445);
+    }
+    .column .dash .heading{
+        font-size: 2rem;
+        border-bottom: 1px solid cyan;
+    }
+
+
+    /* For Phones */
+    @media only screen and (max-device-width: 640px) {
+
+        #mainboard{
+            overflow-y: auto;
+        }
+
+        .flex-container {
+            flex-direction: column;
+            height: 100vh;
+        }
+    }
+
+</style>
 
 
 <script>
@@ -163,4 +229,5 @@
     }
 
 </script>
+
 {% endblock body %}

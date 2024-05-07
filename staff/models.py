@@ -94,6 +94,8 @@ class Order(models.Model):
 
         super(Order, self).save(*args, **kwargs)
     
+    def get_unpaid(self, *args, **kwargs):
+        return ['BAL']
     
     def __str__(self) -> str:
         return f"{self.customer}:₹{self.payable_amt} >> {(self.time_of_delivery.strftime('%d/%m/%y, %H:%M'))}"
