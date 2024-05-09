@@ -240,8 +240,10 @@
     <div style="color: white;" class="label-classic" id="order-bill_text"></div><br><br>
     <div style="color: green; font-size: 25px;" class="label-classic" id="order-money"></div>
     <br><br>
+    <button id="paid-" name="paid_button" style="font-size: 20px; color: cyan;"
+        onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Paid - Online?</button>
     <button id="paid-" name="paid_button" style="font-size: 20px; color: green;"
-        onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Mark as Paid</button>
+        onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Paid - Cash?</button>
 
     <div id="confirm_delete" style="float: right; margin: 5px; visibility: hidden;">
         <form action="/staff/delete-order" method="POST">{% csrf_token %}

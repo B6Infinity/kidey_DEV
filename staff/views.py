@@ -66,11 +66,14 @@ def products(request):
             categories.append(product.category)
 
     # Making Sure that 'NONE' Category appears in the end
-    
-    categories.remove(categories[categories.index("none")])
-    categories.append("none")
+
+    if "none" in categories:
+        categories.remove(categories[categories.index("none")])
+        categories.append("none")
+
 
     DATA["CATEGORIES"] = categories
+    DATA["ALL_CATEGORIES"] = existing_products[0].get_all_categories()
 
     return render(request, 'staff/products.html', DATA)
 
@@ -169,9 +172,9 @@ def orders(request):
             categories.append(product.category)
 
     # Making Sure that 'NONE' Category appears in the end
-    
-    categories.remove(categories[categories.index("none")])
-    categories.append("none")
+    if "none" in categories:
+        categories.remove(categories[categories.index("none")])
+        categories.append("none")
     DATA["CATEGORIES"] = categories
 
 
@@ -181,9 +184,10 @@ def money(request):
     if not request.user.is_staff:
         return HttpResponse("You need to login as a staff <a href='/staff'>Login Here</a>")
 
+    cash = Money.objects.first().value
+    online = Money.objects.last().value
     
-    
-    DATA = {"CURRENT_PAGE": "money", "CASH": Money.objects.all()[0], "EXPENSES":Expense.objects.all()[:20][::-1]}
+    DATA = {"CURRENT_PAGE": "money", "CASH": cash, "ONLINE": online, "TOTAL_MONEY": cash + online, "EXPENSES":Expense.objects.all()[:20][::-1]}
     return render(request, 'staff/money.html', DATA)
 
 def addProduct(request):
@@ -432,6 +436,8 @@ def deleteCustomer(request):
 
         return JsonResponse(RESPONSE)
 
+def fetch_relevant_orders(request):
+    '''Relevant Order means the order that is to be delivered in the afternoon and night'''
 # STATICITY
 
 def get_menu(request):
@@ -447,9 +453,9 @@ def get_menu(request):
             categories.append(product.category)
 
     # Making Sure that 'NONE' Category appears in the end
-    
-    categories.remove(categories[categories.index("none")])
-    categories.append("none")
+    if "none" in categories:
+        categories.remove(categories[categories.index("none")])
+        categories.append("none")
 
     for category in categories:
         MENU[category.upper()] = {}
@@ -500,9 +506,9 @@ def fetchMenu(request):
             categories.append(product.category)
 
     # Making Sure that 'NONE' Category appears in the end
-    
-    categories.remove(categories[categories.index("none")])
-    categories.append("none")
+    if "none" in categories:
+        categories.remove(categories[categories.index("none")])
+        categories.append("none")
 
     for category in categories:
         MENU[category.upper()] = {}

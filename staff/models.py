@@ -19,13 +19,18 @@ class Product(models.Model):
         ('none', 'none'),
         ('biriyani', 'biriyani'),
         ('thali', 'thali'),
+        ('extra', 'extra'),
         ('chinese', 'chinese'),
+        ('curry', 'curry'),
     )
     
     category = models.CharField(max_length=25, choices=category_choices, default='none')
 
     def __str__(self) -> str:
         return f"{self.name} - ₹{self.price}"
+    
+    def get_all_categories(self) -> tuple:
+        return self.category_choices
 
 
 class Profile(models.Model):
@@ -109,6 +114,7 @@ class Expense(models.Model):
     time_of_expense = models.DateTimeField()
 
     amount = models.IntegerField()
+    is_online = models.BooleanField(default=False)
 
     summary = models.TextField(null=True, blank=True)
 
@@ -122,7 +128,16 @@ class Expense(models.Model):
         super(Expense, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return f"<b style='color:skyblue;'>₹{self.amount}</b> - {self.time_of_expense.strftime('%d/%m/%y, %H:%M')}"
+        # return f"<b style='color:skyblue;'>₹{self.amount}</b> - {self.time_of_expense.strftime('%d/%m/%y, %H:%M')}"
+        return f"₹{self.amount} - {self.time_of_expense.strftime('%d/%m/%y, %H:%M')}"
+
 
 class Money(models.Model):
     value = models.IntegerField(default=0)
+    online_mode = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        if self.online_mode:
+            return "Online"
+        else:
+            return "Cash"

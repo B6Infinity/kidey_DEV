@@ -7,7 +7,12 @@
 
     <div class="flex-object" style="flex-grow: 1;">
         <div class="fnt-med" style="color: #aaaaaa">Total Money in Cash</div><br>
-        <div class="fnt-extra-xxx" id="big_money">{{CASH.value}}/-</div>
+        <div class="fnt-extra-xxx" id="big_money">{{TOTAL_MONEY}}/-</div>
+        <div class="flex-row">
+            <h3>Cash: <span id="cash_money">{{CASH}}/-</span></h3>
+            <h3>Online: <span id="online_money">{{ONLINE}}/-</span></h3>
+        </div>
+        <!-- <div class="fnt-extra-xxx" id="big_money">{{ONLINE.value}}/-</div> -->
 
         <div id="withdraw-money-container">
             <div class="fnt-med" style="color: #aaaaaa">Withdraw Money:</div>
@@ -15,6 +20,7 @@
             <form action="withdrawMoney" method="post">{% csrf_token %}
                 <input type="text" class="input-classic" name="withdraw_name" placeholder="Name of withdrawer" required autocomplete="off">
                 <input type="number" class="input-classic" name="withdraw_amt" placeholder="Amount Withdrawn" required autocomplete="off">
+                <input type="checkbox" class="" name="is_online" placeholder="" required autocomplete="off"> Is Online
                 <input type="text" class="input-classic" name="withdraw_summary" placeholder="Summary" required autocomplete="off">
                 <input type="datetime-local" class="input-classic" name="widthdraw_time" placeholder="Time Of Widthdrawl" required autocomplete="off">
                 <br><br>
@@ -50,6 +56,28 @@
 
 </div>
 
+<style>
+    .flex-row span{
+        font-weight: 600;
+        font-size: 2rem;
+    }
+    .flex-row h3{
+        background-color: #1f1f1f;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 10px;
+        flex-grow: 1;
+        color: white;
+        font-weight: 100;
+    }
+    #cash_money{
+        color: lime;
+    }
+    #online_money{
+        color: cyan;
+    }
+    
+</style>
 
 
 

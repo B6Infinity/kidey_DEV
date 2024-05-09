@@ -15,17 +15,21 @@
             <div class="column">
                 <!-- Content for the first column -->
                 <div class="dash" id="upcoming_orders" style="flex-grow: 2;">
-                    <div class="heading">Upcoming Orders</div>
-                    <div class="scroll_content">
-                        <div>Poltu Da - </div>
-                    </div>
+                    <div class="heading">Upcoming Orders - <span id="live_time">TIMEHERE</span></div>
+
+
                 </div>
                 
                 
             </div>
             <div class="column">
                 <!-- Content for the second column -->
-                ?!
+                <div class="dash" id="upcoming_orders" style="flex-grow: 2;">
+                    <div class="heading">Global Parameters</div>
+                    
+                    Minimum Qty for Free Delivery:
+    
+                </div>
             </div>
         </div>
 
@@ -174,6 +178,28 @@
 
 </div>
 
+<script> //TIMER SCRIPT
+    setInterval(function() {
+        let clockdom = document.getElementById('live_time');
+        let time = new Date().toLocaleTimeString();
+        clockdom.innerHTML = time;
+
+        if (time.includes('AM')) {
+            clockdom.style.color = 'yellow';
+        } else if (time.includes('PM')) {
+            clockdom.style.color = 'cyan';
+        }
+    }, 1000);
+</script>
+
+<script defer> // Load relevant orders
+    fetch('serverendpoint')
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+    
+    
+</script>
+
 
 <style>
     .flex-container {
@@ -206,7 +232,6 @@
         border-bottom: 1px solid cyan;
     }
 
-
     /* For Phones */
     @media only screen and (max-device-width: 640px) {
 
@@ -219,15 +244,16 @@
             height: 100vh;
         }
     }
-
+    
 </style>
+
 
 
 <script>
     if ("{{CURRENT_PAGE}}" == "home") {
         document.getElementById('{{CURRENT_PAGE}}-hotbar').classList.add('hotbar-active');
     }
-
+    
 </script>
 
 {% endblock body %}

@@ -12,16 +12,17 @@
 
             <form action="/staff/add-product" method="POST">
                 {% csrf_token %}
+                
 
                 <input class="input-classic" name="product_name" type="text" placeholder="Product Name"
                     autocomplete="off" required>
                 <input class="input-classic" name="price" type="number" placeholder="Price" autocomplete="off" required>
                 <select class="input-classic" name="category" id="category">
                     <option value="none" selected>-Choose a Category-</option>
-                    <option value="none">-NONE-</option>
-                    <option value="biriyani">BIRIYANI</option>
-                    <option value="thali">THALI</option>
-                    <option value="chinese">CHINESE</option>
+                    {% for c in ALL_CATEGORIES %}
+                        
+                        <option value="{{c.0}}">{{c.1|upper}}</option>
+                    {% endfor %}
                 </select>
                 <input type="hidden" name="new_product" value="true">
                 <input type="hidden" name="product_id" value="">
