@@ -4,7 +4,7 @@ import os
 import platform
 
 from subtle_defs import *
-'''
+
 MENU = {
      "BIRIYANI": {
          "Chicken Biriyani": 120,
@@ -28,8 +28,30 @@ MENU = {
          "Ghoogni": 10,
          "Roti": 5,
          "Aloo Bhaja": 5,
+     },
+     "ALT":{
+         "Ghoogni": 10,
+         "Roti": 5,
+         "Aloo Bhaja": 5,
+         "Aloo Bhaja2": 5,
+         "Aloo Bhaja3": 5,
+         "Aloo Bhaja4": 5,
+         "Aloo Bhaja5": 5,
+         "Aloo Bhaja7": 5,
+         "Aloo Bhaja4": 5,
+         "Aloo Bhaja4sdg": 5,
+         "Aloo Bhaja4sdgag": 5,
+         "Aloo Bhaja4sdgagfw": 5,
+         "Aloo Bhaja4sdgagfwa": 5,
+         "Aloo Bhaja4sdgagfwaa": 5,
+         "Aloo B": 5,
+         "Aloo Bs": 5,
+         "Aloo B": 5,
+         "Aloo Bgg": 5,
+         "Aloo Beg": 5,
+         "Aloo Bsd": 5,
      }
-}'''
+}
 
 
 current_os = platform.system()
@@ -115,3 +137,5 @@ def generateMenuCard(MENU, path):
 
     print("SAVED!")
     return savedir
+
+generateMenuCard(MENU, '.')
