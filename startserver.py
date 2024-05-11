@@ -11,9 +11,11 @@ os.system('git pull https://github.com/B6Infinity/kidey_DEV master')
 
 
 # GETTING THE IP ADDRESS OF NATIVE MACHINE (LAN COMPATIBLE)
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-native_ip = str(s.getsockname()[0])
+# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# s.connect(("8.8.8.8", 80))
+# native_ip = str(s.getsockname()[0])
+
+native_ip = "0.0.0.0" # Fire on all ports
 
 platform_os = platform.system()
 
