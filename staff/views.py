@@ -316,14 +316,16 @@ def markOrderPaid(request):
         RESPONSE = {"ERROR": None}
         
         order_id = request.POST['order_id']
-        printC(request.POST)
 
         if len(Order.objects.filter(id=order_id)) == 0:
             RESPONSE["ERROR"] = "Order does not exist!"
         else:
             order = Order.objects.get(id=order_id)
             order.paid = True
-            order.save()
+            # order.save(kwargs={
+            #     'is_online': request.POST['is_online']
+                #     })
+            order.save(is_online=request.POST['is_online'])
 
         return JsonResponse(RESPONSE)
 
@@ -363,8 +365,15 @@ def withdrawMoney(request):
         withdraw_amt = request.POST['withdraw_amt']
         withdraw_summary = request.POST['withdraw_summary']
         time_of_expense = request.POST['widthdraw_time']
+        is_online = request.POST['is_online']
 
-        Expense.objects.create(withdrawer=withdraw_name, amount=int(withdraw_amt), summary=withdraw_summary, time_of_expense=time_of_expense)
+        if is_online == 'on':
+            is_online = True
+        else:
+            is_online = False
+            
+
+        Expense.objects.create(withdrawer=withdraw_name, amount=int(withdraw_amt), summary=withdraw_summary, time_of_expense=time_of_expense, is_online=is_online)
 
         return redirect("money")
 

@@ -337,6 +337,10 @@
 
     function markOrderAsPaid(order_id, is_online) {
         console.log(order_id);
+        if (is_online) {
+            console.log('ONLINE PAYMENT!');
+        }
+        
         let form = new FormData();
         form.set('order_id', order_id);
         form.set('is_online', is_online);
@@ -354,9 +358,10 @@
             .then(data => {
                 console.log(data);
                 if (data["ERROR"] == null) {
-                    document.getElementsByName('paid_button')[0].disabled = true;
-                    document.getElementsByName('paid_button')[0].textContent = "Paid";
-                    document.getElementsByName('paid_button')[0].style.color = 'green';
+                    document.getElementsByName('paid_button')[1].disabled = true;
+                    document.getElementsByName('paid_button')[1].textContent = "Paid";
+                    document.getElementsByName('paid_button')[1].style.color = 'green';
+                    document.getElementsByName('paid_button')[0].style.display = 'none';
                     document.getElementById('order-'+order_id).style.backgroundColor = '#202020';
                 }
             });

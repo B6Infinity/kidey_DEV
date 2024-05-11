@@ -92,9 +92,19 @@ class Order(models.Model):
         self.bill_text = bill_text
 
         if self.paid:
-            m = Money.objects.all()[0]
+            # Online or Offline
+            printC(kwargs)
+            if len(kwargs) == 0:
+                index = 0
+            elif kwargs["is_online"]:
+                index = 1
+            
+            m = Money.objects.all()[index]
             m.value += self.payable_amt
             m.save()
+
+            # Clear kwargs
+            kwargs = {}
 
 
         super(Order, self).save(*args, **kwargs)
@@ -106,7 +116,7 @@ class Order(models.Model):
         return f"{self.customer}:₹{self.payable_amt} >> {(self.time_of_delivery.strftime('%d/%m/%y, %H:%M'))}"
 
 
-class Expense(models.Model):
+class Expense(models.Model): # '0' is CASH and '1' is ONLINE
 
     withdrawer = models.CharField(max_length=150, default="", null=True, blank=True)
 
@@ -121,9 +131,14 @@ class Expense(models.Model):
 
     def save(self, *args, **kwargs):
 
-        m = Money.objects.all()[0]
-        m.value -= self.amount
-        m.save()
+        if self.is_online:
+            m = Money.objects.all()[1]
+            m.value -= self.amount
+            m.save()
+        else:
+            m = Money.objects.all()[0]
+            m.value -= self.amount
+            m.save()
 
         super(Expense, self).save(*args, **kwargs)
 
