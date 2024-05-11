@@ -2,3 +2,4 @@ trsh.py
 /media/
 bill_bed.jpg
 *.pyc
+db.sqlite3
