@@ -150,8 +150,12 @@ class MenuCardCreator():
         self.PAGE_WIDTH = 1275
         self.PAGE_HEIGHT = 1650
         self.YCURSOR = 300
+
         self.CATEGORY_HEIGHT = 40
         self.PRODUCT_HEIGHT = 35
+        self.PRODUCT_HEIGHT = 40
+
+        self.MENU_COVER_PORTION = 0.87
 
         self.page_count = 1
         self.path = None
@@ -159,21 +163,50 @@ class MenuCardCreator():
         self.img = None
         self.draw = None
 
+        self.category_font = ImageFont.truetype(self.BASE_FONT, self.CATEGORY_HEIGHT)
+        self.product_font = ImageFont.truetype(self.BASE_FONT, self.PRODUCT_HEIGHT)
+        self.page_number_font = ImageFont.truetype(self.BASE_FONT, self.PRODUCT_HEIGHT)
+
     def generate_menu_card(self, MENU: dict, path: str = '.'):
         self.path = path
 
         self.create_page()
+
+
+        for category in MENU:
+            #  WRITE CATEGORY
+
+            self.write_category(self.YCURSOR, category)
+            self.YCURSOR += self.CATEGORY_HEIGHT + 10
+
+            PRODUCTS = MENU[category]
+            for product in PRODUCTS:
+                self.write_product(product, PRODUCTS[product], self.YCURSOR)
+                
+                self.YCURSOR += self.PRODUCT_HEIGHT + 10
+                if self.YCURSOR >= self.MENU_COVER_PORTION * self.PAGE_HEIGHT:
+                    self.write_page_number()
+                    self.save_img()
+                    self.page_count += 1
+                    self.create_page()
+
+            self.YCURSOR += 5
+            if self.YCURSOR >= self.MENU_COVER_PORTION * self.PAGE_HEIGHT:
+                self.write_page_number()
+                self.save_img()
+                self.page_count += 1
+                self.create_page()
+
+
+        self.write_page_number()
         self.save_img()
-
-
-
 
     # Breakout Functions ---------------------------------------------------
     def create_page(self):
         self.img = Image.new('RGB', (self.PAGE_WIDTH, self.PAGE_HEIGHT), color=(16, 16, 16))
         self.draw = ImageDraw.Draw(self.img)
 
-        self.draw = self.draw_heading()
+        self.draw_heading()
         
     def draw_heading(self):
         font = ImageFont.truetype(self.BASE_FONT, 90)
@@ -190,9 +223,25 @@ class MenuCardCreator():
 
         self.draw.line([(0, 230), (self.PAGE_WIDTH, 230)], fill =(133, 138, 36), width = 7)
 
+        self.YCURSOR = 300
+
+    def write_category(self, cursor, category: str):
+        if category == "NONE":
+            self.draw.text((50, cursor), "OTHER ITEMS", font=self.category_font, fill=(127, 255, 0), stroke_fill=(127, 255, 0), stroke_width=2)
+        else:
+            self.draw.text((50, cursor), category, font=self.category_font, fill=(127, 255, 0), stroke_fill=(127, 255, 0), stroke_width=2)
+    
+    def write_product(self, product: str, price: int, cursor):
+        self.draw.text((100, cursor), product, font=self.product_font, fill=(135, 206, 235), stroke_fill=(135, 206, 235), stroke_width=0)
+        self.draw.text((self.PAGE_WIDTH-200, cursor), '₹'+str(price)+'/-', font=self.product_font, fill=(218, 165, 32), stroke_fill=(218, 165, 32), stroke_width=0)
+
+    def write_page_number(self):
+        self.draw.text((self.PAGE_WIDTH - 300, self.PAGE_HEIGHT - 100), f"Page {self.page_count}", font=self.page_number_font, fill=(135, 135, 0), stroke_fill=(135, 206, 235), stroke_width=0)
+
+
     def new_page(self):
         pass
-    
+
     def save_img(self):
         savename = f"menucard_{self.page_count}.jpg"
         savedir = os.path.join(self.path, savename)
