@@ -219,7 +219,7 @@
 
 <div id="show-order">
     <div style="float: right; font-weight: 900; padding: 5px; user-select: none; color: red; background-color: black; border-radius: 5px;"
-        onclick="document.getElementById('show-order').style.visibility = 'hidden';">X</div>
+        onclick="hide_order()">X</div>
     <div style="margin-right: 5px;float: right; font-weight: 900; padding: 5px; user-select: none; color: red; background-color: black; border-radius: 5px;"
         onclick="document.getElementById('confirm_delete').style.visibility = 'visible';"><img style="width: 15px;"
             src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png">
@@ -240,10 +240,10 @@
     <div style="color: white;" class="label-classic" id="order-bill_text"></div><br><br>
     <div style="color: green; font-size: 25px;" class="label-classic" id="order-money"></div>
     <br><br>
-    <button id="paid-" name="paid_button" style="font-size: 20px; color: cyan;"
-        onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Paid - Online?</button>
-    <button id="paid-" name="paid_button" style="font-size: 20px; color: green;"
-        onclick="markOrderAsPaid(this.id.replace('paid-', ''))" type="button">Paid - Cash?</button>
+    <button id="online-paid-" name="paid_button" style="font-size: 20px; color: cyan;"
+        onclick="markOrderAsPaid(this.id.replace('online-paid-', ''), true)" type="button">Paid - Online?</button>
+    <button id="paid-" name="paid_button" style="font-size: 20px; color: lime;"
+        onclick="markOrderAsPaid(this.id.replace('paid-', ''), false)" type="button">Paid - Cash?</button>
 
     <div id="confirm_delete" style="float: right; margin: 5px; visibility: hidden;">
         <form action="/staff/delete-order" method="POST">{% csrf_token %}
@@ -259,9 +259,22 @@
 
 
 <script>
+    // Global DOMs
+    let paidbtn = document.getElementById('paid-');
+    let paidbtn_online = document.getElementById('online-paid-');
+
+    function hide_order() {
+        paidbtn.id = 'paid-';
+        paidbtn_online.id = 'online-paid-';
+        document.getElementById('show-order').style.visibility = 'hidden';
+        console.log('ello?');
+    }
+
     function showOrder(order_id) {
 
         // fetchOrder
+
+        console.log('Showing Order:' + order_id);
 
         let form = new FormData();
         form.set('order_id', order_id);
@@ -289,19 +302,32 @@
                     document.getElementById('order-time_of_delivery').textContent = data["ORDER"]["TIME_OF_DELIVERY"];
                     document.getElementById('order-money').innerHTML = data["ORDER"]["MONEY"];
                     document.getElementsByName('order-id')[0].value = order_id;
-                    let paidbtn = document.getElementsByName('paid_button')[0];
+                    
+                    
+                    
 
+                    paidbtn_online.id = 'online-paid-' + order_id
                     paidbtn.id = 'paid-' + order_id
 
                     let paid = data["ORDER"]["PAID"];
+                    
                     if (paid) {
                         paidbtn.disabled = true;
                         paidbtn.textContent = "Paid";
                         paidbtn.style.color = 'green';
+
+                        paidbtn_online.style.display = 'none';
+                        
                     } else {
+                        
+                        paidbtn_online.disabled = false;
+                        paidbtn_online.style.color = 'cyan';
+                        paidbtn_online.textContent = "Paid - Online?";
+                        
+                        paidbtn_online.style.display = 'inline-block';
                         paidbtn.disabled = false;
-                        paidbtn.style.color = '#00FF00';
-                        paidbtn.textContent = "Mark as Paid";
+                        paidbtn.style.color = 'lime';
+                        paidbtn.textContent = "Paid - Cash?";
 
                     }
 
@@ -309,10 +335,12 @@
             });
     }
 
-    function markOrderAsPaid(order_id) {
+    function markOrderAsPaid(order_id, is_online) {
         console.log(order_id);
         let form = new FormData();
         form.set('order_id', order_id);
+        form.set('is_online', is_online);
+
         fetch(`markOrderPaid`,
             {
                 method: 'POST',

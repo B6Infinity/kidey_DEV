@@ -20,7 +20,7 @@
             <form action="withdrawMoney" method="post">{% csrf_token %}
                 <input type="text" class="input-classic" name="withdraw_name" placeholder="Name of withdrawer" required autocomplete="off">
                 <input type="number" class="input-classic" name="withdraw_amt" placeholder="Amount Withdrawn" required autocomplete="off">
-                <input type="checkbox" class="" name="is_online" placeholder="" required autocomplete="off"> Is Online
+                <input type="checkbox" class="" name="is_online" placeholder="" autocomplete="off"> Is Online
                 <input type="text" class="input-classic" name="withdraw_summary" placeholder="Summary" required autocomplete="off">
                 <input type="datetime-local" class="input-classic" name="widthdraw_time" placeholder="Time Of Widthdrawl" required autocomplete="off">
                 <br><br>

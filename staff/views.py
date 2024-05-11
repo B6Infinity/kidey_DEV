@@ -190,6 +190,8 @@ def money(request):
     DATA = {"CURRENT_PAGE": "money", "CASH": cash, "ONLINE": online, "TOTAL_MONEY": cash + online, "EXPENSES":Expense.objects.all()[:20][::-1]}
     return render(request, 'staff/money.html', DATA)
 
+# APIs
+
 def addProduct(request):
 
     if request.method == 'POST' and request.user.is_staff:
@@ -246,6 +248,7 @@ def deleteProduct(request):
 
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
+
 
 def addOrder(request):
     if request.method == 'POST' and request.user.is_staff:
@@ -308,6 +311,52 @@ def deleteOrder(request):
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
 
+def markOrderPaid(request):
+    if request.method == 'POST' and request.user.is_staff:
+        RESPONSE = {"ERROR": None}
+        
+        order_id = request.POST['order_id']
+        printC(request.POST)
+
+        if len(Order.objects.filter(id=order_id)) == 0:
+            RESPONSE["ERROR"] = "Order does not exist!"
+        else:
+            order = Order.objects.get(id=order_id)
+            order.paid = True
+            order.save()
+
+        return JsonResponse(RESPONSE)
+
+def fetchOrder(request):
+    if request.method == 'POST' and request.user.is_staff:
+        RESPONSE = {"ERROR": None}
+        
+        order_id = request.POST['order_id']
+
+        if len(Order.objects.filter(id=order_id)) == 0:
+            RESPONSE["ERROR"] = "Order does not exist!"
+        else:
+            order = Order.objects.get(id=order_id)
+
+            RESPONSE["ORDER"] = {
+                "NAME": order.customer.name,
+                "PHONE": order.customer.phone_no,
+                "ADDRESS": order.customer.address,
+                "BILL_TEXT": order.bill_text,
+                "PAID": order.paid,
+                "MONEY": f"₹{order.total_bill} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
+                "TIME_OF_ORDER": str(order.time_of_order),
+                "TIME_OF_ORDER": str(order.time_of_delivery),
+                # "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
+                # "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
+            }
+        
+        return JsonResponse(RESPONSE)
+
+def fetch_relevant_orders(request):
+    '''Relevant Order means the order that is to be delivered in the afternoon and night'''
+
+
 def withdrawMoney(request):
     if request.method == 'POST' and request.user.is_staff:
         withdraw_name = request.POST['withdraw_name']
@@ -319,7 +368,6 @@ def withdrawMoney(request):
 
         return redirect("money")
 
-# APIs
 
 def fetchCustomer(request):
     
@@ -355,47 +403,6 @@ def fetchCustomer(request):
     
     else:
         return HttpResponse("Not this way Mr. heckar :)")
-
-def fetchOrder(request):
-    if request.method == 'POST' and request.user.is_staff:
-        RESPONSE = {"ERROR": None}
-        
-        order_id = request.POST['order_id']
-
-        if len(Order.objects.filter(id=order_id)) == 0:
-            RESPONSE["ERROR"] = "Order does not exist!"
-        else:
-            order = Order.objects.get(id=order_id)
-
-            RESPONSE["ORDER"] = {
-                "NAME": order.customer.name,
-                "PHONE": order.customer.phone_no,
-                "ADDRESS": order.customer.address,
-                "BILL_TEXT": order.bill_text,
-                "PAID": order.paid,
-                "MONEY": f"₹{order.total_bill} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
-                "TIME_OF_ORDER": str(order.time_of_order),
-                "TIME_OF_ORDER": str(order.time_of_delivery),
-                # "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
-                # "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
-            }
-        
-        return JsonResponse(RESPONSE)
-
-def markOrderPaid(request):
-    if request.method == 'POST' and request.user.is_staff:
-        RESPONSE = {"ERROR": None}
-        
-        order_id = request.POST['order_id']
-
-        if len(Order.objects.filter(id=order_id)) == 0:
-            RESPONSE["ERROR"] = "Order does not exist!"
-        else:
-            order = Order.objects.get(id=order_id)
-            order.paid = True
-            order.save()
-
-        return JsonResponse(RESPONSE)
 
 def editCustomer(request):
     if request.user.is_staff and request.method == 'POST':
@@ -436,8 +443,7 @@ def deleteCustomer(request):
 
         return JsonResponse(RESPONSE)
 
-def fetch_relevant_orders(request):
-    '''Relevant Order means the order that is to be delivered in the afternoon and night'''
+
 # STATICITY
 
 def get_menu(request):
