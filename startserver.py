@@ -3,6 +3,8 @@ import os
 import os, sys, platform
 import datetime
 
+from subtle_defs import printC
+
 origin = 'https://github.com/B6Infinity/kidey_DEV'
 
 # PULLING CHANGES
@@ -11,15 +13,19 @@ os.system('git pull https://github.com/B6Infinity/kidey_DEV master')
 
 
 # GETTING THE IP ADDRESS OF NATIVE MACHINE (LAN COMPATIBLE)
-# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# s.connect(("8.8.8.8", 80))
-# native_ip = str(s.getsockname()[0])
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+local_native_ip = str(s.getsockname()[0])
 
 native_ip = "0.0.0.0" # Fire on all ports
 
 platform_os = platform.system()
 
-print(f"\033[95m\033[1m\033[4mStarting Server ---> KIDEY-CORE @ {native_ip}:8000\033[0m")
+printC("\n\nStarting Virtual Environment...\n\n")
+# os.system('.\\venv\Scripts\Activate.ps1')
+
+
+print(f"\033[95m\033[1m\033[4mStarting Server ---> KIDEY-CORE @ {local_native_ip}:8000\033[0m")
 print('\n\n\n')
 if platform_os == "Linux":
     os.system(f'python3 manage.py runserver {native_ip}:8000')

@@ -1,1 +1,1 @@
-python startserver.py
+.\venv\Scripts\python.exe manage.py runserver
