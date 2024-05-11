@@ -93,11 +93,15 @@ class Order(models.Model):
 
         if self.paid:
             # Online or Offline
-            printC(kwargs)
+
             if len(kwargs) == 0:
                 index = 0
             elif kwargs["is_online"]:
                 index = 1
+            else:
+                index = 0
+
+            printC(f"Pushing in {['CASH', 'ONLINE'][index]}")
             
             m = Money.objects.all()[index]
             m.value += self.payable_amt

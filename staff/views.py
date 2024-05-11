@@ -322,10 +322,13 @@ def markOrderPaid(request):
         else:
             order = Order.objects.get(id=order_id)
             order.paid = True
-            # order.save(kwargs={
-            #     'is_online': request.POST['is_online']
-                #     })
-            order.save(is_online=request.POST['is_online'])
+
+            if request.POST['is_online'] == "true":
+                is_online = True
+            else:
+                is_online = False
+
+            order.save(is_online=is_online)
 
         return JsonResponse(RESPONSE)
 
