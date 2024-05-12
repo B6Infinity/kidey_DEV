@@ -12,7 +12,7 @@ from subtle_defs import *
 from .models import *
 import json
 import pytz
-from menucard_creator import generateMenuCard
+from menucard_creator import MENUCARD
 
 def allow_all(self):
     return True
@@ -497,14 +497,27 @@ def get_menu(request):
                 MENU[category.upper()][product.name] = str(product.price)
 
     
-    savedir = generateMenuCard(MENU, 'media')
+    path, image_prefix, pagecount = MENUCARD.generate_menu_card(MENU, 'media')
+
+    printG(path)
+    printG(image_prefix)
+    printG(pagecount)
+
+    img_portion_HTML = f''''''
+
+    for i in range(1, pagecount+1):
+        img_portion_HTML += f'''
+            <img style="object-fit:contain; height:85%;" src="/staff/{path}/{image_prefix.replace('*', f"{i}")}">
+        '''
 
     return HttpResponse(f'''
         <title>Kidey's Menu Card</title>
 
-        <img style="object-fit:contain; height:85%;" src="/staff/{savedir}"><br>
-        <a href="/staff/{savedir}" download>
-        <div style="padding: 10px; border-radius:5px; background-color:skyblue; margin:10px; font-size:28px; user-select:none; color: black;">Download</div></a>
+        {img_portion_HTML}
+        <br>
+        <!--<a href="/staff/{path}" download> -->
+        <div style="padding: 10px; border-radius:5px; background-color:skyblue; margin:10px; font-size:28px; user-select:none; color: black;">Download PDF??? MON KE BOL eta thik korte</div>
+        <!--</a> -->
 
         '''+'''
         <style>

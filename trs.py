@@ -163,6 +163,8 @@ class MenuCardCreator():
         self.img = None
         self.draw = None
 
+        self.savedir = None
+
         self.category_font = ImageFont.truetype(self.BASE_FONT, self.CATEGORY_HEIGHT)
         self.product_font = ImageFont.truetype(self.BASE_FONT, self.PRODUCT_HEIGHT)
         self.page_number_font = ImageFont.truetype(self.BASE_FONT, self.PRODUCT_HEIGHT)
@@ -201,6 +203,8 @@ class MenuCardCreator():
         self.write_page_number()
         self.save_img()
 
+        return self.savedir, self.page_count
+    
     # Breakout Functions ---------------------------------------------------
     def create_page(self):
         self.img = Image.new('RGB', (self.PAGE_WIDTH, self.PAGE_HEIGHT), color=(16, 16, 16))
@@ -238,14 +242,10 @@ class MenuCardCreator():
     def write_page_number(self):
         self.draw.text((self.PAGE_WIDTH - 300, self.PAGE_HEIGHT - 100), f"Page {self.page_count}", font=self.page_number_font, fill=(135, 135, 0), stroke_fill=(135, 206, 235), stroke_width=0)
 
-
-    def new_page(self):
-        pass
-
     def save_img(self):
         savename = f"menucard_{self.page_count}.jpg"
-        savedir = os.path.join(self.path, savename)
-        self.img.save(savedir)
+        self.savedir = os.path.join(self.path, savename)
+        self.img.save(self.savedir)
 
         print("SAVED!")
 
