@@ -47,7 +47,12 @@ class MenuCardCreator():
         self.page_number_font = ImageFont.truetype(self.BASE_FONT, self.PRODUCT_HEIGHT)
 
     def generate_menu_card(self, MENU: dict, path: str = '.'):
+        self.__init__()
         self.path = path
+        
+        print(os.listdir(path))
+        for i in os.listdir(path):
+            os.remove(os.path.join(path, i))
 
         self.create_page()
 
