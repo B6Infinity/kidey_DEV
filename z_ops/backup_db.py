@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import shutil
 
 DB_FROM = ''
 DB_TO = '..\\DB\\'
@@ -20,14 +21,17 @@ def add_to_log(text):
 # Add to changelog
 # Add recent backup
 
-OLD_DB_NAME = f"\"{PREVIOUS_SNAPSHOTS}old_db_{time_of_op}.sqlite3\""
+OLD_DB_NAME = f"{PREVIOUS_SNAPSHOTS}old_db_{time_of_op}.sqlite3"
 
 try:
-    os.system(f'MOVE {DB_TO}{BACKUP_DB} {OLD_DB_NAME}')
+    # os.system(f'MOVE {DB_TO}{BACKUP_DB} {OLD_DB_NAME}')
+    shutil.move(f"{DB_TO}{BACKUP_DB}", f"{DB_TO}{OLD_DB_NAME}")
+    print("Backed up the backup_db.")
 except Exception as e:
-    print("Could not find 'db.sqlite3'... Skipping...")
+    print("Could not find previous backup... Skipping...")
     add_to_log("Could not find previous backup")
     
 
-os.system(f'COPY db.sqlite3 {DB_TO}{BACKUP_DB}')
+shutil.copyfile('db.sqlite3', f"{DB_TO}{BACKUP_DB}")
 add_to_log(f"Backed up {OLD_DB_NAME}.")
+print("Back up done!")
