@@ -4,3 +4,5 @@ bill_bed.jpg
 *.pyc
 db.sqlite3
 TODO
+menucard_*.jpg
+__pycache__
