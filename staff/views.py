@@ -368,7 +368,10 @@ def withdrawMoney(request):
         withdraw_amt = request.POST['withdraw_amt']
         withdraw_summary = request.POST['withdraw_summary']
         time_of_expense = request.POST['widthdraw_time']
-        is_online = request.POST['is_online']
+        try:
+            is_online = request.POST['is_online']
+        except KeyError as e:
+            is_online = False
 
         if is_online == 'on':
             is_online = True
@@ -449,6 +452,18 @@ def deleteCustomer(request):
         
         cid = request.POST['cid']
         Customer.objects.get(id=cid).delete()
+
+        RESPONSE["STATUS"] = 'SUCCESS'
+
+
+        return JsonResponse(RESPONSE)
+    
+def deleteExpense(request):
+    if request.user.is_staff and request.method == 'POST':
+        RESPONSE = {"ERROR": None, "STATUS": 'FAILED'}
+        
+        expense_id = request.POST['expense_id']
+        Expense.objects.get(id=expense_id).delete()
 
         RESPONSE["STATUS"] = 'SUCCESS'
 

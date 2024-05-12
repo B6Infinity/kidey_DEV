@@ -24,6 +24,7 @@ urlpatterns = [
     path('markOrderPaid', view=views.markOrderPaid, name='markOrderPaid'),
     path('editCustomer', view=views.editCustomer, name='editCustomer'),
     path('deleteCustomer', view=views.deleteCustomer, name='deleteCustomer'),
+    path('deleteExpense', view=views.deleteExpense, name='deleteExpense'),
 
     # STATICITY
 

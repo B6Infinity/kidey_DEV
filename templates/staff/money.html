@@ -18,11 +18,15 @@
             <div class="fnt-med" style="color: #aaaaaa">Withdraw Money:</div>
 
             <form action="withdrawMoney" method="post">{% csrf_token %}
-                <input type="text" class="input-classic" name="withdraw_name" placeholder="Name of withdrawer" required autocomplete="off">
-                <input type="number" class="input-classic" name="withdraw_amt" placeholder="Amount Withdrawn" required autocomplete="off">
+                <input type="text" class="input-classic" name="withdraw_name" placeholder="Name of withdrawer" required
+                    autocomplete="off">
+                <input type="number" class="input-classic" name="withdraw_amt" placeholder="Amount Withdrawn" required
+                    autocomplete="off">
                 <input type="checkbox" class="" name="is_online" placeholder="" autocomplete="off"> Is Online
-                <input type="text" class="input-classic" name="withdraw_summary" placeholder="Summary" required autocomplete="off">
-                <input type="datetime-local" class="input-classic" name="widthdraw_time" placeholder="Time Of Widthdrawl" required autocomplete="off">
+                <input type="text" class="input-classic" name="withdraw_summary" placeholder="Summary" required
+                    autocomplete="off">
+                <input type="datetime-local" class="input-classic" name="widthdraw_time"
+                    placeholder="Time Of Widthdrawl" required autocomplete="off">
                 <br><br>
                 <button style="font-size: 20px; color: green;" type="submit">Widthdraw</button>
             </form>
@@ -30,10 +34,11 @@
         </div>
 
     </div>
-    
+
     <hr>
     <div class="flex-object">
         <div class="fnt-med" style="color: #aaaaaa; right: 0;">Expenses</div><br>
+        {% csrf_token %}
         {% for expense in EXPENSES %}
         <div class="existing-product existing-expense" id="expense-{{expense.id}}">
             <div style="display: flex;">
@@ -42,26 +47,62 @@
             </div>
             <!-- EXPENSE DETAILS -->
             <div class="expense-details">
-                <span style="font-weight:900; color: skyblue;">{{expense.withdrawer}}</span> - {{expense.summary}}
+                <span style="font-weight:600; color: skyblue;">{{expense.withdrawer}}</span> - {{expense.summary}}
+                <div></div>
+
+                <button type="button" id="cutomer-{{customer.id}}-btn=delete"
+                    onclick="deleteExpense({{expense.id}})"><img
+                        src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"></button>
             </div>
         </div>
 
         {% endfor %}
 
-    </div>
 
-    
+    </div>
+    <script>
+        function deleteExpense(expense_id) {
+            let csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+            if (!confirm('Are you sure you want to delete Expense: ' + String(expense_id) + '?')) {
+                return null; // Do nothing!
+            }
+            let form = new FormData();
+            form.set('expense_id', String(expense_id));
+
+            fetch(`deleteExpense`, {
+                method: 'POST',
+                body: form,
+                headers: {
+                    'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                    "X-CSRFToken": csrftoken
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    if (data['STATUS'] == 'SUCCESS') {
+                        // REMOVE FROM HTML
+                        document.getElementById('expense-' + String(expense_id)).remove();
+                    }
+
+                });
+        }
+    </script>
+
 
 
 
 </div>
 
 <style>
-    .flex-row span{
+    .flex-row span {
         font-weight: 600;
         font-size: 2rem;
     }
-    .flex-row h3{
+
+    .flex-row h3 {
         background-color: #1f1f1f;
         border-radius: 5px;
         margin: 10px;
@@ -70,13 +111,14 @@
         color: white;
         font-weight: 100;
     }
-    #cash_money{
+
+    #cash_money {
         color: lime;
     }
-    #online_money{
+
+    #online_money {
         color: cyan;
     }
-    
 </style>
 
 
