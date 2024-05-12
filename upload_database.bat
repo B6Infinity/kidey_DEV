@@ -1,1 +1,0 @@
-python z_ops\upload_database.py
