@@ -25,6 +25,7 @@ def home(request):
     if request.user.is_staff:
         all_customers = Customer.objects.order_by('name')
         DATA["CUSTOMERS"] = all_customers
+        DATA["customer_count"] = all_customers.count()
 
     return render(request, 'staff/home.html', DATA)
 
@@ -249,7 +250,6 @@ def deleteProduct(request):
     else:
         return HttpResponse("Critical Gateway! Data Loss!")
 
-
 def addOrder(request):
     if request.method == 'POST' and request.user.is_staff:
         printG(request.POST)
@@ -368,7 +368,6 @@ def fetchOrder(request):
 def fetch_relevant_orders(request):
     '''Relevant Order means the order that is to be delivered in the afternoon and night'''
 
-
 def withdrawMoney(request):
     if request.method == 'POST' and request.user.is_staff:
         withdraw_name = request.POST['withdraw_name']
@@ -389,7 +388,6 @@ def withdrawMoney(request):
         Expense.objects.create(withdrawer=withdraw_name, amount=int(withdraw_amt), summary=withdraw_summary, time_of_expense=time_of_expense, is_online=is_online)
 
         return redirect("money")
-
 
 def fetchCustomer(request):
     

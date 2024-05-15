@@ -42,7 +42,7 @@
 
         <div class="sideboard-object" id="customer_panel">
 
-            <div style="margin-bottom: 5px; font-weight: 900;" class="fnt-small">Customers</div>
+            <div style="margin-bottom: 5px; font-weight: 900;" class="fnt-small">Customers - <span style="font-size: large; font-weight: 800; color: lime;">{{customer_count}}</span></div>
             {% for customer in CUSTOMERS %}
             <div class="cutomer-holder" id="customer-{{customer.id}}">
                 <div class="edit-customer-panel">
