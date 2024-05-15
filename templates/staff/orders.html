@@ -13,7 +13,7 @@
 
         <div id="add-product-container">
 
-            <script>let orderJson = {}; let totalBill = 0; let discount = 0;</script>
+            <script>let orderJson = {}; let totalBill = 0; let discount = 0; let delivery_charge = 0;</script>
 
             <form action="/staff/add-order" method="POST">
                 {% csrf_token %}
@@ -31,6 +31,208 @@
 
                         <input class="input-classic" name="customer_address" value="" type="text" placeholder="Address"
                             autocomplete="off">
+                        <br>
+
+                        <!-- Delivery Landmark -->
+                        <input type="hidden" name="delivery_landmark_id" value="">
+
+                        <input class="input-classic" name="delivery_landmark" value="" type="search" placeholder="Delivery Landmark"
+                            autocomplete="off" onkeyup="checkLandmark()" onsearch="checkLandmark()"> <span onclick="addLandmark()" style="user-select: none; font-weight: 900; font-size: large; color: lime;">+</span>
+                            <ul id="list_of_landmarks">
+                                <div class="progress-indicator"></div>
+                                <br>
+                                <li><a href="#">Loading Landmarks...</a></li>
+                            </ul>
+                            
+                            <style>
+                                #list_of_landmarks{
+                                    height: 5rem;
+                                    height: 20rem;
+                                    overflow-y: auto;
+                                    background-color: gray;
+                                    border-radius: 10px;
+                                }
+                                #list_of_landmarks li{
+                                    margin: 5px;
+                                    padding: 5px;
+                                    border-radius: 5px;
+                                    background-color: #101010;
+                                }
+                                /* For Phones */
+                                @media only screen and (max-device-width: 640px) {
+                                    #list_of_landmarks{
+                                        height: 5rem;
+                                        opacity: 0.7;
+                                    }
+                                    
+                                }
+                            </style>
+
+                            <script defer>
+                                // Load List of Landmarks
+                                let LANDMARKS = {};
+                                let DELIVERY_RATE_CHART = {};
+                                let ACTIVE_LANDMARK_NAMES = [];
+                                let ACTIVE_LANDMARK_IDS = [];
+
+                                let list_DOM = document.getElementById('list_of_landmarks');
+
+                                fetch('fetchDeliveryRateChart')
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    DELIVERY_RATE_CHART = data
+                                });
+                                
+                                
+
+                                fetch('get_landmark_details')
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    LANDMARKS = data;
+                                    
+                                    ACTIVE_LANDMARK_IDS = Object.keys(LANDMARKS);
+
+                                    updateUIWithActiveLandmarks();
+
+                                });
+                                
+                                function addLandmark(){
+                                    let name = prompt("Enter the name of the landmark:");
+                                    let distance = prompt("Enter the Distance of the landmark (KMs):");
+                                    if (isNaN(parseFloat(distance))) {
+                                        // Distance is a float
+                                        alert("Invalid distance input. Please enter a valid number.");
+                                        return;
+                                    }
+                                    let time = prompt("Enter the time taken to reach the landmark (Minutes):");
+                                    if (isNaN(parseFloat(time))) {
+                                        // Distance is a float
+                                        alert("Invalid time input. Please enter a valid time in Minutes.");
+                                        return;
+                                    }
+                                    let parent = prompt("Enter the parent city of the landmark:", "Barasat");
+
+
+                                    let form = new FormData();
+                                    form.set('name', name.toUpperCase());
+                                    form.set('distance', parseFloat(distance));
+                                    form.set('time', parseInt(time));
+                                    form.set('parent', parent);
+
+                                    fetch('/staff/add-landmark', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                                            "X-CSRFToken": csrftoken
+                                        },
+                                        body: form
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log(data);
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+
+
+                                }
+
+                                function deleteLandmark(lid){
+                                    console.log(lid);
+
+                                    if (!confirm(`Are you sure you want to delete ${LANDMARKS[lid].name}?`)) {
+                                        return;
+                                    }
+
+                                    let form = new FormData();
+                                    
+                                    form.set('id', lid);
+
+
+
+
+                                    fetch('/staff/delete-landmark', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Accept': 'multipart/form-data, application/json, text/plain, */*',
+                                            "X-CSRFToken": csrftoken
+                                        },
+                                        body: form
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log(data);
+
+                                        window.location.reload();
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                                }
+
+                                function checkLandmark(){
+                                    let filter = document.getElementsByName('delivery_landmark')[0].value.toUpperCase();
+
+                                    ACTIVE_LANDMARK_IDS = [];
+
+                                    for (const landmark_id in LANDMARKS) {
+                                        let landmark_name = LANDMARKS[landmark_id].name;
+                                        if (landmark_name.toUpperCase().indexOf(filter) > -1) {
+                                            ACTIVE_LANDMARK_IDS.push(landmark_id);
+                                        }
+                                    }
+                                    updateUIWithActiveLandmarks();
+                                }
+                            
+                                function updateUIWithActiveLandmarks(){
+
+                                    list_DOM.innerHTML = "";
+
+                                    for (let i = 0; i < ACTIVE_LANDMARK_IDS.length; i++) {
+                                        let lid = ACTIVE_LANDMARK_IDS[i];
+                                        const landmark_name = LANDMARKS[lid].name;
+                                        list_DOM.innerHTML += `
+                                            <li id="landmark-${lid}" onclick="selectLandMark(${lid})">${landmark_name} <span style="font-size: small; color: gray;">${LANDMARKS[lid].parent}</span><span id="delete_landmark_${lid}" style="margin-right: 5px; font-weight: 900; padding: 5px; user-select: none; color: red; background-color: black; border-radius: 5px;" onclick="deleteLandmark(this.id.replace('delete_landmark_', ''))"><img style="width: 15px;" src="https://img.icons8.com/material-outlined/24/fa314a/delete-trash.png"></span></li>
+                                        `;                                    
+                                    }
+                                }
+                            
+                                function selectLandMark(lid){
+                                    let prevID = document.getElementsByName('delivery_landmark_id')[0].value;
+                                    let liDOM = document.getElementById(`landmark-${prevID}`);
+                                    if (liDOM != null) {
+                                        liDOM.style.backgroundColor = "#101010";
+                                    }
+
+                                    document.getElementsByName('delivery_landmark_id')[0].value = lid;
+                                    // Update UI
+
+                                    liDOM = document.getElementById(`landmark-${lid}`);
+                                    liDOM.style.backgroundColor = "green";
+                                    document.getElementsByName('delivery_landmark')[0].value = LANDMARKS[lid].name;
+                                
+                                    // Update Delivery Charge
+                                    let distance = LANDMARKS[lid].distance;
+                                    
+                                    let dists = Object.keys(DELIVERY_RATE_CHART).map(parseFloat);
+                                    console.log(DELIVERY_RATE_CHART);
+                                    for (const d of dists) {
+                                        if (distance <= d) {
+                                            console.log(distance);
+                                            console.log(DELIVERY_RATE_CHART[String(d)]);
+                                            
+                                            let charge = DELIVERY_RATE_CHART[String(d)];
+                                            document.getElementsByName('delivery_charge')[0].value = charge;
+                                            delivery_charge = charge;
+                                            evaluateBill();
+                                            break
+                                        }
+                                    }
+                                }
+                            </script>
+
+                        <!--  -->
 
                         <br>Time Of Order:
                         <input class="input-classic" name="time_of_order" type="datetime-local"
@@ -39,17 +241,19 @@
                         <input class="input-classic" name="time_of_delivery" type="datetime-local"
                             placeholder="Time Of Delivery" autocomplete="off" required><br>
                         <br>
+
                         <input class="input-classic" style="width: 100px; background-color: #101010;" name="total_bill"
-                            type="number" placeholder="Total Bill" autocomplete="off" disabled>-
+                            type="number" placeholder="Total Bill" autocomplete="off" disabled>+
+                        <input class="input-classic" style="width: 100px; background-color: #101010;" name="delivery_charge"
+                            type="number" placeholder="Delivery Charge" autocomplete="off" readonly>-
                         <input class="input-classic" style="width: 100px;" onchange="addDiscount(Number(this.value));"
                             name="discount" type="number" placeholder="Discount" autocomplete="off">
-                        <input class="input-classic" style="width: 90px; background-color: #101010;" name="payable_amt"
+                        
+                            <input class="input-classic" style="width: 90px; background-color: #101010;" name="payable_amt"
                             type="number" placeholder="Payable ₹" autocomplete="off" disabled required>
-
                     </div>
 
                     <input type="hidden" name="order_json" value="">
-
 
 
                     <!-- PRODUCT LIST -->
@@ -89,6 +293,7 @@
                     </div>
 
                     <script>
+                        let csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
                         function countProduct(product_id, operation) {
                             let count = Number(document.getElementById('product-counter-' + product_id).textContent);
@@ -122,7 +327,7 @@
 
                             // CHANGE HTML
                             document.getElementsByName('total_bill')[0].value = totalBill;
-                            document.getElementsByName('payable_amt')[0].value = totalBill - discount;
+                            document.getElementsByName('payable_amt')[0].value = totalBill + delivery_charge - discount;
 
                             document.getElementsByName('order_json')[0].value = JSON.stringify(orderJson);
                         }
@@ -131,7 +336,7 @@
                             discount = d; evaluateBill();
                         }
 
-                        let csrftoken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+                        
                         function fetchCustomer(data, datatype) {
                             // console.log(data, datatype);
 

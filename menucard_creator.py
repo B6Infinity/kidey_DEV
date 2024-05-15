@@ -7,7 +7,7 @@ from subtle_defs import *
 
 
 current_os = platform.system()
-printC(current_os)
+# printC(current_os)
 if current_os == "Windows":
     font_prefix = "C:\Windows\Fonts\\"
 else:
@@ -130,6 +130,6 @@ class MenuCardCreator():
         self.savedir = os.path.join(self.path, savename)
         self.img.save(self.savedir)
 
-        print("SAVED!")
+        # print("SAVED!")
 
 MENUCARD = MenuCardCreator()

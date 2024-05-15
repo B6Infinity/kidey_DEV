@@ -252,13 +252,19 @@ def deleteProduct(request):
 
 def addOrder(request):
     if request.method == 'POST' and request.user.is_staff:
+        printG(request.POST)
         customer_name = request.POST['customer_name']
         customer_phone_no = request.POST['customer_phone_no']
         address = request.POST['customer_address']        
         time_of_order = request.POST['time_of_order']
         time_of_delivery = request.POST['time_of_delivery']
+        delivery_charge = request.POST['delivery_charge']
         discount = request.POST['discount']
         order_json = request.POST['order_json']
+
+        printC(delivery_charge)
+
+        
 
         # Frisk Data
         if len(discount) == 0:
@@ -285,7 +291,8 @@ def addOrder(request):
             order_json = order_json,
             time_of_order = too,
             time_of_delivery = tod,
-            discount = int(discount)
+            discount = int(discount),
+            delivery_charge=int(delivery_charge)
         )
 
         customer.address = address
@@ -349,9 +356,9 @@ def fetchOrder(request):
                 "ADDRESS": order.customer.address,
                 "BILL_TEXT": order.bill_text,
                 "PAID": order.paid,
-                "MONEY": f"₹{order.total_bill} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
+                "MONEY": f"₹{order.total_bill} + ₹{order.delivery_charge} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
                 "TIME_OF_ORDER": str(order.time_of_order),
-                "TIME_OF_ORDER": str(order.time_of_delivery),
+                "TIME_OF_DELIVERY": str(order.time_of_delivery),
                 # "TIME_OF_ORDER": order.time_of_order.strftime("%b. %d, %-I:%M %p"),
                 # "TIME_OF_DELIVERY": order.time_of_delivery.strftime("%b. %d, %-I:%M %p"),
             }
@@ -470,6 +477,30 @@ def deleteExpense(request):
 
         return JsonResponse(RESPONSE)
 
+def addLandmark(request):
+    if request.method == 'POST' and request.user.is_staff:
+        DeliveryLandmark.objects.create(name=request.POST['name'], distance=float(request.POST['distance']), time_in_minutes=int(request.POST['time']), parent=request.POST['parent'])
+
+        return JsonResponse({'ERROR': None})
+
+    else:
+        return HttpResponse("Critical Gateway! Data Loss! PAKAMO KORO NA")
+
+def deleteLandmark(request):
+    if request.method == 'POST' and request.user.is_staff:
+        printC(f"{request.POST}")
+        
+        obj = DeliveryLandmark.objects.get(id=request.POST['id'])
+        print(obj)
+
+        obj.delete()
+
+        return JsonResponse({'ERROR': None})
+
+    else:
+        return HttpResponse("Critical Gateway! Data Loss! PAKAMO KORO NA")
+
+
 
 # STATICITY
 
@@ -532,6 +563,23 @@ def get_menu(request):
 
     ''')
 
+def get_landmark_details(request):
+    if request.user.is_staff:
+        LANDMARKS = {}
+        landmarks = DeliveryLandmark.objects.all()
+        
+        for l in landmarks:
+            LANDMARKS[l.id] = {
+                "name": l.name,
+                "distance": l.distance,
+                "time_in_mins": l.time_in_minutes,
+                "parent": l.parent
+            }
+        
+        return JsonResponse(LANDMARKS)
+
+    else:
+        return HttpResponse("Don't do chudurbudur.")
 
 @user_passes_test(allow_all)
 @csrf_exempt
@@ -562,9 +610,19 @@ def fetchMenu(request):
             if product.category == category:
                 MENU[category.upper()][product.name] = {"ID": product.id, "PRICE": str(product.price)}
 
-
-
     return JsonResponse(MENU)
+
+@user_passes_test(allow_all)
+@csrf_exempt
+def fetchDeliveryRates(request):
+    RATE_CHART = {}
+
+    vars_and_vals = GlobalVariable.objects.filter(category="delivery_rate")
+    # printG(vars_and_vals)
+    for v in vars_and_vals:
+        RATE_CHART[v.name] = int(v.value)
+
+    return JsonResponse(RATE_CHART)
 
 @user_passes_test(allow_all)
 @csrf_exempt

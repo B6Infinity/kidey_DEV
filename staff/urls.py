@@ -12,13 +12,13 @@ urlpatterns = [
     path('analytics', view=views.analytics, name='analytics'),
     path('orders', view=views.orders, name='orders'),
     path('money', view=views.money, name='money'),
+
+    # APIs
     path('add-product', view=views.addProduct, name='add-product'),
     path('delete-product', view=views.deleteProduct, name='delete-product'),
     path('add-order', view=views.addOrder, name='add-order'),
     path('delete-order', view=views.deleteOrder, name='delete-order'),
     path('withdrawMoney', view=views.withdrawMoney, name='withdrawMoney'),
-
-    # APIs
     path('fetchCustomer', view=views.fetchCustomer, name='fetchCustomer'),
     path('fetchOrder', view=views.fetchOrder, name='fetchOrder'),
     path('markOrderPaid', view=views.markOrderPaid, name='markOrderPaid'),
@@ -26,11 +26,16 @@ urlpatterns = [
     path('deleteCustomer', view=views.deleteCustomer, name='deleteCustomer'),
     path('deleteExpense', view=views.deleteExpense, name='deleteExpense'),
 
+    path('add-landmark', view=views.addLandmark, name='add-landmark'),
+    path('delete-landmark', view=views.deleteLandmark, name='delete-landmark'),
+
     # STATICITY
 
     path('get_menu', view=views.get_menu, name='get_menu'),
+    path('get_landmark_details', view=views.get_landmark_details, name='get_landmark_details'),
     path('respond_avail', view=views.respond_avail, name='respond_avail'),
     path('fetchMenu', view=views.fetchMenu, name='fetchMenu'),
+    path('fetchDeliveryRateChart', view=views.fetchDeliveryRates, name='fetchDeliveryRates'),
 
     path('pushOrders__STATIC', view=views.addOrders__STATICPUSH, name='pushOrders__STATIC'),
 
