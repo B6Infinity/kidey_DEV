@@ -441,10 +441,12 @@
     <div style="color: white;" class="label-classic" id="order-time_of_order"></div>
     <br><span class="label-classic">Time Of Delivery: &nbsp;</span>
     <div style="color: white;" class="label-classic" id="order-time_of_delivery"></div>
-    <br><span class="label-classic">Order:&nbsp; </span><br>
+    <br><span class="label-classic">Order Summary:&nbsp; </span><span style="margin-right: 5px; font-weight: 900; padding: 5px; user-select: none; color: cyan; background-color: black; border-radius: 5px;" onclick="copyOrderSummary2Clipboard()"><img style="width: 15px;" src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Bw_copy_icon_320x320.svg"></span><br>
     <div style="color: white;" class="label-classic" id="order-bill_text"></div><br><br>
     <div style="color: green; font-size: 25px;" class="label-classic" id="order-money"></div>
     <br><br>
+
+    <textarea hidden name="" id="order_summary"></textarea>
     <button id="online-paid-" name="paid_button" style="font-size: 20px; color: cyan;"
         onclick="markOrderAsPaid(this.id.replace('online-paid-', ''), true)" type="button">Paid - Online?</button>
     <button id="paid-" name="paid_button" style="font-size: 20px; color: lime;"
@@ -468,11 +470,18 @@
     let paidbtn = document.getElementById('paid-');
     let paidbtn_online = document.getElementById('online-paid-');
 
+    function copyOrderSummary2Clipboard(){
+        let orderSummary = document.getElementById('order_summary').innerHTML.replaceAll('<br>', '\n');
+        console.log(orderSummary);
+
+        navigator.clipboard.writeText(orderSummary);
+        alert('Order summary copied to clipboard');
+    }
+
     function hide_order() {
         paidbtn.id = 'paid-';
         paidbtn_online.id = 'online-paid-';
         document.getElementById('show-order').style.visibility = 'hidden';
-        console.log('ello?');
     }
 
     function showOrder(order_id) {
@@ -498,7 +507,7 @@
                 if (data["ERROR"] == null) {
                     // CHANGE HTML
                     document.getElementById('show-order').style.visibility = 'visible';
-
+                    console.log(data);
                     document.getElementById('order-customer_name').textContent = data["ORDER"]["NAME"];
                     document.getElementById('order-phone_no').textContent = data["ORDER"]["PHONE"];
                     document.getElementById('order-address').textContent = data["ORDER"]["ADDRESS"];
@@ -508,7 +517,12 @@
                     document.getElementById('order-money').innerHTML = data["ORDER"]["MONEY"];
                     document.getElementsByName('order-id')[0].value = order_id;
                     
-                    
+
+                    let tod = new Date(data["ORDER"]["TIME_OF_DELIVERY"]);
+
+                    document.getElementById('order_summary').innerText = `
+                    Order by ${data["ORDER"]["NAME"]}\nTime of Delivery: ${tod.toDateString()} at ${tod.toLocaleTimeString()}\n\nSummary:\n${data["ORDER"]["BILL_TEXT"]}\nDelivery Charge: ₹${data["ORDER"]["DELIVERY_CHARGE"]}\n_______________\nPayable Amount: ₹${data["ORDER"]["PAYABLE_AMT"]}\n
+                    `.trim();
                     
 
                     paidbtn_online.id = 'online-paid-' + order_id

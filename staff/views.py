@@ -263,6 +263,8 @@ def addOrder(request):
         order_json = request.POST['order_json']
 
         printC(delivery_charge)
+        if delivery_charge == '':
+            delivery_charge = 0
 
         
 
@@ -355,6 +357,8 @@ def fetchOrder(request):
                 "PHONE": order.customer.phone_no,
                 "ADDRESS": order.customer.address,
                 "BILL_TEXT": order.bill_text,
+                "DELIVERY_CHARGE": order.delivery_charge,
+                "PAYABLE_AMT": order.payable_amt,
                 "PAID": order.paid,
                 "MONEY": f"₹{order.total_bill} + ₹{order.delivery_charge} - ₹{order.discount} => <span style='color: lime; font-size:25px; font-weight:900;'>₹{order.payable_amt}/-</span>",
                 "TIME_OF_ORDER": str(order.time_of_order),
